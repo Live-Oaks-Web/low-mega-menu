@@ -1,0 +1,7 @@
+/vendor/
+/node_modules/
+/admin-app/node_modules/
+/admin-app/build/
+/public/build/
+*.log
+.DS_Store

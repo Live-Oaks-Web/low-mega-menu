@@ -1,0 +1,22 @@
+{
+	"name": "low-mega-menu",
+	"version": "1.0.0",
+	"private": true,
+	"description": "LOW Mega Menu WordPress plugin — root build scripts",
+	"scripts": {
+		"build:admin": "npm run build --prefix admin-app",
+		"build:public:css": "postcss public/src/styles/main.css -o public/build/main.css --config public/postcss.config.js",
+		"build:public:js": "esbuild public/src/js/controller.js --bundle --outfile=public/build/controller.js --format=iife",
+		"build:public": "npm run build:public:css && npm run build:public:js",
+		"build:all": "npm run build:admin && npm run build:public",
+		"start:admin": "npm run start --prefix admin-app"
+	},
+	"devDependencies": {
+		"autoprefixer": "^10.4.20",
+		"esbuild": "^0.24.2",
+		"postcss": "^8.4.49",
+		"postcss-cli": "^11.0.0",
+		"postcss-import": "^16.1.0",
+		"tailwindcss": "^3.4.17"
+	}
+}

@@ -1,0 +1,38 @@
+/* Panel open/close animations — toggled by JS in Prompt 04 */
+
+.low-mega-menu .low-mm-panel[data-low-mm-animation='fade'],
+.low-mega-menu .low-mm-panel__inner[data-low-mm-animation='fade'] {
+	transition: opacity var(--low-mm-animation-speed, 200ms) ease;
+}
+
+.low-mega-menu .low-mm-panel[data-low-mm-animation='slide-down'],
+.low-mega-menu .low-mm-panel__inner[data-low-mm-animation='slide-down'] {
+	transition:
+		transform var(--low-mm-animation-speed, 200ms) ease,
+		opacity var(--low-mm-animation-speed, 200ms) ease;
+}
+
+.low-mega-menu .low-mm-panel[data-low-mm-animation='none'],
+.low-mega-menu .low-mm-panel__inner[data-low-mm-animation='none'] {
+	transition: none;
+}
+
+.low-mega-menu .low-mm-panel.is-open[data-low-mm-animation='slide-down'],
+.low-mega-menu .low-mm-panel.low-mm-panel-open[data-low-mm-animation='slide-down'] {
+	transform: translateY(0);
+	opacity: 1;
+}
+
+.low-mega-menu .low-mm-panel:not(.is-open):not(.low-mm-panel-open)[data-low-mm-animation='slide-down'] {
+	transform: translateY(-0.5rem);
+	opacity: 0;
+}
+
+.low-mega-menu .low-mm-panel.is-open[data-low-mm-animation='fade'],
+.low-mega-menu .low-mm-panel.low-mm-panel-open[data-low-mm-animation='fade'] {
+	opacity: 1;
+}
+
+.low-mega-menu .low-mm-panel:not(.is-open):not(.low-mm-panel-open)[data-low-mm-animation='fade'] {
+	opacity: 0;
+}

@@ -1,0 +1,43 @@
+=== LOW Mega Menu ===
+Contributors: TBD
+Tags: mega menu, navigation, menu
+Requires at least: 6.0
+Tested up to: 6.8
+Requires PHP: 7.4
+Stable tag: 1.1.0
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+
+Build multi-column mega menu panels and attach them to WordPress nav menu items.
+
+== Description ==
+
+LOW Mega Menu lets site owners build multi-column dropdown panels and attach them to items in any WordPress navigation menu.
+
+Features:
+
+* Visual drag-and-drop builder for multi-column mega menu panels.
+* Per-column width fractions, labels, and optional left/right borders.
+* Content modules: Link List, Post Query, Image, CTA, Excerpt, Scroll To, and custom Code.
+* Post Query module with thumbnail, category, and date layout.
+* Scroll To module that links a menu item to a specific heading on any page or post.
+* Mobile takeover navigation with drill-down panels.
+* Theme-agnostic styling that resists host-theme navigation CSS (tested with Divi).
+
+== Installation ==
+
+1. Upload the plugin files to `/wp-content/plugins/low-mega-menu/`, or install through the WordPress plugins screen.
+2. Activate the plugin through the Plugins screen in WordPress.
+
+== Changelog ==
+
+= 1.1.0 =
+* Added Scroll To module: link a menu item to a heading on any page or post, with smooth scrolling and an adjustable offset.
+* Added per-column left/right border options in the builder.
+* Added Post Query module styling: floated thumbnail with title, category, and date.
+* Added a theme-agnostic CSS reset so host-theme navigation styles no longer hide or mis-size panel content (Divi compatibility).
+* Hardened Post Query rendering with normalized settings and a graceful empty state for editors.
+* Performance and coding-standards improvements (cached attachment lookups, PHPCS fixes).
+
+= 1.0.0 =
+* Initial development started.
