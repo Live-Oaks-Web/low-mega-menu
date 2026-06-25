@@ -1,6 +1,6 @@
 import { useEffect, useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
-import { CheckboxControl, SelectControl, TextControl, Spinner } from '@wordpress/components';
+import { CheckboxControl, SelectControl, TextControl, TextareaControl, Spinner } from '@wordpress/components';
 
 export default function ExcerptFields( { settings, onChange } ) {
 	const [ search, setSearch ] = useState( '' );
@@ -65,6 +65,13 @@ export default function ExcerptFields( { settings, onChange } ) {
 				label="Show excerpt"
 				checked={ !! settings.show_excerpt }
 				onChange={ ( value ) => onChange( { show_excerpt: value } ) }
+			/>
+			<TextareaControl
+				label="Custom excerpt override"
+				value={ settings.custom_excerpt || '' }
+				onChange={ ( value ) => onChange( { custom_excerpt: value } ) }
+				rows={ 3 }
+				help="Leave blank to use the post's own excerpt. When filled, this text is shown instead and the length / full-content options are ignored."
 			/>
 			<TextControl
 				label="Excerpt length override"

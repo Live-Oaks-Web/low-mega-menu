@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.4.0
+
+- Added a custom excerpt override to the Page / Post Excerpt module: author-provided teaser text replaces the post's excerpt and takes precedence over the length and full-content options.
+- Fixed a double-escaping issue on the auto-generated excerpt so characters like ampersands render correctly.
+- Search field, clear, and Back controls now inherit the active theme's font (`font-family: inherit`) instead of the browser default.
+
 ## 1.3.0
 
 - Added a lightweight WYSIWYG editor (bold, italic, links, lists, plus a code view) to the Call to Action body and the Code / Shortcode content fields. The Code field defaults to the code view so shortcodes and raw HTML stay intact.

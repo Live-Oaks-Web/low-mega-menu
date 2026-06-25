@@ -4,7 +4,7 @@ Tags: mega menu, navigation, menu
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.3.0
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -31,6 +31,11 @@ Features:
 2. Activate the plugin through the Plugins screen in WordPress.
 
 == Changelog ==
+
+= 1.4.0 =
+* Added a custom excerpt override to the Page / Post Excerpt module: enter your own teaser text to replace the post's excerpt (takes precedence over the length and full-content options).
+* Fixed a double-escaping issue on the auto-generated excerpt so characters like ampersands render correctly.
+* Search field, clear, and Back controls now inherit the active theme's font instead of the browser default.
 
 = 1.3.0 =
 * Added a lightweight WYSIWYG editor (bold, italic, links, lists, plus a code view) to the Call to Action body and the Code / Shortcode content fields. The Code field defaults to the code view so shortcodes and raw HTML stay intact.

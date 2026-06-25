@@ -39,6 +39,7 @@ class ExcerptModule extends Module {
 			'source_post_id'     => 0,
 			'show_image'         => true,
 			'show_excerpt'       => true,
+			'custom_excerpt'     => '',
 			'excerpt_length'     => 0,
 			'rich_text_override' => false,
 		);
@@ -72,14 +73,19 @@ class ExcerptModule extends Module {
 		}
 
 		$excerpt_length = (int) ( $settings['excerpt_length'] ?? 0 );
+		$custom_excerpt = trim( (string) ( $settings['custom_excerpt'] ?? '' ) );
 		$excerpt        = '';
+		$use_rich       = false;
 
 		if ( ! empty( $settings['show_excerpt'] ) ) {
-			if ( ! empty( $settings['rich_text_override'] ) ) {
-				$excerpt = apply_filters( 'the_content', $post->post_content );
+			if ( '' !== $custom_excerpt ) {
+				// Author-provided text wins over the post's excerpt/content.
+				$excerpt = $custom_excerpt;
+			} elseif ( ! empty( $settings['rich_text_override'] ) ) {
+				$excerpt  = apply_filters( 'the_content', $post->post_content );
+				$use_rich = true;
 			} else {
-				$raw_excerpt = has_excerpt( $post ) ? $post->post_excerpt : wp_trim_words( wp_strip_all_tags( $post->post_content ), $excerpt_length > 0 ? $excerpt_length : 55 );
-				$excerpt     = esc_html( $raw_excerpt );
+				$excerpt = has_excerpt( $post ) ? $post->post_excerpt : wp_trim_words( wp_strip_all_tags( $post->post_content ), $excerpt_length > 0 ? $excerpt_length : 55 );
 			}
 		}
 
@@ -93,7 +99,7 @@ class ExcerptModule extends Module {
 				'post'       => $post,
 				'image_html' => $image_html,
 				'excerpt'    => $excerpt,
-				'rich'       => ! empty( $settings['rich_text_override'] ),
+				'rich'       => $use_rich,
 			)
 		);
 	}
