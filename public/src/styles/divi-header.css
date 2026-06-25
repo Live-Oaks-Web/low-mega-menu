@@ -163,10 +163,18 @@ body.low-mm-divi-header-active #main-header #top-menu-nav {
 		width: 100%;
 	}
 
+	/*
+	 * Right-aligned and vertically centered without transform. A transform here
+	 * would become the containing block for the fixed-position mega panels nested
+	 * inside #top-menu and shrink them to this element's width — so center via
+	 * top/bottom + align-items instead.
+	 */
 	body.low-mm-divi-header-active #main-header #top-menu {
 		position: absolute;
-		top: 50%;
-		transform: translateY(-50%);
+		top: 0;
+		bottom: 0;
 		right: 0;
+		display: flex;
+		align-items: center;
 	}
 }
