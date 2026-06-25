@@ -27,6 +27,11 @@ class FrontendSettings {
 	public const OPTION_OVERRIDE_DIVI_HEADER = 'low_mm_override_divi_header';
 
 	/**
+	 * Option key: enable the AJAX search bar in the mega menu.
+	 */
+	public const OPTION_SEARCH_ENABLED = 'low_mm_search_enabled';
+
+	/**
 	 * Register front-end hooks driven by settings.
 	 *
 	 * @return void
@@ -89,9 +94,44 @@ class FrontendSettings {
 	}
 
 	/**
+	 * Whether the AJAX search bar should render and respond.
+	 *
+	 * @return bool
+	 */
+	public static function search_enabled(): bool {
+		return (bool) get_option( self::OPTION_SEARCH_ENABLED, true );
+	}
+
+	/**
+	 * Post types the search endpoint queries.
+	 *
+	 * @return string[]
+	 */
+	public static function search_post_types(): array {
+		$post_types = apply_filters( 'low_mm_search_post_types', array( 'post', 'page' ) );
+
+		if ( ! is_array( $post_types ) || empty( $post_types ) ) {
+			$post_types = array( 'post', 'page' );
+		}
+
+		return array_values( array_filter( array_map( 'sanitize_key', $post_types ), 'post_type_exists' ) );
+	}
+
+	/**
+	 * Maximum number of search results returned.
+	 *
+	 * @return int
+	 */
+	public static function search_results_count(): int {
+		$count = (int) apply_filters( 'low_mm_search_results_count', 6 );
+
+		return max( 1, min( 20, $count ) );
+	}
+
+	/**
 	 * Config passed to the public script.
 	 *
-	 * @return array<string, bool>
+	 * @return array<string, mixed>
 	 */
 	public static function public_script_config(): array {
 		return array(
@@ -99,6 +139,15 @@ class FrontendSettings {
 			'overrideDiviNav'  => self::override_divi_header(),
 			'singularPostId'   => is_singular() ? (int) get_queried_object_id() : 0,
 			'scrollToOffset'   => max( 0, (int) apply_filters( 'low_mm_scroll_to_offset', 30 ) ),
+			'searchEnabled'    => self::search_enabled(),
+			'searchEndpoint'   => esc_url_raw( rest_url( 'low-mm/v1/search' ) ),
+			'restNonce'        => wp_create_nonce( 'wp_rest' ),
+			'searchMinChars'   => 2,
+			'i18n'             => array(
+				'searchNoResults' => __( 'No results found.', 'low-mega-menu' ),
+				'searchLoading'   => __( 'Searching…', 'low-mega-menu' ),
+				'searchError'     => __( 'Search failed. Please try again.', 'low-mega-menu' ),
+			),
 		);
 	}
 }

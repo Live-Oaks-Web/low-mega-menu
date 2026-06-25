@@ -79,7 +79,6 @@
 	.low-mm-mobile-drawer {
 		position: fixed;
 		inset: 0;
-		top: var(--low-mm-admin-bar-offset, 0px);
 		z-index: 99997;
 		visibility: hidden;
 		pointer-events: none;
@@ -110,8 +109,9 @@
 		position: absolute;
 		top: 0;
 		left: 0;
+		right: 0;
 		bottom: 0;
-		width: min(20rem, 88vw);
+		width: 100%;
 		max-width: 100%;
 		background: #ffffff;
 		box-shadow: 0 10px 25px rgb(0 0 0 / 0.15);
@@ -195,6 +195,15 @@
 		overflow: visible;
 		background: transparent;
 	}
+}
+
+/*
+ * The WP admin bar is present at every screen width for logged-in users, so the
+ * fixed full-screen drawer always starts below it (at any width). The drawer is
+ * static at >=1024px, where `top` is ignored, so this is safe across breakpoints.
+ */
+.low-mega-menu .low-mm-mobile-drawer {
+	top: var(--low-mm-admin-bar-offset, 0px);
 }
 
 body.low-mm-mobile-nav-open {

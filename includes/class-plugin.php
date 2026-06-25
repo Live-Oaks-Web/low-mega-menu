@@ -22,6 +22,7 @@ use LOW_MM\PostTypes\MegaMenuCPT;
 use LOW_MM\Render\AssetLoader;
 use LOW_MM\REST\HeadingsController;
 use LOW_MM\REST\MenusController;
+use LOW_MM\REST\SearchController;
 use LOW_MM\Utils\FrontendSettings;
 
 defined( 'ABSPATH' ) || exit;
@@ -64,6 +65,7 @@ class Plugin {
 		new MegaMenuCPT();
 		new MenusController();
 		new HeadingsController();
+		new SearchController();
 		new NavMenuFields();
 		new NavMenuItemMeta();
 		new ClassicMenusSupport();

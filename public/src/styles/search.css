@@ -1,0 +1,221 @@
+/* AJAX search bar + results (desktop mega panel / mobile drawer) */
+
+.low-mm-search {
+	position: relative;
+	display: flex;
+	align-items: center;
+}
+
+.low-mm-search__form {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin: 0;
+	width: 100%;
+}
+
+.low-mm-search__field {
+	position: relative;
+	flex: 1 1 auto;
+	display: flex;
+	align-items: center;
+	min-width: 0;
+}
+
+.low-mm-search__input {
+	flex: 1 1 auto;
+	width: 100%;
+	min-width: 0;
+	border: 1px solid #d1d5db;
+	border-radius: 9999px;
+	background: #ffffff;
+	color: #111827;
+	padding: 0.4rem 2rem 0.4rem 0.85rem;
+	font-size: 0.9rem;
+	line-height: 1.2;
+	outline: none;
+}
+
+.low-mm-search__input:focus {
+	border-color: #6b7280;
+	box-shadow: 0 0 0 3px rgb(107 114 128 / 0.15);
+}
+
+/* Hide the browser's native search clear control; we render our own. */
+.low-mm-search__input::-webkit-search-cancel-button {
+	-webkit-appearance: none;
+	appearance: none;
+}
+
+.low-mm-search__clear {
+	position: absolute;
+	right: 0.5rem;
+	top: 50%;
+	transform: translateY(-50%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.25rem;
+	height: 1.25rem;
+	padding: 0;
+	border: 0;
+	border-radius: 9999px;
+	background: #e5e7eb;
+	color: #374151;
+	font-size: 1rem;
+	line-height: 1;
+	cursor: pointer;
+}
+
+.low-mm-search__clear[hidden] {
+	display: none;
+}
+
+.low-mm-search__clear:hover,
+.low-mm-search__clear:focus {
+	background: #d1d5db;
+}
+
+.low-mm-search__back {
+	display: none;
+	align-items: center;
+	gap: 0.25rem;
+	border: 0;
+	background: transparent;
+	color: #111827;
+	font-size: 0.95rem;
+	font-weight: 600;
+	cursor: pointer;
+	padding: 0.25rem 0.5rem;
+}
+
+/* Results container */
+.low-mm-search__panel[hidden] {
+	display: none;
+}
+
+.low-mm-search__list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.low-mm-search__item {
+	margin: 0;
+}
+
+.low-mm-search__link {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.85rem;
+	padding: 0.65rem 0.75rem;
+	text-decoration: none;
+	color: inherit;
+	border-radius: 0.375rem;
+}
+
+.low-mm-search__link:hover,
+.low-mm-search__link:focus {
+	background: #f3f4f6;
+}
+
+.low-mm-search__thumb {
+	flex: 0 0 auto;
+}
+
+.low-mm-search__thumb img {
+	display: block;
+	width: 56px;
+	height: 40px;
+	object-fit: cover;
+	border-radius: 4px;
+}
+
+.low-mm-search__body {
+	display: flex;
+	flex-direction: column;
+	gap: 0.15rem;
+	min-width: 0;
+}
+
+.low-mm-search__title {
+	font-size: 0.95rem;
+	font-weight: 600;
+	color: #21303f;
+	line-height: 1.3;
+}
+
+.low-mm-search__type {
+	font-size: 0.7rem;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: #6b7280;
+}
+
+.low-mm-search__excerpt {
+	font-size: 0.825rem;
+	color: #4b5563;
+	line-height: 1.4;
+}
+
+.low-mm-search__status {
+	padding: 0.85rem 0.75rem;
+	color: #6b7280;
+	font-size: 0.9rem;
+}
+
+/* Desktop: results render as a full-width mega menu panel (positioned by JS). */
+@media (min-width: 1024px) {
+	.low-mm-search__input {
+		width: 220px;
+	}
+
+	.low-mm-search__panel {
+		z-index: 99998;
+		background: #ffffff;
+		box-shadow: 0 18px 40px rgb(0 0 0 / 0.12);
+		border-top: 1px solid #e5e7eb;
+		max-height: 70vh;
+		overflow-y: auto;
+	}
+
+	.low-mm-search__list {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 0.25rem 1.5rem;
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 1.25rem 1.5rem;
+	}
+}
+
+/* Mobile: search sits at the top of the drawer and expands into a search view. */
+@media (max-width: 1023px) {
+	.low-mm-search {
+		flex-direction: column;
+		align-items: stretch;
+		width: 100%;
+		padding: 0.75rem 1rem;
+		border-bottom: 1px solid #e5e7eb;
+		background: #ffffff;
+	}
+
+	.low-mm-search--active .low-mm-search__back {
+		display: inline-flex;
+		order: 1;
+		margin-left: auto;
+	}
+
+	/* Results drop full width beneath the search form. */
+	.low-mm-search__panel {
+		float: right;
+		width: 100%;
+		margin-top: 0.5rem;
+	}
+
+	/* While results are showing, hide the menu until Back is pressed. */
+	.low-mm-search-results-open .low-mm-mobile-drawer__panel #top-menu,
+	.low-mm-search-results-open .low-mm-mobile-drawer__panel > ul {
+		display: none !important;
+	}
+}

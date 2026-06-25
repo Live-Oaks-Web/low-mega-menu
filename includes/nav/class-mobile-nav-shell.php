@@ -7,6 +7,8 @@
 
 namespace LOW_MM\Nav;
 
+use LOW_MM\Utils\FrontendSettings;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -73,11 +75,43 @@ class MobileNavShell {
 
 		$drawer_close = '</div></div>';
 
+		$search = $this->search_markup();
+
 		if ( preg_match( '/^(<div[^>]*low-mm-nav-container[^>]*>)([\s\S]*)(<\/div>\s*)$/', $nav_menu, $matches ) ) {
-			return $matches[1] . $toggle . $drawer_open . $matches[2] . $drawer_close . $matches[3];
+			return $matches[1] . $search . $toggle . $drawer_open . $matches[2] . $drawer_close . $matches[3];
 		}
 
-		return $toggle . $drawer_open . $nav_menu . $drawer_close;
+		return $search . $toggle . $drawer_open . $nav_menu . $drawer_close;
+	}
+
+	/**
+	 * Search bar markup injected into the nav. JS relocates it into the drawer on
+	 * mobile. Falls back to a native WordPress search submit without JS.
+	 *
+	 * @return string
+	 */
+	private function search_markup(): string {
+		if ( ! FrontendSettings::search_enabled() ) {
+			return '';
+		}
+
+		return sprintf(
+			'<div class="low-mm-search" data-low-mm-search>'
+			. '<form class="low-mm-search__form" role="search" method="get" action="%1$s">'
+			. '<div class="low-mm-search__field">'
+			. '<span class="low-mm-search__icon" aria-hidden="true"></span>'
+			. '<input type="search" class="low-mm-search__input" name="s" placeholder="%2$s" aria-label="%2$s" autocomplete="off" />'
+			. '<button type="button" class="low-mm-search__clear" aria-label="%4$s" hidden><span aria-hidden="true">&times;</span></button>'
+			. '</div>'
+			. '<button type="button" class="low-mm-search__back" aria-label="%3$s"><span aria-hidden="true">&lsaquo;</span> %3$s</button>'
+			. '</form>'
+			. '<div class="low-mm-search__panel low-mega-menu" hidden><div class="low-mm-search__results" aria-live="polite"></div></div>'
+			. '</div>',
+			esc_url( home_url( '/' ) ),
+			esc_attr__( 'Search', 'low-mega-menu' ),
+			esc_attr__( 'Back', 'low-mega-menu' ),
+			esc_attr__( 'Clear search', 'low-mega-menu' )
+		);
 	}
 
 	/**

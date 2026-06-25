@@ -96,7 +96,8 @@ export function positionViewportPanel( panel, container ) {
 	const minTop = getAdminBarMinTop();
 
 	panel.style.position = 'fixed';
-	panel.style.top = `${ Math.max( minTop, Math.round( rect.bottom ) ) }px`;
+	// Nudge the panel down 1px so its top edge sits just below the header border.
+	panel.style.top = `${ Math.max( minTop, Math.round( rect.bottom ) ) + 1 }px`;
 	panel.style.left = '0';
 	panel.style.right = '0';
 	panel.style.width = '100%';

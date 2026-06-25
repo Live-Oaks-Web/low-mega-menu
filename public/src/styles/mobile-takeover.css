@@ -16,6 +16,17 @@
 
 	.low-mega-menu.low-mm-nav-container.low-mm-mobile-mode .low-mm-mobile-header {
 		@apply low-flex low-items-center low-gap-3 low-border-b low-border-gray-200 low-bg-white low-px-4 low-py-3;
+		background-color: #ffffff;
+	}
+
+	/*
+	 * Tint the drilled-in panel grey. The visible surface is .low-mm-panel__inner
+	 * (painted via --low-mm-panel-bg, set inline to white), so override that too;
+	 * the mobile header strip stays white from its own rule above.
+	 */
+	.low-mm-drill-active .low-mega-menu,
+	.low-mm-drill-active .low-mega-menu .low-mm-panel__inner {
+		background-color: #f1f1f1;
 	}
 
 	.low-mega-menu.low-mm-nav-container.low-mm-mobile-mode .low-mm-panel .low-mm-mobile-header {
@@ -36,6 +47,8 @@
 
 	.low-mega-menu .low-mm-back {
 		@apply low-border-0 low-bg-transparent low-p-0 low-text-base low-font-medium low-text-gray-900;
+		order: 1;
+		margin-left: auto;
 	}
 
 	.low-mega-menu .low-mm-mobile-header__title {

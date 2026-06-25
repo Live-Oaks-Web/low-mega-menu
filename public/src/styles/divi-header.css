@@ -6,6 +6,12 @@ body.low-mm-divi-header-active #main-header .mobile_nav {
 	display: none !important;
 }
 
+/* Use the plugin search instead of Divi's built-in search. */
+body.low-mm-divi-header-active #et_top_search,
+body.low-mm-divi-header-active #et_search_icon {
+	display: none !important;
+}
+
 body.low-mm-divi-header-active #main-header .low-mm-header-navigation {
 	display: flex;
 	align-items: center;
@@ -32,10 +38,57 @@ body.low-mm-divi-header-active #main-header #top-menu {
 	padding: 0;
 }
 
+/*
+ * Vertically center the nav (desktop) and the hamburger toggle (mobile) within
+ * Divi's #et-top-navigation. The logo is absolutely positioned, so the container
+ * collapses to its content height with no room to center. JS (divi-header.js)
+ * publishes Divi's intended nav height (data-height / data-fixed-height) as
+ * --low-mm-divi-nav-height, used here as min-height so align-items:center works.
+ * Applied at all widths so the mobile toggle centers too.
+ */
+body.low-mm-divi-header-active #main-header #et-top-navigation {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	min-height: var( --low-mm-divi-nav-height, 0px );
+	padding: 0 !important;
+}
+
+body.low-mm-divi-header-active #main-header #top-menu-nav {
+	display: flex;
+	align-items: center;
+	float: none;
+	margin: 0;
+}
+
 @media (max-width: 1023px) {
 	body.low-mm-divi-header-active #main-header .low-mm-header-navigation {
 		flex: 1 1 100%;
 		justify-content: flex-end;
+	}
+
+	/*
+	 * Open the mobile drawer flush below Divi's header. divi-header.js publishes
+	 * the header's live bottom edge as --low-mm-divi-header-bottom; fall back to
+	 * the admin bar offset if the metric is unavailable.
+	 */
+	body.low-mm-divi-header-active .low-mm-mobile-drawer {
+		top: var( --low-mm-divi-header-bottom, var( --low-mm-admin-bar-offset, 0px ) );
+	}
+
+	/*
+	 * When a menu item is drilled into on mobile, the panel fills the drawer
+	 * panel (its transformed containing block), which already starts at the
+	 * header bottom — so it covers the menu items. top:0/height:100% relative to
+	 * that container; JS sets matching inline values once it runs.
+	 */
+	body.low-mm-divi-header-active .low-mega-menu .low-mm-panel {
+		top: 0;
+		height: 100%;
+	}
+
+	body.low-mm-divi-header-active .low-mm-drawer-close {
+		display: none !important;
 	}
 
 	body.low-mm-divi-header-active #main-header .low-mm-menu-toggle--divi-slot {
@@ -90,5 +143,30 @@ body.low-mm-divi-header-active #main-header #top-menu {
 @media (min-width: 1024px) {
 	body.low-mm-divi-header-active #main-header .low-mm-menu-toggle--divi-slot {
 		display: none !important;
+	}
+
+	/*
+	 * Desktop Divi layout: search floats left, menu is absolutely centered to the
+	 * right so it shares the row with the search bar.
+	 */
+	body.low-mm-divi-header-active #main-header .low-mm-search {
+		float: left;
+	}
+
+	body.low-mm-divi-header-active #main-header #et-top-navigation {
+		width: 100% !important;
+		position: relative;
+	}
+
+	body.low-mm-divi-header-active #main-header #top-menu-nav {
+		padding-left: 100px;
+		width: 100%;
+	}
+
+	body.low-mm-divi-header-active #main-header #top-menu {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		right: 0;
 	}
 }

@@ -1,6 +1,7 @@
 import { isMobileViewport } from './constants';
 import { syncAdminBarOffset } from './admin-bar';
 import { overrideDiviNav } from './config';
+import { syncDiviHeaderMetrics } from './divi-header';
 
 const THEME_TOGGLE_SELECTORS = [
 	'.menu-toggle',
@@ -129,6 +130,7 @@ export class MobileDrawerController {
 
 		if ( overrideDiviNav() ) {
 			this.hideDiviMobileNav();
+			syncDiviHeaderMetrics();
 		}
 
 		syncAdminBarOffset();

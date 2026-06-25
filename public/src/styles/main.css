@@ -2,14 +2,23 @@
 @import './mobile-takeover.css';
 @import './mobile-drawer.css';
 @import './divi-header.css';
+@import './search.css';
 @import './animations.css';
 
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Default the admin bar offset on :root so the JS-published value (set on
+ * <html>) inherits into the plugin UI. Declaring it on .low-mega-menu would
+ * shadow the JS value for descendants (drawer/panels) and pin it to 0.
+ */
+:root {
+	--low-mm-admin-bar-offset: 0px;
+}
+
 .low-mega-menu {
 	--low-mm-breakpoint: 1024px;
-	--low-mm-admin-bar-offset: 0px;
 	box-sizing: border-box;
 }
 

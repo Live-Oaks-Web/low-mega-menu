@@ -79,6 +79,16 @@ class SettingsPage {
 			)
 		);
 
+		register_setting(
+			self::OPTION_GROUP,
+			FrontendSettings::OPTION_SEARCH_ENABLED,
+			array(
+				'type'              => 'boolean',
+				'sanitize_callback' => array( $this, 'sanitize_checkbox' ),
+				'default'           => true,
+			)
+		);
+
 		$divi_header_description = NavEnvironment::is_divi()
 			? __( 'Replace Divi\'s #et-top-navigation with the plugin mega menu. Divi logo and top bar are unchanged. Enabled by default on Divi until you change this setting.', 'low-mega-menu' )
 			: __( 'Only applies when the Divi theme is active.', 'low-mega-menu' );
@@ -104,6 +114,16 @@ class SettingsPage {
 		}
 
 		$sections = array(
+			'low_mm_search' => array(
+				'title'  => __( 'Search', 'low-mega-menu' ),
+				'fields' => array(
+					FrontendSettings::OPTION_SEARCH_ENABLED => array(
+						'label'       => __( 'Enable mega menu search', 'low-mega-menu' ),
+						'description' => __( 'Adds an AJAX search bar to the navigation. Results (posts and pages) appear in a mega menu panel on desktop and inside the drawer on mobile. On by default.', 'low-mega-menu' ),
+						'type'        => 'checkbox',
+					),
+				),
+			),
 			'low_mm_accessibility' => array(
 				'title'  => __( 'Accessibility', 'low-mega-menu' ),
 				'fields' => array(
@@ -188,6 +208,8 @@ class SettingsPage {
 		if ( 'checkbox' === $type ) {
 			if ( FrontendSettings::OPTION_OVERRIDE_DIVI_HEADER === $field_id ) {
 				$value = FrontendSettings::override_divi_header();
+			} elseif ( FrontendSettings::OPTION_SEARCH_ENABLED === $field_id ) {
+				$value = FrontendSettings::search_enabled();
 			} else {
 				$value = (bool) get_option( $field_id, false );
 			}

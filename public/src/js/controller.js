@@ -1,6 +1,7 @@
 import { isMobileViewport } from './constants';
 import { initScrollTo } from './scroll-to';
 import { initAdminBarOffset, syncAdminBarOffset } from './admin-bar';
+import { initDiviHeaderHeight } from './divi-header';
 import { discoverNavContainers, resolvePanelTrigger } from './discover-containers';
 import { DrilldownController } from './drilldown';
 import { initHamburgerCoexistence } from './hamburger-coexistence';
@@ -9,6 +10,7 @@ import { setNavCloseHandler } from './nav-ui';
 import { resetMobilePanelInsets } from './mobile-panel-insets';
 import { getScrollTargets, resetDesktopPanelPosition } from './panel-position';
 import { PanelController } from './panel';
+import { initSearch } from './search';
 
 /** @type {PanelController|null} */
 let currentOpenPanel = null;
@@ -289,6 +291,7 @@ function repositionActiveMobileDrilldown() {
 
 function init() {
 	initAdminBarOffset();
+	initDiviHeaderHeight();
 
 	discoverNavContainers().forEach( ( container ) => {
 		initContainer( container );
@@ -296,6 +299,7 @@ function init() {
 
 	setNavCloseHandler( closeAllNavUi );
 	initScrollTo();
+	initSearch();
 
 	document.addEventListener( 'click', handleDocumentClick );
 	document.addEventListener( 'keydown', handleDocumentKeydown );

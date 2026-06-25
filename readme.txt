@@ -4,7 +4,7 @@ Tags: mega menu, navigation, menu
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,6 +21,7 @@ Features:
 * Content modules: Link List, Post Query, Image, CTA, Excerpt, Scroll To, and custom Code.
 * Post Query module with thumbnail, category, and date layout.
 * Scroll To module that links a menu item to a specific heading on any page or post.
+* AJAX search bar: results (posts and pages) appear in a mega menu panel on desktop and inside the drawer on mobile, with a clear button and no-JS fallback.
 * Mobile takeover navigation with drill-down panels.
 * Theme-agnostic styling that resists host-theme navigation CSS (tested with Divi).
 
@@ -30,6 +31,13 @@ Features:
 2. Activate the plugin through the Plugins screen in WordPress.
 
 == Changelog ==
+
+= 1.2.0 =
+* Added an AJAX search bar to the mega menu: live results for posts and pages with thumbnail, type, and excerpt.
+* Desktop results open in a full-width mega menu panel; mobile relocates the search to the top of the drawer and expands into a full search view with a Back button.
+* Added a clear (X) button inside the search field and a settings toggle to enable/disable search (on by default).
+* Added a public REST endpoint (low-mm/v1/search) with filters for searchable post types and result count.
+* Divi: hide the built-in Divi search, vertically center the menu, and refine desktop/mobile header and drawer layout.
 
 = 1.1.0 =
 * Added Scroll To module: link a menu item to a heading on any page or post, with smooth scrolling and an adjustable offset.
