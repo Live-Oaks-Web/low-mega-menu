@@ -36,15 +36,18 @@ class CtaModule extends Module {
 	 */
 	public static function default_settings(): array {
 		return array(
-			'heading'              => '',
-			'body'                 => '',
-			'body_plain_text_only' => false,
-			'button_label'         => '',
-			'button_url'           => '',
-			'background_mode'      => 'color',
-			'background_color'     => '#f5f5f5',
-			'background_image_id'  => 0,
-			'alignment'            => 'left',
+			'heading'                 => '',
+			'body'                    => '',
+			'body_plain_text_only'    => false,
+			'text_color'              => '',
+			'button_label'            => '',
+			'button_url'              => '',
+			'button_text_color'       => '',
+			'button_background_color' => '',
+			'background_mode'         => 'color',
+			'background_color'        => '#f5f5f5',
+			'background_image_id'     => 0,
+			'alignment'               => 'left',
 		);
 	}
 
@@ -69,18 +72,33 @@ class CtaModule extends Module {
 	 * {@inheritDoc}
 	 */
 	public static function render( array $settings ): string {
-		$background_style = '';
+		$container_style = '';
 		if ( 'image' === ( $settings['background_mode'] ?? 'color' ) ) {
 			$image_id = (int) ( $settings['background_image_id'] ?? 0 );
 			$image    = $image_id ? wp_get_attachment_image_url( $image_id, 'large' ) : '';
 			if ( $image ) {
-				$background_style = 'background-image:url(' . esc_url( $image ) . ');';
+				$container_style .= 'background-image:url(' . esc_url( $image ) . ');';
 			}
 		} else {
-			$color = (string) ( $settings['background_color'] ?? '#f5f5f5' );
-			if ( preg_match( '/^#[0-9a-fA-F]{6}$/', $color ) ) {
-				$background_style = 'background-color:' . $color . ';';
+			$color = self::sanitize_color( (string) ( $settings['background_color'] ?? '#f5f5f5' ) );
+			if ( '' !== $color ) {
+				$container_style .= 'background-color:' . $color . ';';
 			}
+		}
+
+		$text_color = self::sanitize_color( (string) ( $settings['text_color'] ?? '' ) );
+		if ( '' !== $text_color ) {
+			$container_style .= 'color:' . $text_color . ';';
+		}
+
+		$button_style       = '';
+		$button_text_color  = self::sanitize_color( (string) ( $settings['button_text_color'] ?? '' ) );
+		$button_background   = self::sanitize_color( (string) ( $settings['button_background_color'] ?? '' ) );
+		if ( '' !== $button_text_color ) {
+			$button_style .= 'color:' . $button_text_color . ';';
+		}
+		if ( '' !== $button_background ) {
+			$button_style .= 'background-color:' . $button_background . ';';
 		}
 
 		return self::render_template(
@@ -91,9 +109,25 @@ class CtaModule extends Module {
 				'button_label'     => (string) ( $settings['button_label'] ?? '' ),
 				'button_url'       => (string) ( $settings['button_url'] ?? '' ),
 				'alignment'        => (string) ( $settings['alignment'] ?? 'left' ),
-				'background_style' => $background_style,
+				'background_style' => $container_style,
+				'button_style'     => $button_style,
 			)
 		);
+	}
+
+	/**
+	 * Validate and normalize a CSS color value (hex 3/6/8 digits).
+	 *
+	 * @param string $color Raw color value.
+	 * @return string Sanitized color, or empty string when invalid.
+	 */
+	private static function sanitize_color( string $color ): string {
+		$color = trim( $color );
+		if ( preg_match( '/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/', $color ) ) {
+			return $color;
+		}
+
+		return '';
 	}
 }
 

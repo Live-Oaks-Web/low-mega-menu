@@ -10,6 +10,7 @@
  * @var string $button_url
  * @var string $alignment
  * @var string $background_style
+ * @var string $button_style
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -31,7 +32,7 @@ defined( 'ABSPATH' ) || exit;
 	<?php endif; ?>
 	<?php if ( $button_label && $button_url ) : ?>
 		<p class="low-mm-cta__button-wrap">
-			<a class="low-mm-cta__button" href="<?php echo esc_url( $button_url ); ?>"><?php echo esc_html( $button_label ); ?></a>
+			<a class="low-mm-cta__button" href="<?php echo esc_url( $button_url ); ?>"<?php echo $button_style ? ' style="' . esc_attr( $button_style ) . '"' : ''; ?>><?php echo esc_html( $button_label ); ?></a>
 		</p>
 	<?php endif; ?>
 </div>

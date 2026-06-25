@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.0
+
+- Added a lightweight WYSIWYG editor (bold, italic, links, lists, plus a code view) to the Call to Action body and the Code / Shortcode content fields. The Code field defaults to the code view so shortcodes and raw HTML stay intact.
+- Added Call to Action color controls: text color (heading and body), button text color, and button background color (sanitized to valid hex on output).
+- Minor CSS refinements: centered search status message, fixed a 1px seam under Divi's fixed header (`.et-fixed-header`), and added spacing below the CTA body.
+
 ## 1.2.0
 
 - Added an AJAX search bar to the mega menu: live results for posts and pages with thumbnail, type, and excerpt.

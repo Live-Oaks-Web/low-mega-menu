@@ -12,6 +12,11 @@ body.low-mm-divi-header-active #et_search_icon {
 	display: none !important;
 }
 
+/* Close the 1px seam under Divi's fixed header. */
+.et-fixed-header .low-mega-menu {
+	margin-top: -1px;
+}
+
 body.low-mm-divi-header-active #main-header .low-mm-header-navigation {
 	display: flex;
 	align-items: center;

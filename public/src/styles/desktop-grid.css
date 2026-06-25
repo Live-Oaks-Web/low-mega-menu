@@ -244,6 +244,10 @@
 	@apply low-rounded-md low-p-6;
 }
 
+.low-mm-cta__body {
+	padding-bottom: 1em;
+}
+
 .low-mega-menu .low-mm-cta__button {
 	@apply low-inline-block low-rounded low-bg-gray-900 low-px-4 low-py-2 low-text-white low-no-underline;
 }

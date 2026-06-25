@@ -1,4 +1,3 @@
-import { RichText } from '@wordpress/block-editor';
 import { MediaUpload } from '@wordpress/media-utils';
 import {
 	Button,
@@ -7,6 +6,7 @@ import {
 	TextControl,
 	ColorPalette,
 } from '@wordpress/components';
+import WysiwygControl from '../components/WysiwygControl';
 
 export default function CtaFields( { settings, onChange } ) {
 	const backgroundMode = settings.background_mode || 'color';
@@ -18,18 +18,23 @@ export default function CtaFields( { settings, onChange } ) {
 				value={ settings.heading || '' }
 				onChange={ ( value ) => onChange( { heading: value } ) }
 			/>
-			<label className="components-base-control__label">Body</label>
-			<RichText
-				tagName="div"
+			<WysiwygControl
+				label="Body"
 				value={ settings.body || '' }
 				onChange={ ( value ) => onChange( { body: value } ) }
-				allowedFormats={ [ 'core/bold', 'core/italic', 'core/link' ] }
 			/>
 			<CheckboxControl
 				label="Plain text only for body"
 				checked={ !! settings.body_plain_text_only }
 				onChange={ ( value ) => onChange( { body_plain_text_only: value } ) }
 			/>
+			<div>
+				<p className="components-base-control__label">Text color (heading &amp; body)</p>
+				<ColorPalette
+					value={ settings.text_color || '' }
+					onChange={ ( value ) => onChange( { text_color: value || '' } ) }
+				/>
+			</div>
 			<TextControl
 				label="Button label"
 				value={ settings.button_label || '' }
@@ -40,6 +45,20 @@ export default function CtaFields( { settings, onChange } ) {
 				value={ settings.button_url || '' }
 				onChange={ ( value ) => onChange( { button_url: value } ) }
 			/>
+			<div>
+				<p className="components-base-control__label">Button text color</p>
+				<ColorPalette
+					value={ settings.button_text_color || '' }
+					onChange={ ( value ) => onChange( { button_text_color: value || '' } ) }
+				/>
+			</div>
+			<div>
+				<p className="components-base-control__label">Button background color</p>
+				<ColorPalette
+					value={ settings.button_background_color || '' }
+					onChange={ ( value ) => onChange( { button_background_color: value || '' } ) }
+				/>
+			</div>
 			<SelectControl
 				label="Background"
 				value={ backgroundMode }

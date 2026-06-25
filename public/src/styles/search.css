@@ -159,9 +159,11 @@
 }
 
 .low-mm-search__status {
+	margin: 30px auto;
 	padding: 0.85rem 0.75rem;
 	color: #6b7280;
 	font-size: 0.9rem;
+	text-align: center;
 }
 
 /* Desktop: results render as a full-width mega menu panel (positioned by JS). */

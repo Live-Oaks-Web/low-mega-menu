@@ -4,7 +4,7 @@ Tags: mega menu, navigation, menu
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.2.0
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -31,6 +31,11 @@ Features:
 2. Activate the plugin through the Plugins screen in WordPress.
 
 == Changelog ==
+
+= 1.3.0 =
+* Added a lightweight WYSIWYG editor (bold, italic, links, lists, plus a code view) to the Call to Action body and the Code / Shortcode content fields. The Code field defaults to the code view so shortcodes and raw HTML stay intact.
+* Added Call to Action color controls: text color (heading and body), button text color, and button background color.
+* Minor CSS refinements: centered search status message, fixed a 1px seam under Divi's fixed header, and added spacing below the CTA body.
 
 = 1.2.0 =
 * Added an AJAX search bar to the mega menu: live results for posts and pages with thumbnail, type, and excerpt.
