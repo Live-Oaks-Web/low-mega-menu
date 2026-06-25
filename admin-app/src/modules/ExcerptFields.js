@@ -56,6 +56,12 @@ export default function ExcerptFields( { settings, onChange } ) {
 				options={ options }
 				onChange={ ( value ) => onChange( { source_post_id: parseInt( value, 10 ) || 0 } ) }
 			/>
+			<TextControl
+				label="Custom title override"
+				value={ settings.custom_title || '' }
+				onChange={ ( value ) => onChange( { custom_title: value } ) }
+				help="Leave blank to use the page or post title."
+			/>
 			<CheckboxControl
 				label="Show featured image"
 				checked={ !! settings.show_image }

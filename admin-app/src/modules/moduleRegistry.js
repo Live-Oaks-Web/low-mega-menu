@@ -22,6 +22,7 @@ const registry = {
 			source_post_id: 0,
 			show_image: true,
 			show_excerpt: true,
+			custom_title: '',
 			custom_excerpt: '',
 			excerpt_length: 0,
 			rich_text_override: false,

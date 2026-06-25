@@ -39,6 +39,7 @@ class ExcerptModule extends Module {
 			'source_post_id'     => 0,
 			'show_image'         => true,
 			'show_excerpt'       => true,
+			'custom_title'       => '',
 			'custom_excerpt'     => '',
 			'excerpt_length'     => 0,
 			'rich_text_override' => false,
@@ -89,6 +90,9 @@ class ExcerptModule extends Module {
 			}
 		}
 
+		$custom_title = trim( (string) ( $settings['custom_title'] ?? '' ) );
+		$title        = '' !== $custom_title ? $custom_title : get_the_title( $post );
+
 		$image_html = '';
 		if ( ! empty( $settings['show_image'] ) && has_post_thumbnail( $post ) ) {
 			$image_html = get_the_post_thumbnail( $post, 'medium', array( 'class' => 'low-mm-excerpt__image' ) );
@@ -97,6 +101,7 @@ class ExcerptModule extends Module {
 		return self::render_template(
 			array(
 				'post'       => $post,
+				'title'      => $title,
 				'image_html' => $image_html,
 				'excerpt'    => $excerpt,
 				'rich'       => $use_rich,

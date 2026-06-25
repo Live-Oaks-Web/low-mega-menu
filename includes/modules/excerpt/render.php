@@ -4,6 +4,7 @@
  *
  * @package LOW_MM
  * @var \WP_Post $post
+ * @var string   $title
  * @var string   $image_html
  * @var string   $excerpt
  * @var bool     $rich
@@ -16,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
 		<?php if ( $image_html ) : ?>
 			<div class="low-mm-excerpt__media"><?php echo $image_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
 		<?php endif; ?>
-		<h3 class="low-mm-excerpt__title"><?php echo esc_html( get_the_title( $post ) ); ?></h3>
+		<h3 class="low-mm-excerpt__title"><?php echo esc_html( $title ); ?></h3>
 	</a>
 	<?php if ( $excerpt ) : ?>
 		<div class="low-mm-excerpt__body">
