@@ -4,7 +4,7 @@ Tags: mega menu, navigation, menu
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.6.4
+Stable tag: 1.7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,7 @@ Features:
 * AJAX search bar: results (posts and pages) appear in a mega menu panel on desktop and inside the drawer on mobile, with a clear button and no-JS fallback.
 * Mobile takeover navigation with drill-down panels.
 * Configurable mobile/desktop breakpoint (default 1024px) in Mega Menu → Settings.
+* Settings → Styling: color palette for panels, links, buttons, and optional custom CSS.
 * Theme-agnostic styling that resists host-theme navigation CSS (tested with Divi).
 * Updates from GitHub Releases when a newer version is published.
 
@@ -39,11 +40,19 @@ This plugin updates from the public GitHub repository (Live-Oaks-Web/low-mega-me
 To publish an update for sites running the plugin:
 
 1. Bump the Version header / LOW_MM_VERSION and update the changelog.
-2. Build front-end assets (`npm run build:all`) and ensure Composer autoload is present.
+2. Build and package: `npm run package` (installs deps, builds assets, writes a lean `low-mega-menu.zip`).
 3. Create a GitHub Release tagged like `v1.6.0` (tag must match the new version).
-4. Attach a ZIP named `low-mega-menu.zip` whose root folder is `low-mega-menu/` and includes built `public/build` and `admin-app/build` assets. The updater prefers that asset over the raw source archive.
+4. Attach that ZIP. The updater prefers `low-mega-menu.zip` over the raw source archive.
+
+Do not zip the whole plugin folder by hand — `node_modules` (especially under `admin-app/`) is hundreds of MB and is not needed at runtime. Delete `node_modules` folders after building if you want a small working copy; recreate them with `npm install` / `npm install --prefix admin-app` when you need to build again.
 
 == Changelog ==
+
+= 1.7.0 =
+* Added Settings → Styling with a color palette (text, headings, links, buttons, panel background, muted, border, accent) prefilled from the current defaults.
+* Added a custom CSS textarea with useful mega menu class names listed.
+* Palette and CSS apply only to mega panels, search, and drawer chrome — not theme top-level nav items.
+* Added `npm run package` / `bin/package-release.ps1` for a lean installable ZIP without node_modules.
 
 = 1.6.4 =
 * Search: magnifying-glass icon is decorative (not a clickable submit); the clear (X) control replaces it in the same slot when the field has text. Enter still submits the form.

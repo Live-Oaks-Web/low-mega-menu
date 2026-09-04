@@ -4,6 +4,7 @@
 @import './divi-header.css';
 @import './search.css';
 @import './animations.css';
+@import './theme-vars.css';
 
 @tailwind components;
 @tailwind utilities;

@@ -9,7 +9,8 @@
 		"build:public:js": "esbuild public/src/js/controller.js --bundle --outfile=public/build/controller.js --format=iife",
 		"build:public": "npm run build:public:css && npm run build:public:js",
 		"build:all": "npm run build:admin && npm run build:public",
-		"start:admin": "npm run start --prefix admin-app"
+		"start:admin": "npm run start --prefix admin-app",
+		"package": "powershell -ExecutionPolicy Bypass -File ./bin/package-release.ps1"
 	},
 	"devDependencies": {
 		"autoprefixer": "^10.4.20",

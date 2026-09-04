@@ -38,6 +38,16 @@ class FrontendSettings {
 	public const OPTION_MOBILE_BREAKPOINT = 'low_mm_mobile_breakpoint';
 
 	/**
+	 * Option key: palette colors from Settings → Styling.
+	 */
+	public const OPTION_STYLE_COLORS = 'low_mm_style_colors';
+
+	/**
+	 * Option key: optional custom CSS from Settings → Styling.
+	 */
+	public const OPTION_CUSTOM_CSS = 'low_mm_custom_css';
+
+	/**
 	 * Default mobile/desktop breakpoint in pixels.
 	 */
 	public const DEFAULT_MOBILE_BREAKPOINT = 1024;
@@ -199,5 +209,224 @@ class FrontendSettings {
 				'searchError'     => __( 'Search failed. Please try again.', 'low-mega-menu' ),
 			),
 		);
+	}
+
+	/**
+	 * Color keys available in Settings → Styling.
+	 *
+	 * Defaults match the current front-end palette.
+	 *
+	 * @return array<string, array{label:string,description:string,default:string}>
+	 */
+	public static function style_color_fields(): array {
+		return array(
+			'text'        => array(
+				'label'       => __( 'Text color', 'low-mega-menu' ),
+				'description' => __( 'Body and excerpt text inside mega panels.', 'low-mega-menu' ),
+				'default'     => '#4b5563',
+			),
+			'heading'     => array(
+				'label'       => __( 'Heading color', 'low-mega-menu' ),
+				'description' => __( 'Titles and CTA headings inside panels.', 'low-mega-menu' ),
+				'default'     => '#21303f',
+			),
+			'link'        => array(
+				'label'       => __( 'Link color', 'low-mega-menu' ),
+				'description' => __( 'Links inside mega panels and search results.', 'low-mega-menu' ),
+				'default'     => '#21303f',
+			),
+			'link_hover'  => array(
+				'label'       => __( 'Link hover color', 'low-mega-menu' ),
+				'description' => __( 'Panel color on hover / focus inside panels.', 'low-mega-menu' ),
+				'default'     => '#111827',
+			),
+			'button_bg'   => array(
+				'label'       => __( 'Button background', 'low-mega-menu' ),
+				'description' => __( 'CTA button backgrounds.', 'low-mega-menu' ),
+				'default'     => '#111827',
+			),
+			'button_text' => array(
+				'label'       => __( 'Button text', 'low-mega-menu' ),
+				'description' => __( 'Text color on CTA buttons.', 'low-mega-menu' ),
+				'default'     => '#ffffff',
+			),
+			'panel_bg'    => array(
+				'label'       => __( 'Panel background', 'low-mega-menu' ),
+				'description' => __( 'Desktop mega panel and search results panel background.', 'low-mega-menu' ),
+				'default'     => '#ffffff',
+			),
+			'muted'       => array(
+				'label'       => __( 'Muted text', 'low-mega-menu' ),
+				'description' => __( 'Secondary labels, dates, meta, and search status text.', 'low-mega-menu' ),
+				'default'     => '#8a8a8a',
+			),
+			'border'      => array(
+				'label'       => __( 'Border / divider', 'low-mega-menu' ),
+				'description' => __( 'Column borders and subtle separators.', 'low-mega-menu' ),
+				'default'     => '#e5e7eb',
+			),
+			'accent'      => array(
+				'label'       => __( 'Accent', 'low-mega-menu' ),
+				'description' => __( 'Highlights such as post labels and search focus accents.', 'low-mega-menu' ),
+				'default'     => '#bb4d1c',
+			),
+		);
+	}
+
+	/**
+	 * Saved style colors with stylesheet defaults filled in when unset/empty.
+	 *
+	 * @return array<string, string>
+	 */
+	public static function style_colors(): array {
+		$stored = get_option( self::OPTION_STYLE_COLORS, array() );
+		if ( ! is_array( $stored ) ) {
+			$stored = array();
+		}
+
+		$colors = array();
+		foreach ( self::style_color_fields() as $key => $field ) {
+			$raw   = isset( $stored[ $key ] ) ? (string) $stored[ $key ] : '';
+			$clean = self::sanitize_hex_color_value( $raw );
+			$colors[ $key ] = '' !== $clean ? $clean : (string) $field['default'];
+		}
+
+		return $colors;
+	}
+
+	/**
+	 * Sanitize the style colors option.
+	 *
+	 * @param mixed $value Submitted value.
+	 * @return array<string, string>
+	 */
+	public static function sanitize_style_colors( $value ): array {
+		if ( ! is_array( $value ) ) {
+			$value = array();
+		}
+
+		$clean = array();
+		foreach ( array_keys( self::style_color_fields() ) as $key ) {
+			$raw           = isset( $value[ $key ] ) ? (string) $value[ $key ] : '';
+			$clean[ $key ] = self::sanitize_hex_color_value( $raw );
+		}
+
+		return $clean;
+	}
+
+	/**
+	 * Accept a 3/6/8 digit hex color, or empty string.
+	 *
+	 * @param string $color Raw color.
+	 * @return string
+	 */
+	public static function sanitize_hex_color_value( string $color ): string {
+		$color = trim( $color );
+		if ( '' === $color ) {
+			return '';
+		}
+
+		if ( preg_match( '/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$/', $color ) ) {
+			return $color;
+		}
+
+		return '';
+	}
+
+	/**
+	 * Custom CSS from Settings → Styling.
+	 *
+	 * @return string
+	 */
+	public static function custom_css(): string {
+		return (string) get_option( self::OPTION_CUSTOM_CSS, '' );
+	}
+
+	/**
+	 * Sanitize custom CSS (admins only; strip tags / null bytes).
+	 *
+	 * @param mixed $value Submitted CSS.
+	 * @return string
+	 */
+	public static function sanitize_custom_css( $value ): string {
+		$value = is_string( $value ) ? $value : '';
+		$value = str_replace( "\0", '', $value );
+		$value = wp_strip_all_tags( $value );
+
+		/**
+		 * Filter sanitized custom CSS before save.
+		 *
+		 * @param string $value CSS.
+		 */
+		return (string) apply_filters( 'low_mm_sanitize_custom_css', $value );
+	}
+
+	/**
+	 * Useful class names for the Custom CSS help text.
+	 *
+	 * @return string
+	 */
+	public static function custom_css_class_help(): string {
+		$classes = array(
+			'.low-mm-panel',
+			'.low-mm-panel__inner',
+			'.low-mm-column',
+			'.low-mm-column__label',
+			'.low-mm-module',
+			'.low-mm-link-list',
+			'.low-mm-link-list__link',
+			'.low-mm-post-query__title',
+			'.low-mm-post-query__label',
+			'.low-mm-cta',
+			'.low-mm-cta__heading',
+			'.low-mm-cta__button',
+			'.low-mm-search',
+			'.low-mm-search__input',
+			'.low-mm-search__panel',
+			'.low-mm-mobile-drawer__panel',
+		);
+
+		return implode( ', ', $classes );
+	}
+
+	/**
+	 * Build an inline CSS block for saved palette colors + custom CSS.
+	 *
+	 * @return string
+	 */
+	public static function public_style_css(): string {
+		$parts  = array();
+		$vars   = array();
+		$colors = self::style_colors();
+		$map    = array(
+			'text'        => '--low-mm-color-text',
+			'heading'     => '--low-mm-color-heading',
+			'link'        => '--low-mm-color-link',
+			'link_hover'  => '--low-mm-color-link-hover',
+			'button_bg'   => '--low-mm-color-button-bg',
+			'button_text' => '--low-mm-color-button-text',
+			'panel_bg'    => '--low-mm-color-panel-bg',
+			'muted'       => '--low-mm-color-muted',
+			'border'      => '--low-mm-color-border',
+			'accent'      => '--low-mm-color-accent',
+		);
+
+		foreach ( $map as $key => $css_var ) {
+			if ( ! empty( $colors[ $key ] ) ) {
+				$vars[] = $css_var . ':' . $colors[ $key ];
+			}
+		}
+
+		if ( ! empty( $vars ) ) {
+			// Scope to mega surfaces only — never the Divi/theme top-level nav links.
+			$parts[] = '.low-mm-panel,.low-mm-mobile-drawer,.low-mm-search{' . implode( ';', $vars ) . ';}';
+		}
+
+		$custom = trim( self::custom_css() );
+		if ( '' !== $custom ) {
+			$parts[] = $custom;
+		}
+
+		return implode( "\n", $parts );
 	}
 }

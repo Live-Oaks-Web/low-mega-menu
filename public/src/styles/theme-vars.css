@@ -1,0 +1,94 @@
+/*
+ * Themeable color tokens for mega panels / search / drawer chrome only.
+ * Settings → Styling overrides these via inline CSS. Do not style Divi/theme
+ * top-level nav links from here.
+ */
+
+.low-mm-panel,
+.low-mm-mobile-drawer,
+.low-mm-search {
+	--low-mm-color-text: #4b5563;
+	--low-mm-color-heading: #21303f;
+	--low-mm-color-link: #21303f;
+	--low-mm-color-link-hover: #111827;
+	--low-mm-color-button-bg: #111827;
+	--low-mm-color-button-text: #ffffff;
+	--low-mm-color-panel-bg: #ffffff;
+	--low-mm-color-muted: #8a8a8a;
+	--low-mm-color-border: #e5e7eb;
+	--low-mm-color-accent: #bb4d1c;
+}
+
+.low-mm-panel,
+.low-mm-search__panel {
+	color: var(--low-mm-color-text);
+}
+
+.low-mm-panel .low-mm-excerpt__title,
+.low-mm-panel .low-mm-cta__heading,
+.low-mm-panel .low-mm-post-query__title,
+.low-mm-panel .low-mm-scroll-to__title,
+.low-mm-search__title {
+	color: var(--low-mm-color-heading);
+}
+
+.low-mm-panel .low-mm-column__label {
+	color: var(--low-mm-color-muted);
+}
+
+.low-mm-panel a:not(.low-mm-cta__button),
+.low-mm-search__link {
+	color: var(--low-mm-color-link);
+}
+
+.low-mm-panel a:not(.low-mm-cta__button):hover,
+.low-mm-panel a:not(.low-mm-cta__button):focus,
+.low-mm-search__link:hover,
+.low-mm-search__link:focus {
+	color: var(--low-mm-color-link-hover);
+}
+
+/* Beat Divi `#top-menu a` for CTA buttons inside panels only. */
+.low-mm-panel a.low-mm-cta__button,
+#top-menu .low-mm-panel a.low-mm-cta__button {
+	background-color: var(--low-mm-color-button-bg);
+	color: var(--low-mm-color-button-text);
+}
+
+.low-mm-panel a.low-mm-cta__button:hover,
+.low-mm-panel a.low-mm-cta__button:focus,
+#top-menu .low-mm-panel a.low-mm-cta__button:hover,
+#top-menu .low-mm-panel a.low-mm-cta__button:focus {
+	background-color: var(--low-mm-color-button-bg);
+	color: var(--low-mm-color-button-text);
+	opacity: 0.92;
+}
+
+.low-mm-panel,
+.low-mm-search__panel {
+	background-color: var(--low-mm-color-panel-bg);
+}
+
+.low-mm-panel .low-mm-post-query__meta,
+.low-mm-panel .low-mm-post-query__date,
+.low-mm-panel .low-mm-scroll-to__content,
+.low-mm-search__type,
+.low-mm-search__excerpt,
+.low-mm-search__status {
+	color: var(--low-mm-color-muted);
+}
+
+.low-mm-panel .low-mm-post-query__label {
+	color: var(--low-mm-color-accent);
+}
+
+.low-mm-panel .low-mm-column--border-left,
+.low-mm-panel .low-mm-column--border-right,
+.low-mm-panel .low-mm-column.has-border-left,
+.low-mm-panel .low-mm-column.has-border-right {
+	border-color: var(--low-mm-color-border);
+}
+
+.low-mm-search__field:focus-within {
+	box-shadow: 0 4px 16px color-mix(in srgb, var(--low-mm-color-accent) 18%, transparent);
+}

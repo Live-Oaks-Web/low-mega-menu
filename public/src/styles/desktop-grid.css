@@ -199,7 +199,6 @@
 	font-size: 1rem;
 	line-height: 1.35;
 	font-weight: 600;
-	color: #21303f;
 }
 
 .low-mega-menu .low-mm-post-query__link:hover .low-mm-post-query__title {
@@ -211,14 +210,12 @@
 	margin-top: 0.5rem;
 	font-size: 0.875rem;
 	font-weight: 600;
-	color: #bb4d1c;
 }
 
 .low-mega-menu .low-mm-post-query__date {
 	display: block;
 	margin-top: 0.375rem;
 	font-size: 0.8125rem;
-	color: #8a8a8a;
 }
 
 .low-mega-menu .low-mm-post-query__excerpt {
@@ -232,7 +229,6 @@
 .low-mega-menu .low-mm-post-query__view-all a {
 	font-size: 0.9375rem;
 	font-weight: 600;
-	color: #21303f;
 	text-decoration: none;
 }
 

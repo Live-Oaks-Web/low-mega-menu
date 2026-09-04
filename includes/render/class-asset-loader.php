@@ -138,6 +138,7 @@ class AssetLoader {
 				$version
 			);
 			$this->print_breakpoint_bridge( $breakpoint );
+			$this->print_style_overrides();
 			return;
 		}
 
@@ -164,6 +165,19 @@ class AssetLoader {
 		wp_enqueue_style( 'low-mm-public' );
 		wp_add_inline_style( 'low-mm-public', (string) $css );
 		$this->print_breakpoint_bridge( $breakpoint );
+		$this->print_style_overrides();
+	}
+
+	/**
+	 * Append Settings → Styling palette variables and custom CSS.
+	 *
+	 * @return void
+	 */
+	private function print_style_overrides(): void {
+		$style_css = FrontendSettings::public_style_css();
+		if ( '' !== $style_css ) {
+			wp_add_inline_style( 'low-mm-public', $style_css );
+		}
 	}
 
 	/**

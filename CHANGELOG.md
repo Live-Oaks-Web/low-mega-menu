@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.7.0
+
+- Added Settings → Styling with a color palette (text, headings, links, buttons, panel background, muted, border, accent) prefilled from the current defaults.
+- Added a custom CSS textarea with useful mega menu class names listed.
+- Palette and CSS apply only to mega panels, search, and drawer chrome — not theme top-level nav items.
+- Added `npm run package` / `bin/package-release.ps1` for a lean installable ZIP without node_modules.
+
 ## 1.6.4
 
 - Search: magnifying-glass icon is decorative (not a clickable submit); the clear (X) control replaces it in the same slot when the field has text. Enter still submits the form.
