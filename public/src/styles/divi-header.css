@@ -50,13 +50,40 @@ body.low-mm-divi-header-active #main-header #top-menu {
  * publishes Divi's intended nav height (data-height / data-fixed-height) as
  * --low-mm-divi-nav-height, used here as min-height so align-items:center works.
  * Applied at all widths so the mobile toggle centers too.
+ *
+ * pointer-events: none on the full-width nav shell lets clicks reach Divi's
+ * absolutely positioned logo; interactive children re-enable pointer-events.
  */
-body.low-mm-divi-header-active #main-header #et-top-navigation {
+body.low-mm-divi-header-active #main-header #et-top-navigation,
+body.low-mm-divi-header-active #main-header .low-mm-header-navigation {
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;
 	min-height: var( --low-mm-divi-nav-height, 0px );
 	padding: 0 !important;
+}
+
+body.low-mm-divi-header-active #main-header #et-top-navigation,
+body.low-mm-divi-header-active #main-header .low-mm-header-navigation,
+body.low-mm-divi-header-active #main-header #top-menu-nav,
+body.low-mm-divi-header-active #main-header .low-mm-divi-menu-nav,
+body.low-mm-divi-header-active #main-header #top-menu {
+	pointer-events: none;
+}
+
+body.low-mm-divi-header-active #main-header #et-top-navigation a,
+body.low-mm-divi-header-active #main-header #et-top-navigation button,
+body.low-mm-divi-header-active #main-header #et-top-navigation input,
+body.low-mm-divi-header-active #main-header #et-top-navigation .low-mm-search,
+body.low-mm-divi-header-active #main-header #et-top-navigation .low-mm-menu-toggle,
+body.low-mm-divi-header-active #main-header #et-top-navigation .low-mm-panel,
+body.low-mm-divi-header-active #main-header .low-mm-header-navigation a,
+body.low-mm-divi-header-active #main-header .low-mm-header-navigation button,
+body.low-mm-divi-header-active #main-header .low-mm-header-navigation input,
+body.low-mm-divi-header-active #main-header .low-mm-header-navigation .low-mm-search,
+body.low-mm-divi-header-active #main-header .low-mm-header-navigation .low-mm-menu-toggle,
+body.low-mm-divi-header-active #main-header .low-mm-header-navigation .low-mm-panel {
+	pointer-events: auto;
 }
 
 body.low-mm-divi-header-active #main-header #top-menu-nav {

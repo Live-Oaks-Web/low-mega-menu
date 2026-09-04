@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.6.3
+
+- Divi: restore logo link clicks by setting `pointer-events: none` on the full-width nav shell and re-enabling pointer events only on interactive controls (links, search, toggle, panels).
+
 ## 1.6.2
 
 - Divi: keep the plugin hamburger visible at the mobile breakpoint (`display: inline-flex !important` on `.low-mm-menu-toggle--divi-slot`), and force the replaced `#et-top-navigation` / header nav to stay visible when Divi’s mobile CSS would hide it.
