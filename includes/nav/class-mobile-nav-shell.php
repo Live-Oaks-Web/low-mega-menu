@@ -95,13 +95,17 @@ class MobileNavShell {
 			return '';
 		}
 
+		$icon_url = LOW_MM_PLUGIN_URL . 'includes/img/search.svg';
+
 		return sprintf(
 			'<div class="low-mm-search" data-low-mm-search>'
 			. '<form class="low-mm-search__form" role="search" method="get" action="%1$s">'
 			. '<div class="low-mm-search__field">'
-			. '<span class="low-mm-search__icon" aria-hidden="true"></span>'
 			. '<input type="search" class="low-mm-search__input" name="s" placeholder="%2$s" aria-label="%2$s" autocomplete="off" />'
 			. '<button type="button" class="low-mm-search__clear" aria-label="%4$s" hidden><span aria-hidden="true">&times;</span></button>'
+			. '<button type="submit" class="low-mm-search__submit" aria-label="%2$s">'
+			. '<img class="low-mm-search__icon" src="%5$s" alt="" width="20" height="20" decoding="async" />'
+			. '</button>'
 			. '</div>'
 			. '<button type="button" class="low-mm-search__back" aria-label="%3$s"><span aria-hidden="true">&lsaquo;</span> %3$s</button>'
 			. '</form>'
@@ -110,7 +114,8 @@ class MobileNavShell {
 			esc_url( home_url( '/' ) ),
 			esc_attr__( 'Search', 'low-mega-menu' ),
 			esc_attr__( 'Back', 'low-mega-menu' ),
-			esc_attr__( 'Clear search', 'low-mega-menu' )
+			esc_attr__( 'Clear search', 'low-mega-menu' ),
+			esc_url( $icon_url )
 		);
 	}
 

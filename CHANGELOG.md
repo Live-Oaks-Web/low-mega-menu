@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5.0
+
+- Redesigned the search bar: soft shadowed white field with rounded corners, placeholder on the left, and a clickable magnifying-glass submit control using `includes/img/search.svg`.
+- Added a custom title override to the Page / Post Excerpt module (leave blank to use the page or post title).
+
 ## 1.4.0
 
 - Added a custom excerpt override to the Page / Post Excerpt module: author-provided teaser text replaces the post's excerpt and takes precedence over the length and full-content options.

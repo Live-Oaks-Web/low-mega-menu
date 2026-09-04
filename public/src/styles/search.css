@@ -20,27 +20,42 @@
 	display: flex;
 	align-items: center;
 	min-width: 0;
+	background: #ffffff;
+	border: 0;
+	border-radius: 10px;
+	box-shadow: 0 4px 14px rgb(0 0 0 / 0.1);
+	padding: 0 0.35rem 0 0;
 }
 
 .low-mm-search__input {
 	flex: 1 1 auto;
 	width: 100%;
 	min-width: 0;
-	border: 1px solid #d1d5db;
-	border-radius: 9999px;
-	background: #ffffff;
+	border: 0;
+	border-radius: 10px;
+	background: transparent;
 	color: #111827;
-	padding: 0.4rem 2rem 0.4rem 0.85rem;
+	padding: 0.65rem 0.5rem 0.65rem 1rem;
 	/* Inherit the theme font instead of the browser default for form controls. */
 	font-family: inherit;
-	font-size: 0.9rem;
+	font-size: 0.95rem;
 	line-height: 1.2;
 	outline: none;
+	box-shadow: none;
+}
+
+.low-mm-search__input::placeholder {
+	color: #999999;
+	opacity: 1;
 }
 
 .low-mm-search__input:focus {
-	border-color: #6b7280;
-	box-shadow: 0 0 0 3px rgb(107 114 128 / 0.15);
+	outline: none;
+	box-shadow: none;
+}
+
+.low-mm-search__field:focus-within {
+	box-shadow: 0 4px 16px rgb(0 0 0 / 0.14);
 }
 
 /* Hide the browser's native search clear control; we render our own. */
@@ -50,15 +65,13 @@
 }
 
 .low-mm-search__clear {
-	position: absolute;
-	right: 0.5rem;
-	top: 50%;
-	transform: translateY(-50%);
+	flex: 0 0 auto;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	width: 1.25rem;
 	height: 1.25rem;
+	margin-right: 0.15rem;
 	padding: 0;
 	border: 0;
 	border-radius: 9999px;
@@ -77,6 +90,39 @@
 .low-mm-search__clear:hover,
 .low-mm-search__clear:focus {
 	background: #d1d5db;
+}
+
+.low-mm-search__submit {
+	flex: 0 0 auto;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.25rem;
+	height: 2.25rem;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	border-radius: 8px;
+	background: transparent;
+	cursor: pointer;
+	line-height: 0;
+}
+
+.low-mm-search__submit:hover,
+.low-mm-search__submit:focus {
+	background: #f3f4f6;
+}
+
+.low-mm-search__submit:focus-visible {
+	outline: 2px solid #6b7280;
+	outline-offset: 1px;
+}
+
+.low-mm-search__icon {
+	display: block;
+	width: 1.25rem;
+	height: 1.25rem;
+	pointer-events: none;
 }
 
 .low-mm-search__back {
@@ -172,8 +218,8 @@
 
 /* Desktop: results render as a full-width mega menu panel (positioned by JS). */
 @media (min-width: 1024px) {
-	.low-mm-search__input {
-		width: 220px;
+	.low-mm-search__field {
+		width: 240px;
 	}
 
 	.low-mm-search__panel {

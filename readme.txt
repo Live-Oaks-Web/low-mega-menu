@@ -4,7 +4,7 @@ Tags: mega menu, navigation, menu
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.4.0
+Stable tag: 1.5.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -31,6 +31,10 @@ Features:
 2. Activate the plugin through the Plugins screen in WordPress.
 
 == Changelog ==
+
+= 1.5.0 =
+* Redesigned the search bar: soft shadowed white field with rounded corners, placeholder on the left, and a clickable magnifying-glass submit control using the plugin SVG icon.
+* Added a custom title override to the Page / Post Excerpt module (leave blank to use the page or post title).
 
 = 1.4.0 =
 * Added a custom excerpt override to the Page / Post Excerpt module: enter your own teaser text to replace the post's excerpt (takes precedence over the length and full-content options).
