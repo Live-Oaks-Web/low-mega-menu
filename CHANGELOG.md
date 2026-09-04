@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.6.2
+
+- Divi: keep the plugin hamburger visible at the mobile breakpoint (`display: inline-flex !important` on `.low-mm-menu-toggle--divi-slot`), and force the replaced `#et-top-navigation` / header nav to stay visible when Divi’s mobile CSS would hide it.
+
 ## 1.6.1
 
 - Hardened the mobile breakpoint setting so CSS media queries always match the saved value (rewritten on enqueue, cache-busted by breakpoint).

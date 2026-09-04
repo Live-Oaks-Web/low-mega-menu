@@ -177,7 +177,10 @@ class AssetLoader {
 		wp_add_inline_style(
 			'low-mm-public',
 			sprintf(
-				':root{--low-mm-breakpoint:%1$dpx;}html.low-mm-is-mobile .low-mm-nav-container>.low-mm-search,html.low-mm-is-mobile #et-top-navigation>.low-mm-search,html.low-mm-is-mobile #top-menu-nav>.low-mm-search,html.low-mm-is-mobile .low-mm-header-navigation>.low-mm-search{display:none!important;}html.low-mm-is-desktop .low-mm-menu-toggle,html.low-mm-is-desktop .low-mm-drawer-close,html.low-mm-is-desktop .low-mm-mobile-drawer__backdrop{display:none!important;}',
+				':root{--low-mm-breakpoint:%1$dpx;}' .
+				'html.low-mm-is-mobile .low-mm-nav-container>.low-mm-search,html.low-mm-is-mobile #et-top-navigation>.low-mm-search,html.low-mm-is-mobile #top-menu-nav>.low-mm-search,html.low-mm-is-mobile .low-mm-header-navigation>.low-mm-search{display:none!important;}' .
+				'html.low-mm-is-mobile .low-mm-menu-toggle,html.low-mm-is-mobile body.low-mm-divi-header-active #main-header .low-mm-menu-toggle--divi-slot{display:inline-flex!important;visibility:visible!important;opacity:1!important;}' .
+				'html.low-mm-is-desktop .low-mm-menu-toggle,html.low-mm-is-desktop .low-mm-drawer-close,html.low-mm-is-desktop .low-mm-mobile-drawer__backdrop{display:none!important;}',
 				$breakpoint
 			)
 		);

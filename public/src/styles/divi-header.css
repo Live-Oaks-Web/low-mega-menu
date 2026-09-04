@@ -72,6 +72,17 @@ body.low-mm-divi-header-active #main-header #top-menu-nav {
 		justify-content: flex-end;
 	}
 
+	/* Keep our replaced nav (and hamburger) visible — Divi may hide #et-top-navigation / #top-menu-nav on mobile. */
+	body.low-mm-divi-header-active #main-header #et-top-navigation,
+	body.low-mm-divi-header-active #main-header .low-mm-header-navigation,
+	body.low-mm-divi-header-active #main-header #top-menu-nav {
+		display: flex !important;
+		visibility: visible !important;
+		opacity: 1 !important;
+		height: auto !important;
+		overflow: visible !important;
+	}
+
 	/*
 	 * Open the mobile drawer flush below Divi's header. divi-header.js publishes
 	 * the header's live bottom edge as --low-mm-divi-header-bottom; fall back to
@@ -97,7 +108,9 @@ body.low-mm-divi-header-active #main-header #top-menu-nav {
 	}
 
 	body.low-mm-divi-header-active #main-header .low-mm-menu-toggle--divi-slot {
-		display: inline-flex;
+		display: inline-flex !important;
+		visibility: visible !important;
+		opacity: 1 !important;
 		order: 2;
 		margin-left: auto;
 		border: 0;
