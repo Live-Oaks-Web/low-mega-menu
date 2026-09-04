@@ -69,16 +69,16 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 1.25rem;
-	height: 1.25rem;
-	margin-right: 0.15rem;
+	width: 2.25rem;
+	height: 2.25rem;
+	margin: 0;
 	padding: 0;
 	border: 0;
-	border-radius: 9999px;
-	background: #e5e7eb;
-	color: #374151;
+	border-radius: 8px;
+	background: transparent;
+	color: #6d6d6d;
 	font-family: inherit;
-	font-size: 1rem;
+	font-size: 1.25rem;
 	line-height: 1;
 	cursor: pointer;
 }
@@ -89,10 +89,12 @@
 
 .low-mm-search__clear:hover,
 .low-mm-search__clear:focus {
-	background: #d1d5db;
+	color: #111827;
+	background: #f3f4f6;
 }
 
-.low-mm-search__submit {
+/* Decorative search glyph — not a control; Enter still submits the form. */
+.low-mm-search__icon-wrap {
 	flex: 0 0 auto;
 	display: flex;
 	align-items: center;
@@ -101,28 +103,19 @@
 	height: 2.25rem;
 	margin: 0;
 	padding: 0;
-	border: 0;
-	border-radius: 8px;
-	background: transparent;
-	cursor: pointer;
 	line-height: 0;
+	pointer-events: none;
 }
 
-.low-mm-search__submit:hover,
-.low-mm-search__submit:focus {
-	background: #f3f4f6;
-}
-
-.low-mm-search__submit:focus-visible {
-	outline: 2px solid #6b7280;
-	outline-offset: 1px;
+/* When clear is visible, it takes the icon's slot. */
+.low-mm-search__field:has(.low-mm-search__clear:not([hidden])) .low-mm-search__icon-wrap {
+	display: none;
 }
 
 .low-mm-search__icon {
 	display: block;
 	width: 1.25rem;
 	height: 1.25rem;
-	pointer-events: none;
 }
 
 .low-mm-search__back {

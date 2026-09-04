@@ -4,7 +4,7 @@ Tags: mega menu, navigation, menu
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.6.3
+Stable tag: 1.6.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -44,6 +44,9 @@ To publish an update for sites running the plugin:
 4. Attach a ZIP named `low-mega-menu.zip` whose root folder is `low-mega-menu/` and includes built `public/build` and `admin-app/build` assets. The updater prefers that asset over the raw source archive.
 
 == Changelog ==
+
+= 1.6.4 =
+* Search: magnifying-glass icon is decorative (not a clickable submit); the clear (X) control replaces it in the same slot when the field has text. Enter still submits the form.
 
 = 1.6.3 =
 * Divi: restore logo link clicks by letting pointer events pass through the full-width nav shell onto Divi's absolutely positioned logo (interactive menu/search/toggle controls still receive clicks).

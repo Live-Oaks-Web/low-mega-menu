@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.6.4
+
+- Search: magnifying-glass icon is decorative (not a clickable submit); the clear (X) control replaces it in the same slot when the field has text. Enter still submits the form.
+
 ## 1.6.3
 
 - Divi: restore logo link clicks by setting `pointer-events: none` on the full-width nav shell and re-enabling pointer events only on interactive controls (links, search, toggle, panels).
