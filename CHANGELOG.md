@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.1
+
+- Hardened the mobile breakpoint setting so CSS media queries always match the saved value (rewritten on enqueue, cache-busted by breakpoint).
+- Prevent search from stacking above the hamburger on mobile: hide in-header search until it is relocated into the drawer; early `html.low-mm-is-mobile` / `low-mm-is-desktop` classes keep first paint in sync with JS.
+
 ## 1.6.0
 
 - Added a configurable mobile breakpoint setting (default 1024px) under Mega Menu → Settings → Layout. CSS media queries are rewritten on enqueue when customized; JS viewport checks use the same value.

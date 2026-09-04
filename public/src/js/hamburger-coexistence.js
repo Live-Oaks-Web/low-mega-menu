@@ -23,8 +23,12 @@ export function initHamburgerCoexistence( { onThemeMenuClose, onViewportChange }
 	const mediaQueryList = window.matchMedia( getMobileMediaQuery() );
 
 	const syncMobileModeClass = () => {
+		const mobile = isMobileViewport();
+		document.documentElement.classList.toggle( 'low-mm-is-mobile', mobile );
+		document.documentElement.classList.toggle( 'low-mm-is-desktop', ! mobile );
+
 		document.querySelectorAll( '.low-mm-nav-container' ).forEach( ( container ) => {
-			if ( isMobileViewport() ) {
+			if ( mobile ) {
 				container.classList.add( 'low-mm-mobile-mode' );
 			} else {
 				container.classList.remove( 'low-mm-mobile-mode' );

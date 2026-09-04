@@ -119,22 +119,14 @@ class AssetLoader {
 	}
 
 	/**
-	 * Enqueue public CSS, rewriting media-query breakpoints when customized.
+	 * Enqueue public CSS, rewriting media-query breakpoints to the setting.
 	 *
 	 * @param string $css_path   Absolute path to compiled CSS.
 	 * @param int    $breakpoint Desktop starts at this width (px).
 	 * @return void
 	 */
 	private function enqueue_public_css( string $css_path, int $breakpoint ): void {
-		if ( FrontendSettings::DEFAULT_MOBILE_BREAKPOINT === $breakpoint ) {
-			wp_enqueue_style(
-				'low-mm-public',
-				LOW_MM_PLUGIN_URL . 'public/build/main.css',
-				array(),
-				LOW_MM_VERSION
-			);
-			return;
-		}
+		$version = LOW_MM_VERSION . '-' . $breakpoint;
 
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- local plugin asset.
 		$css = file_get_contents( $css_path );
@@ -143,29 +135,62 @@ class AssetLoader {
 				'low-mm-public',
 				LOW_MM_PLUGIN_URL . 'public/build/main.css',
 				array(),
-				LOW_MM_VERSION
+				$version
 			);
+			$this->print_breakpoint_bridge( $breakpoint );
 			return;
 		}
 
 		$mobile_max = max( 0, $breakpoint - 1 );
-		$css        = str_replace(
-			array(
-				'max-width: 1023px',
-				'min-width: 1024px',
-				'--low-mm-breakpoint: 1024px',
-			),
-			array(
-				'max-width: ' . $mobile_max . 'px',
-				'min-width: ' . $breakpoint . 'px',
-				'--low-mm-breakpoint: ' . $breakpoint . 'px',
-			),
+
+		// Rewrite every mobile/desktop media query (tolerant of whitespace).
+		$css = preg_replace(
+			'/@media\s*\(\s*max-width:\s*1023px\s*\)/',
+			'@media (max-width: ' . $mobile_max . 'px)',
 			$css
 		);
+		$css = preg_replace(
+			'/@media\s*\(\s*min-width:\s*1024px\s*\)/',
+			'@media (min-width: ' . $breakpoint . 'px)',
+			$css
+		);
+		$css = str_replace(
+			'--low-mm-breakpoint: 1024px',
+			'--low-mm-breakpoint: ' . $breakpoint . 'px',
+			(string) $css
+		);
 
-		wp_register_style( 'low-mm-public', false, array(), LOW_MM_VERSION );
+		wp_register_style( 'low-mm-public', false, array(), $version );
 		wp_enqueue_style( 'low-mm-public' );
-		wp_add_inline_style( 'low-mm-public', $css );
+		wp_add_inline_style( 'low-mm-public', (string) $css );
+		$this->print_breakpoint_bridge( $breakpoint );
+	}
+
+	/**
+	 * Publish the breakpoint to CSS vars and set an early html class so layout
+	 * matches JS even before the main bundle runs.
+	 *
+	 * @param int $breakpoint Desktop starts at this width (px).
+	 * @return void
+	 */
+	private function print_breakpoint_bridge( int $breakpoint ): void {
+		wp_add_inline_style(
+			'low-mm-public',
+			sprintf(
+				':root{--low-mm-breakpoint:%1$dpx;}html.low-mm-is-mobile .low-mm-nav-container>.low-mm-search,html.low-mm-is-mobile #et-top-navigation>.low-mm-search,html.low-mm-is-mobile #top-menu-nav>.low-mm-search,html.low-mm-is-mobile .low-mm-header-navigation>.low-mm-search{display:none!important;}html.low-mm-is-desktop .low-mm-menu-toggle,html.low-mm-is-desktop .low-mm-drawer-close,html.low-mm-is-desktop .low-mm-mobile-drawer__backdrop{display:none!important;}',
+				$breakpoint
+			)
+		);
+
+		$script = sprintf(
+			'(function(){var bp=%1$d;var mobile=window.matchMedia("(max-width:"+(bp-1)+"px)").matches;var r=document.documentElement;r.classList.toggle("low-mm-is-mobile",mobile);r.classList.toggle("low-mm-is-desktop",!mobile);r.style.setProperty("--low-mm-breakpoint",bp+"px");})();',
+			$breakpoint
+		);
+
+		// Inline before the main bundle so the first paint matches the setting.
+		wp_register_script( 'low-mm-breakpoint', false, array(), LOW_MM_VERSION, false );
+		wp_enqueue_script( 'low-mm-breakpoint' );
+		wp_add_inline_script( 'low-mm-breakpoint', $script );
 	}
 
 	/**

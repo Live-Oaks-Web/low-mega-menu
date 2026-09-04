@@ -243,7 +243,19 @@
 
 /* Mobile: search sits at the top of the drawer and expands into a search view. */
 @media (max-width: 1023px) {
-	.low-mm-search {
+	/*
+	 * Keep search out of the header chrome on mobile. JS relocates it into the
+	 * drawer; until then (or if JS is late), do not stack it above the hamburger.
+	 */
+	.low-mm-nav-container > .low-mm-search,
+	#et-top-navigation > .low-mm-search,
+	#top-menu-nav > .low-mm-search,
+	.low-mm-header-navigation > .low-mm-search {
+		display: none !important;
+	}
+
+	.low-mm-mobile-drawer__panel > .low-mm-search {
+		display: flex;
 		flex-direction: column;
 		align-items: stretch;
 		width: 100%;
