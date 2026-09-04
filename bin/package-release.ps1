@@ -27,7 +27,8 @@ $required = @(
 	'public\build\main.css',
 	'public\build\controller.js',
 	'admin-app\build\index.js',
-	'vendor\autoload.php'
+	'vendor\autoload.php',
+	'low-mega-menu.php'
 )
 foreach ( $path in $required ) {
 	if ( -not ( Test-Path $path ) ) {
@@ -64,7 +65,6 @@ Get-ChildItem -Force | ForEach-Object {
 	if ( $name -eq 'admin-app' ) {
 		$destAdmin = Join-Path $pluginDir 'admin-app'
 		New-Item -ItemType Directory -Path $destAdmin | Out-Null
-		# Ship only the built admin bundle — not src / node_modules / lockfiles.
 		Copy-Item ( Join-Path $_.FullName 'build' ) -Destination ( Join-Path $destAdmin 'build' ) -Recurse -Force
 		return
 	}
@@ -79,8 +79,30 @@ Get-ChildItem -Force | ForEach-Object {
 	Copy-Item $_.FullName -Destination ( Join-Path $pluginDir $name ) -Recurse -Force
 }
 
-Compress-Archive -Path $pluginDir -DestinationPath $zipPath -Force
+if ( -not ( Test-Path ( Join-Path $pluginDir 'low-mega-menu.php' ) ) ) {
+	throw 'Staged package is missing low-mega-menu.php'
+}
+if ( -not ( Test-Path ( Join-Path $pluginDir 'vendor\autoload.php' ) ) ) {
+	throw 'Staged package is missing vendor/autoload.php'
+}
+
+# Prefer tar: Compress-Archive has produced ZIPs that WordPress unpacks incorrectly.
+Push-Location $stageRoot
+try {
+	& tar -a -c -f $zipPath low-mega-menu
+	if ( $LASTEXITCODE -ne 0 -or -not ( Test-Path $zipPath ) ) {
+		throw "tar failed to create $zipPath"
+	}
+} finally {
+	Pop-Location
+}
+
+# Sanity-check archive layout before upload.
+$listing = & tar -tf $zipPath
+if ( $listing -notcontains 'low-mega-menu/low-mega-menu.php' ) {
+	throw 'ZIP is missing low-mega-menu/low-mega-menu.php — refusing to publish a broken package'
+}
 
 $sizeMb = [math]::Round( ( Get-Item $zipPath ).Length / 1MB, 2 )
 Write-Host "Created $zipPath ($sizeMb MB)"
-Write-Host 'Root folder inside ZIP: low-mega-menu/'
+Write-Host 'Verified root entry: low-mega-menu/low-mega-menu.php'

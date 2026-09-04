@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.7.3
+
+- Fix WordPress admin updates that deactivated the plugin and left "Plugin file does not exist": more reliable `upgrader_source_selection` rename (find nested `low-mega-menu.php`, move/copy into `low-mega-menu/`), and package release ZIPs with `tar` instead of `Compress-Archive`.
+- Recovery: remove any broken `wp-content/plugins/low-mega-menu` folder, then upload `low-mega-menu.zip` via Plugins → Add New.
+
 ## 1.7.2
 
 - Search results: when a post has no authored excerpt, show the first 8 words of content instead of an empty excerpt.

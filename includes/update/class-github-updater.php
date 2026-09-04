@@ -273,53 +273,140 @@ class GitHubUpdater {
 	}
 
 	/**
-	 * Rename the extracted GitHub folder to the expected plugin slug.
+	 * Point the upgrader at the folder that contains low-mega-menu.php and ensure
+	 * it is named `low-mega-menu` (GitHub zips often use a tag suffix or nest).
 	 *
-	 * @param string      $source        Source directory with trailing slash.
-	 * @param string      $remote_source Remote upgrade directory.
+	 * @param string       $source        Source directory with trailing slash.
+	 * @param string       $remote_source Remote upgrade directory.
 	 * @param \WP_Upgrader $upgrader      Upgrader instance.
-	 * @param array       $hook_extra    Extra hook data.
+	 * @param array        $hook_extra    Extra hook data.
 	 * @return string|\WP_Error
 	 */
-	public function fix_source_dir( $source, $remote_source, $upgrader, $hook_extra = array() ) {
+	public function fix_source_dir( $source, $remote_source, $upgrader, $hook_extra = array() ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
 		global $wp_filesystem;
 
-		$plugin = isset( $hook_extra['plugin'] ) ? (string) $hook_extra['plugin'] : '';
-		if ( $plugin && $plugin !== $this->plugin_basename ) {
+		if ( empty( $source ) || empty( $remote_source ) || ! is_object( $wp_filesystem ) ) {
 			return $source;
 		}
 
-		// Also match when WordPress identifies by slug during bulk updates.
-		if ( ! $plugin && isset( $hook_extra['plugins'] ) && is_array( $hook_extra['plugins'] ) ) {
-			if ( ! in_array( $this->plugin_basename, $hook_extra['plugins'], true ) ) {
-				return $source;
-			}
-		}
+		$explicit = $this->is_our_upgrade( $hook_extra );
+		$found    = $this->find_plugin_root( (string) $source );
 
-		if ( empty( $source ) || ! is_object( $wp_filesystem ) ) {
+		// Another plugin's package (or unrelated upgrader run).
+		if ( ! $explicit && ! $found ) {
 			return $source;
 		}
 
-		$source_basename = basename( untrailingslashit( $source ) );
-		if ( self::SLUG === $source_basename ) {
-			return $source;
+		if ( ! $found ) {
+			return new \WP_Error(
+				'low_mm_upgrade_missing_main_file',
+				__( 'The update package did not contain low-mega-menu.php.', 'low-mega-menu' )
+			);
 		}
 
-		// Only rename folders that look like this plugin's GitHub archive.
-		if ( 0 !== strpos( $source_basename, self::SLUG ) && false === strpos( $source_basename, 'low-mega-menu' ) ) {
-			return $source;
+		$found      = trailingslashit( $found );
+		$desired    = trailingslashit( $remote_source ) . self::SLUG . '/';
+		$found_base = basename( untrailingslashit( $found ) );
+
+		if ( self::SLUG === $found_base && untrailingslashit( $found ) === untrailingslashit( $desired ) ) {
+			return $found;
 		}
 
-		$target = trailingslashit( $remote_source ) . self::SLUG;
+		// If something already occupies the desired path, remove it first.
+		if ( $wp_filesystem->exists( $desired ) && untrailingslashit( $found ) !== untrailingslashit( $desired ) ) {
+			$wp_filesystem->delete( $desired, true );
+		}
 
-		if ( $wp_filesystem->move( $source, $target ) ) {
-			return trailingslashit( $target );
+		if ( untrailingslashit( $found ) === untrailingslashit( $desired ) ) {
+			return $desired;
+		}
+
+		if ( $wp_filesystem->move( $found, $desired ) ) {
+			return $desired;
+		}
+
+		// Fallback: copy then delete (some hosts block move across directories).
+		if ( copy_dir( $found, $desired ) ) {
+			$wp_filesystem->delete( $found, true );
+			return $desired;
 		}
 
 		return new \WP_Error(
 			'low_mm_upgrade_rename_failed',
-			__( 'Could not rename the GitHub update package to the plugin directory.', 'low-mega-menu' )
+			__( 'Could not move the update package into the low-mega-menu plugin directory.', 'low-mega-menu' )
 		);
+	}
+
+	/**
+	 * Whether this upgrader run is for LOW Mega Menu.
+	 *
+	 * @param array $hook_extra Extra hook data.
+	 * @return bool
+	 */
+	private function is_our_upgrade( array $hook_extra ): bool {
+		$plugin = isset( $hook_extra['plugin'] ) ? (string) $hook_extra['plugin'] : '';
+		if ( $plugin ) {
+			return $plugin === $this->plugin_basename;
+		}
+
+		if ( isset( $hook_extra['plugins'] ) && is_array( $hook_extra['plugins'] ) ) {
+			return in_array( $this->plugin_basename, $hook_extra['plugins'], true );
+		}
+
+		// When WordPress omits plugin identifiers, only claim packages that look like ours.
+		return false;
+	}
+
+	/**
+	 * Locate the directory that contains the main plugin file.
+	 *
+	 * @param string $source Extracted source path.
+	 * @return string|null Absolute path without requiring a trailing slash.
+	 */
+	private function find_plugin_root( string $source ): ?string {
+		global $wp_filesystem;
+
+		$source = untrailingslashit( $source );
+		$main   = 'low-mega-menu.php';
+
+		if ( $wp_filesystem->exists( $source . '/' . $main ) ) {
+			return $source;
+		}
+
+		$dirlist = $wp_filesystem->dirlist( $source );
+		if ( ! is_array( $dirlist ) ) {
+			return null;
+		}
+
+		foreach ( $dirlist as $name => $entry ) {
+			if ( empty( $entry['type'] ) || 'd' !== $entry['type'] ) {
+				continue;
+			}
+
+			$candidate = $source . '/' . $name;
+			if ( $wp_filesystem->exists( $candidate . '/' . $main ) ) {
+				return $candidate;
+			}
+
+			// One more level for oddly nested packages.
+			$nested = $wp_filesystem->dirlist( $candidate );
+			if ( ! is_array( $nested ) ) {
+				continue;
+			}
+
+			foreach ( $nested as $nested_name => $nested_entry ) {
+				if ( empty( $nested_entry['type'] ) || 'd' !== $nested_entry['type'] ) {
+					continue;
+				}
+
+				$deep = $candidate . '/' . $nested_name;
+				if ( $wp_filesystem->exists( $deep . '/' . $main ) ) {
+					return $deep;
+				}
+			}
+		}
+
+		return null;
 	}
 
 	/**
@@ -331,6 +418,17 @@ class GitHubUpdater {
 	 */
 	public function clear_cache( $upgrader, $options ): void { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundBeforeLastUsed
 		if ( empty( $options['type'] ) || 'plugin' !== $options['type'] ) {
+			return;
+		}
+
+		$plugins = array();
+		if ( ! empty( $options['plugins'] ) && is_array( $options['plugins'] ) ) {
+			$plugins = $options['plugins'];
+		} elseif ( ! empty( $options['plugin'] ) ) {
+			$plugins = array( $options['plugin'] );
+		}
+
+		if ( $plugins && ! in_array( $this->plugin_basename, $plugins, true ) ) {
 			return;
 		}
 
