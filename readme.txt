@@ -4,7 +4,7 @@ Tags: mega menu, navigation, menu
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.5.0
+Stable tag: 1.6.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,14 +23,31 @@ Features:
 * Scroll To module that links a menu item to a specific heading on any page or post.
 * AJAX search bar: results (posts and pages) appear in a mega menu panel on desktop and inside the drawer on mobile, with a clear button and no-JS fallback.
 * Mobile takeover navigation with drill-down panels.
+* Configurable mobile/desktop breakpoint (default 1024px) in Mega Menu → Settings.
 * Theme-agnostic styling that resists host-theme navigation CSS (tested with Divi).
+* Updates from GitHub Releases when a newer version is published.
 
 == Installation ==
 
 1. Upload the plugin files to `/wp-content/plugins/low-mega-menu/`, or install through the WordPress plugins screen.
 2. Activate the plugin through the Plugins screen in WordPress.
 
+== Updates ==
+
+This plugin updates from the public GitHub repository (Live-Oaks-Web/low-mega-menu). WordPress will show an update when a newer GitHub Release is published.
+
+To publish an update for sites running the plugin:
+
+1. Bump the Version header / LOW_MM_VERSION and update the changelog.
+2. Build front-end assets (`npm run build:all`) and ensure Composer autoload is present.
+3. Create a GitHub Release tagged like `v1.6.0` (tag must match the new version).
+4. Attach a ZIP named `low-mega-menu.zip` whose root folder is `low-mega-menu/` and includes built `public/build` and `admin-app/build` assets. The updater prefers that asset over the raw source archive.
+
 == Changelog ==
+
+= 1.6.0 =
+* Added a configurable mobile breakpoint setting (default 1024px) under Mega Menu → Settings → Layout. CSS and JS both honor the value.
+* Added GitHub Releases-based plugin updates for the public Live-Oaks-Web/low-mega-menu repository (prefers an attached low-mega-menu.zip asset).
 
 = 1.5.0 =
 * Redesigned the search bar: soft shadowed white field with rounded corners, placeholder on the left, and a clickable magnifying-glass submit control using the plugin SVG icon.

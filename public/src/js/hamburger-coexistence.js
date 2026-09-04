@@ -1,4 +1,4 @@
-import { isMobileViewport, mobileMediaQuery } from './constants';
+import { isMobileViewport, getMobileMediaQuery } from './constants';
 
 /**
  * Body classes many themes toggle when their mobile nav is open.
@@ -20,7 +20,7 @@ const THEME_MENU_OPEN_BODY_CLASSES = [
  * @param {() => void} [options.onViewportChange]
  */
 export function initHamburgerCoexistence( { onThemeMenuClose, onViewportChange } = {} ) {
-	const mediaQueryList = window.matchMedia( mobileMediaQuery );
+	const mediaQueryList = window.matchMedia( getMobileMediaQuery() );
 
 	const syncMobileModeClass = () => {
 		document.querySelectorAll( '.low-mm-nav-container' ).forEach( ( container ) => {

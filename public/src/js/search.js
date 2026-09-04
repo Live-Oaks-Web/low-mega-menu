@@ -1,4 +1,4 @@
-import { isMobileViewport, mobileMediaQuery } from './constants';
+import { isMobileViewport, getMobileMediaQuery } from './constants';
 import {
 	searchEnabled,
 	getSearchEndpoint,
@@ -358,7 +358,7 @@ export function initSearch() {
 		return;
 	}
 
-	const mql = window.matchMedia( mobileMediaQuery );
+	const mql = window.matchMedia( getMobileMediaQuery() );
 	const onChange = () => controllers.forEach( ( controller ) => controller.applyPlacement() );
 
 	if ( typeof mql.addEventListener === 'function' ) {

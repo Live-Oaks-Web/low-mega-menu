@@ -32,6 +32,27 @@ class FrontendSettings {
 	public const OPTION_SEARCH_ENABLED = 'low_mm_search_enabled';
 
 	/**
+	 * Option key: viewport width (px) at which desktop mega menu begins.
+	 * Viewports below this value use the mobile drawer / takeover.
+	 */
+	public const OPTION_MOBILE_BREAKPOINT = 'low_mm_mobile_breakpoint';
+
+	/**
+	 * Default mobile/desktop breakpoint in pixels.
+	 */
+	public const DEFAULT_MOBILE_BREAKPOINT = 1024;
+
+	/**
+	 * Minimum allowed breakpoint.
+	 */
+	public const MIN_MOBILE_BREAKPOINT = 480;
+
+	/**
+	 * Maximum allowed breakpoint.
+	 */
+	public const MAX_MOBILE_BREAKPOINT = 1600;
+
+	/**
 	 * Register front-end hooks driven by settings.
 	 *
 	 * @return void
@@ -103,6 +124,34 @@ class FrontendSettings {
 	}
 
 	/**
+	 * Desktop starts at this width (px). Below it, mobile drawer / takeover is used.
+	 *
+	 * @return int
+	 */
+	public static function mobile_breakpoint(): int {
+		$stored = get_option( self::OPTION_MOBILE_BREAKPOINT, null );
+		$value  = null === $stored ? self::DEFAULT_MOBILE_BREAKPOINT : (int) $stored;
+
+		return self::sanitize_mobile_breakpoint( $value );
+	}
+
+	/**
+	 * Clamp a breakpoint value into the allowed range.
+	 *
+	 * @param mixed $value Raw value.
+	 * @return int
+	 */
+	public static function sanitize_mobile_breakpoint( $value ): int {
+		$value = (int) $value;
+
+		if ( $value < self::MIN_MOBILE_BREAKPOINT || $value > self::MAX_MOBILE_BREAKPOINT ) {
+			return self::DEFAULT_MOBILE_BREAKPOINT;
+		}
+
+		return $value;
+	}
+
+	/**
 	 * Post types the search endpoint queries.
 	 *
 	 * @return string[]
@@ -143,6 +192,7 @@ class FrontendSettings {
 			'searchEndpoint'   => esc_url_raw( rest_url( 'low-mm/v1/search' ) ),
 			'restNonce'        => wp_create_nonce( 'wp_rest' ),
 			'searchMinChars'   => 2,
+			'mobileBreakpoint' => self::mobile_breakpoint(),
 			'i18n'             => array(
 				'searchNoResults' => __( 'No results found.', 'low-mega-menu' ),
 				'searchLoading'   => __( 'Searching…', 'low-mega-menu' ),

@@ -23,6 +23,7 @@ use LOW_MM\Render\AssetLoader;
 use LOW_MM\REST\HeadingsController;
 use LOW_MM\REST\MenusController;
 use LOW_MM\REST\SearchController;
+use LOW_MM\Update\GitHubUpdater;
 use LOW_MM\Utils\FrontendSettings;
 
 defined( 'ABSPATH' ) || exit;
@@ -79,6 +80,7 @@ class Plugin {
 		}
 		new FrontendNav();
 		new AssetLoader();
+		new GitHubUpdater();
 	}
 
 	/**

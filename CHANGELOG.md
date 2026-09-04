@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.6.0
+
+- Added a configurable mobile breakpoint setting (default 1024px) under Mega Menu → Settings → Layout. CSS media queries are rewritten on enqueue when customized; JS viewport checks use the same value.
+- Added GitHub Releases-based plugin updates (`Live-Oaks-Web/low-mega-menu`). Prefers an attached `low-mega-menu.zip` release asset; falls back to the tag source archive.
+
 ## 1.5.0
 
 - Redesigned the search bar: soft shadowed white field with rounded corners, placeholder on the left, and a clickable magnifying-glass submit control using `includes/img/search.svg`.

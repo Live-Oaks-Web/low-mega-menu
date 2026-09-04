@@ -89,6 +89,16 @@ class SettingsPage {
 			)
 		);
 
+		register_setting(
+			self::OPTION_GROUP,
+			FrontendSettings::OPTION_MOBILE_BREAKPOINT,
+			array(
+				'type'              => 'integer',
+				'sanitize_callback' => array( FrontendSettings::class, 'sanitize_mobile_breakpoint' ),
+				'default'           => FrontendSettings::DEFAULT_MOBILE_BREAKPOINT,
+			)
+		);
+
 		$divi_header_description = NavEnvironment::is_divi()
 			? __( 'Replace Divi\'s #et-top-navigation with the plugin mega menu. Divi logo and top bar are unchanged. Enabled by default on Divi until you change this setting.', 'low-mega-menu' )
 			: __( 'Only applies when the Divi theme is active.', 'low-mega-menu' );
@@ -114,6 +124,24 @@ class SettingsPage {
 		}
 
 		$sections = array(
+			'low_mm_layout' => array(
+				'title'  => __( 'Layout', 'low-mega-menu' ),
+				'fields' => array(
+					FrontendSettings::OPTION_MOBILE_BREAKPOINT => array(
+						'label'       => __( 'Mobile breakpoint (px)', 'low-mega-menu' ),
+						'description' => sprintf(
+							/* translators: 1: default breakpoint, 2: minimum, 3: maximum */
+							__( 'Viewport width at which the desktop mega menu starts. Below this width the mobile drawer is used. Default: %1$d. Allowed range: %2$d–%3$d.', 'low-mega-menu' ),
+							FrontendSettings::DEFAULT_MOBILE_BREAKPOINT,
+							FrontendSettings::MIN_MOBILE_BREAKPOINT,
+							FrontendSettings::MAX_MOBILE_BREAKPOINT
+						),
+						'type'        => 'number',
+						'min'         => FrontendSettings::MIN_MOBILE_BREAKPOINT,
+						'max'         => FrontendSettings::MAX_MOBILE_BREAKPOINT,
+					),
+				),
+			),
 			'low_mm_search' => array(
 				'title'  => __( 'Search', 'low-mega-menu' ),
 				'fields' => array(
@@ -179,6 +207,8 @@ class SettingsPage {
 						'field_id'    => $field_id,
 						'type'        => $field['type'] ?? 'text',
 						'description' => $field['description'] ?? '',
+						'min'         => $field['min'] ?? null,
+						'max'         => $field['max'] ?? null,
 					)
 				);
 			}
@@ -219,6 +249,25 @@ class SettingsPage {
 				checked( $value, true, false ),
 				! empty( $args['description'] ) ? esc_html( (string) $args['description'] ) : ''
 			);
+			return;
+		}
+
+		if ( 'number' === $type ) {
+			$value = FrontendSettings::OPTION_MOBILE_BREAKPOINT === $field_id
+				? FrontendSettings::mobile_breakpoint()
+				: (int) get_option( $field_id, 0 );
+
+			printf(
+				'<input type="number" class="small-text" name="%1$s" id="%1$s" value="%2$d" min="%3$d" max="%4$d" step="1" />',
+				esc_attr( $field_id ),
+				(int) $value,
+				isset( $args['min'] ) ? (int) $args['min'] : 0,
+				isset( $args['max'] ) ? (int) $args['max'] : 9999
+			);
+
+			if ( ! empty( $args['description'] ) ) {
+				printf( '<p class="description">%s</p>', esc_html( (string) $args['description'] ) );
+			}
 		}
 	}
 

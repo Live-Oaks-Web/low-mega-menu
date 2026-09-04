@@ -93,16 +93,12 @@ class AssetLoader {
 			return;
 		}
 
-		$css_path = LOW_MM_PLUGIN_DIR . 'public/build/main.css';
-		$js_path  = LOW_MM_PLUGIN_DIR . 'public/build/controller.js';
+		$css_path   = LOW_MM_PLUGIN_DIR . 'public/build/main.css';
+		$js_path    = LOW_MM_PLUGIN_DIR . 'public/build/controller.js';
+		$breakpoint = FrontendSettings::mobile_breakpoint();
 
 		if ( file_exists( $css_path ) ) {
-			wp_enqueue_style(
-				'low-mm-public',
-				LOW_MM_PLUGIN_URL . 'public/build/main.css',
-				array(),
-				LOW_MM_VERSION
-			);
+			$this->enqueue_public_css( $css_path, $breakpoint );
 		}
 
 		if ( file_exists( $js_path ) ) {
@@ -120,6 +116,56 @@ class AssetLoader {
 				'before'
 			);
 		}
+	}
+
+	/**
+	 * Enqueue public CSS, rewriting media-query breakpoints when customized.
+	 *
+	 * @param string $css_path   Absolute path to compiled CSS.
+	 * @param int    $breakpoint Desktop starts at this width (px).
+	 * @return void
+	 */
+	private function enqueue_public_css( string $css_path, int $breakpoint ): void {
+		if ( FrontendSettings::DEFAULT_MOBILE_BREAKPOINT === $breakpoint ) {
+			wp_enqueue_style(
+				'low-mm-public',
+				LOW_MM_PLUGIN_URL . 'public/build/main.css',
+				array(),
+				LOW_MM_VERSION
+			);
+			return;
+		}
+
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- local plugin asset.
+		$css = file_get_contents( $css_path );
+		if ( false === $css || '' === $css ) {
+			wp_enqueue_style(
+				'low-mm-public',
+				LOW_MM_PLUGIN_URL . 'public/build/main.css',
+				array(),
+				LOW_MM_VERSION
+			);
+			return;
+		}
+
+		$mobile_max = max( 0, $breakpoint - 1 );
+		$css        = str_replace(
+			array(
+				'max-width: 1023px',
+				'min-width: 1024px',
+				'--low-mm-breakpoint: 1024px',
+			),
+			array(
+				'max-width: ' . $mobile_max . 'px',
+				'min-width: ' . $breakpoint . 'px',
+				'--low-mm-breakpoint: ' . $breakpoint . 'px',
+			),
+			$css
+		);
+
+		wp_register_style( 'low-mm-public', false, array(), LOW_MM_VERSION );
+		wp_enqueue_style( 'low-mm-public' );
+		wp_add_inline_style( 'low-mm-public', $css );
 	}
 
 	/**

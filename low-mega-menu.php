@@ -2,20 +2,21 @@
 /**
  * Plugin Name:       LOW Mega Menu
  * Description:       Build multi-column mega menu panels and attach them to WordPress nav menu items.
- * Version:           1.5.0
+ * Version:           1.6.0
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Scott Hill
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       low-mega-menu
+ * Update URI:        https://github.com/Live-Oaks-Web/low-mega-menu
  *
  * @package LOW_MM
  */
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'LOW_MM_VERSION', '1.5.0' );
+define( 'LOW_MM_VERSION', '1.6.0' );
 define( 'LOW_MM_PLUGIN_FILE', __FILE__ );
 define( 'LOW_MM_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'LOW_MM_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
