@@ -107,7 +107,6 @@ class SearchController {
 		$type_obj   = get_post_type_object( $post->post_type );
 		$type_label = $type_obj instanceof \WP_Post_Type ? $type_obj->labels->singular_name : '';
 		$thumbnail  = (string) get_the_post_thumbnail_url( $post, 'thumbnail' );
-		$excerpt    = wp_strip_all_tags( get_the_excerpt( $post ) );
 
 		return array(
 			'id'        => (string) $post->ID,
@@ -115,7 +114,30 @@ class SearchController {
 			'url'       => (string) get_permalink( $post ),
 			'typeLabel' => (string) $type_label,
 			'thumbnail' => $thumbnail,
-			'excerpt'   => wp_trim_words( $excerpt, 18, '…' ),
+			'excerpt'   => $this->format_excerpt( $post ),
 		);
+	}
+
+	/**
+	 * Prefer the authored excerpt; otherwise use the first 8 words of content.
+	 *
+	 * @param \WP_Post $post Post object.
+	 * @return string
+	 */
+	private function format_excerpt( \WP_Post $post ): string {
+		if ( has_excerpt( $post ) ) {
+			$excerpt = wp_strip_all_tags( $post->post_excerpt );
+			$excerpt = html_entity_decode( $excerpt, ENT_QUOTES );
+			$excerpt = trim( preg_replace( '/\s+/u', ' ', $excerpt ) ?? $excerpt );
+
+			if ( '' !== $excerpt ) {
+				return $excerpt;
+			}
+		}
+
+		$source = wp_strip_all_tags( $post->post_content );
+		$source = html_entity_decode( $source, ENT_QUOTES );
+
+		return wp_trim_words( $source, 8, '…' );
 	}
 }

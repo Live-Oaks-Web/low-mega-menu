@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.2
+
+- Search results: when a post has no authored excerpt, show the first 8 words of content instead of an empty excerpt.
+
 ## 1.7.1
 
 - Plugins screen: added Settings and Check for update action links (manual GitHub update check with an admin notice).

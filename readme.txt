@@ -4,7 +4,7 @@ Tags: mega menu, navigation, menu
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.7.1
+Stable tag: 1.7.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,6 +47,9 @@ To publish an update for sites running the plugin:
 Do not zip the whole plugin folder by hand — `node_modules` (especially under `admin-app/`) is hundreds of MB and is not needed at runtime. Delete `node_modules` folders after building if you want a small working copy; recreate them with `npm install` / `npm install --prefix admin-app` when you need to build again.
 
 == Changelog ==
+
+= 1.7.2 =
+* Search results: when a post has no authored excerpt, show the first 8 words of content instead of an empty excerpt.
 
 = 1.7.1 =
 * Plugins screen: added Settings and Check for update action links (manual GitHub update check with an admin notice).
