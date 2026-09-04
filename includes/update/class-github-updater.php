@@ -11,6 +11,9 @@
 
 namespace LOW_MM\Update;
 
+use LOW_MM\Admin\SettingsPage;
+use LOW_MM\PostTypes\MegaMenuCPT;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -55,6 +58,137 @@ class GitHubUpdater {
 		add_filter( 'plugins_api', array( $this, 'plugins_api' ), 20, 3 );
 		add_filter( 'upgrader_source_selection', array( $this, 'fix_source_dir' ), 10, 4 );
 		add_action( 'upgrader_process_complete', array( $this, 'clear_cache' ), 10, 2 );
+		add_filter( 'plugin_action_links_' . $this->plugin_basename, array( $this, 'plugin_action_links' ) );
+		add_action( 'admin_post_low_mm_check_update', array( $this, 'handle_check_update' ) );
+		add_action( 'admin_notices', array( $this, 'render_check_update_notice' ) );
+	}
+
+	/**
+	 * Add Settings and Check for update links on plugins.php.
+	 *
+	 * @param string[] $links Existing action links.
+	 * @return string[]
+	 */
+	public function plugin_action_links( array $links ): array {
+		$settings_url = admin_url( 'edit.php?post_type=' . MegaMenuCPT::POST_TYPE . '&page=' . SettingsPage::PAGE_SLUG );
+		$check_url    = wp_nonce_url(
+			admin_url( 'admin-post.php?action=low_mm_check_update' ),
+			'low_mm_check_update'
+		);
+
+		$extra = array(
+			'settings'     => sprintf(
+				'<a href="%s">%s</a>',
+				esc_url( $settings_url ),
+				esc_html__( 'Settings', 'low-mega-menu' )
+			),
+			'check_update' => sprintf(
+				'<a href="%s">%s</a>',
+				esc_url( $check_url ),
+				esc_html__( 'Check for update', 'low-mega-menu' )
+			),
+		);
+
+		return array_merge( $extra, $links );
+	}
+
+	/**
+	 * Clear caches and force a GitHub update check, then return to plugins.php.
+	 *
+	 * @return void
+	 */
+	public function handle_check_update(): void {
+		if ( ! current_user_can( 'update_plugins' ) ) {
+			wp_die( esc_html__( 'Sorry, you are not allowed to update plugins for this site.', 'low-mega-menu' ) );
+		}
+
+		check_admin_referer( 'low_mm_check_update' );
+
+		delete_transient( self::CACHE_KEY );
+		delete_site_transient( 'update_plugins' );
+
+		if ( function_exists( 'wp_update_plugins' ) ) {
+			wp_update_plugins();
+		}
+
+		$release = $this->get_latest_release();
+		$status  = 'unavailable';
+
+		if ( is_array( $release ) && ! empty( $release['version'] ) ) {
+			if ( version_compare( $release['version'], LOW_MM_VERSION, '>' ) ) {
+				$status = 'available';
+			} else {
+				$status = 'current';
+			}
+		}
+
+		$redirect = add_query_arg(
+			array(
+				'low_mm_update_check' => $status,
+				'low_mm_remote'       => is_array( $release ) ? rawurlencode( (string) ( $release['version'] ?? '' ) ) : '',
+			),
+			admin_url( 'plugins.php' )
+		);
+
+		wp_safe_redirect( $redirect );
+		exit;
+	}
+
+	/**
+	 * Admin notice after a manual update check from plugins.php.
+	 *
+	 * @return void
+	 */
+	public function render_check_update_notice(): void {
+		if ( ! current_user_can( 'update_plugins' ) ) {
+			return;
+		}
+
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( ! $screen || 'plugins' !== $screen->id ) {
+			return;
+		}
+
+		$status = isset( $_GET['low_mm_update_check'] ) ? sanitize_key( wp_unslash( (string) $_GET['low_mm_update_check'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( '' === $status ) {
+			return;
+		}
+
+		$remote = isset( $_GET['low_mm_remote'] ) ? sanitize_text_field( wp_unslash( (string) $_GET['low_mm_remote'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+		if ( 'available' === $status ) {
+			printf(
+				'<div class="notice notice-warning is-dismissible"><p>%s</p></div>',
+				esc_html(
+					sprintf(
+						/* translators: 1: installed version, 2: available version */
+						__( 'LOW Mega Menu %1$s — update %2$s is available. Use the update link below the plugin name.', 'low-mega-menu' ),
+						LOW_MM_VERSION,
+						$remote ? $remote : __( 'a newer version', 'low-mega-menu' )
+					)
+				)
+			);
+			return;
+		}
+
+		if ( 'current' === $status ) {
+			printf(
+				'<div class="notice notice-success is-dismissible"><p>%s</p></div>',
+				esc_html(
+					sprintf(
+						/* translators: %s: installed version */
+						__( 'LOW Mega Menu %s is up to date.', 'low-mega-menu' ),
+						LOW_MM_VERSION
+					)
+				)
+			);
+			return;
+		}
+
+		printf(
+			'<div class="notice notice-error is-dismissible"><p>%s</p></div>',
+			esc_html__( 'Could not check GitHub for LOW Mega Menu updates. Try again later.', 'low-mega-menu' )
+		);
 	}
 
 	/**

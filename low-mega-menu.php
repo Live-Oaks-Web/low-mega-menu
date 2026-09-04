@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       LOW Mega Menu
  * Description:       Build multi-column mega menu panels and attach them to WordPress nav menu items.
- * Version:           1.7.0
+ * Version:           1.7.1
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Scott Hill
@@ -16,7 +16,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'LOW_MM_VERSION', '1.7.0' );
+define( 'LOW_MM_VERSION', '1.7.1' );
 define( 'LOW_MM_PLUGIN_FILE', __FILE__ );
 define( 'LOW_MM_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'LOW_MM_PLUGIN_URL', plugin_dir_url( __FILE__ ) );

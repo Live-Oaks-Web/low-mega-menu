@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.1
+
+- Plugins screen: added Settings and Check for update action links (manual GitHub update check with an admin notice).
+
 ## 1.7.0
 
 - Added Settings → Styling with a color palette (text, headings, links, buttons, panel background, muted, border, accent) prefilled from the current defaults.
