@@ -6,6 +6,28 @@ const HEADER_ID = 'main-header';
 const FIXED_HEADER_CLASS = 'et-fixed-header';
 const HEIGHT_VAR = '--low-mm-divi-nav-height';
 const HEADER_BOTTOM_VAR = '--low-mm-divi-header-bottom';
+const DIVI_MOBILE_NAV_SELECTORS = [
+	'#et_mobile_nav_menu',
+	'.et_mobile_nav_menu',
+	'#main-header .mobile_menu_bar',
+	'#main-header .et_pb_header_toggle',
+	'#main-header .mobile_nav',
+];
+
+/**
+ * Resolve the plugin-owned Divi nav node.
+ *
+ * @returns {HTMLElement|null}
+ */
+function getNavElement() {
+	const byId = document.getElementById( NAV_ID );
+	if ( byId instanceof HTMLElement ) {
+		return byId;
+	}
+
+	const byClass = document.querySelector( '#main-header .low-mm-header-navigation' );
+	return byClass instanceof HTMLElement ? byClass : null;
+}
 
 /**
  * Read the Divi-intended nav height from data attributes. Divi stores the
@@ -52,12 +74,30 @@ function syncDiviHeaderBottom() {
 }
 
 /**
+ * Remove Divi hamburger / mobile nav markup if it reappears (Customizer / Divi JS).
+ */
+export function hideDiviMobileNavMarkup() {
+	if ( ! overrideDiviNav() ) {
+		return;
+	}
+
+	DIVI_MOBILE_NAV_SELECTORS.forEach( ( selector ) => {
+		document.querySelectorAll( selector ).forEach( ( element ) => {
+			if ( element instanceof HTMLElement && ! element.classList.contains( 'low-mm-menu-toggle' ) ) {
+				element.remove();
+			}
+		} );
+	} );
+}
+
+/**
  * Publish the Divi nav height so CSS can vertically center the menu within it,
  * and refresh the header-bottom metric used by the mobile drawer.
  */
 export function syncDiviHeaderMetrics() {
-	const nav = document.getElementById( NAV_ID );
+	const nav = getNavElement();
 	if ( ! ( nav instanceof HTMLElement ) ) {
+		syncDiviHeaderBottom();
 		return;
 	}
 
@@ -66,11 +106,13 @@ export function syncDiviHeaderMetrics() {
 
 	if ( height > 0 ) {
 		nav.style.setProperty( HEIGHT_VAR, `${ height }px` );
+		nav.setAttribute( 'data-height', String( parseInt( nav.getAttribute( 'data-height' ) || String( height ), 10 ) || height ) );
 	} else {
 		nav.style.removeProperty( HEIGHT_VAR );
 	}
 
 	syncDiviHeaderBottom();
+	hideDiviMobileNavMarkup();
 }
 
 /**
@@ -81,19 +123,28 @@ export function initDiviHeaderHeight() {
 		return;
 	}
 
-	const nav = document.getElementById( NAV_ID );
+	const nav = getNavElement();
 	if ( ! ( nav instanceof HTMLElement ) ) {
 		return;
 	}
 
 	syncDiviHeaderMetrics();
+	hideDiviMobileNavMarkup();
 
 	window.addEventListener( 'scroll', syncDiviHeaderMetrics, { passive: true } );
 	window.addEventListener( 'resize', syncDiviHeaderMetrics, { passive: true } );
 
 	const header = document.getElementById( HEADER_ID );
 	if ( header instanceof HTMLElement && typeof MutationObserver !== 'undefined' ) {
-		const observer = new MutationObserver( syncDiviHeaderMetrics );
-		observer.observe( header, { attributes: true, attributeFilter: [ 'class' ] } );
+		const observer = new MutationObserver( () => {
+			syncDiviHeaderMetrics();
+			hideDiviMobileNavMarkup();
+		} );
+		observer.observe( header, {
+			attributes: true,
+			attributeFilter: [ 'class' ],
+			childList: true,
+			subtree: true,
+		} );
 	}
 }

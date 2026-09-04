@@ -1,9 +1,22 @@
 /* Plugin navigation replacing Divi's #et-top-navigation */
 
+/* Hide Divi's hamburger / mobile nav whenever we own the header. */
 body.low-mm-divi-header-active #et_mobile_nav_menu,
+body.low-mm-divi-header-active .et_mobile_nav_menu,
 body.low-mm-divi-header-active .mobile_menu_bar,
-body.low-mm-divi-header-active #main-header .mobile_nav {
+body.low-mm-divi-header-active .mobile_menu_bar_toggle,
+body.low-mm-divi-header-active .et_pb_header_toggle,
+body.low-mm-divi-header-active #main-header .mobile_nav,
+body.low-mm-divi-header-active #main-header .mobile_nav.closed,
+body.low-mm-divi-header-active #main-header .mobile_nav.opened {
 	display: none !important;
+	visibility: hidden !important;
+	pointer-events: none !important;
+	width: 0 !important;
+	height: 0 !important;
+	overflow: hidden !important;
+	margin: 0 !important;
+	padding: 0 !important;
 }
 
 /* Use the plugin search instead of Divi's built-in search. */
@@ -29,7 +42,9 @@ body.low-mm-divi-header-active #main-header .low-mm-header-navigation {
 
 body.low-mm-divi-header-active #main-header .low-mm-divi-menu-nav {
 	flex: 1 1 auto;
+	align-self: stretch;
 	min-width: 0;
+	position: relative;
 }
 
 body.low-mm-divi-header-active #main-header #top-menu {
@@ -44,12 +59,13 @@ body.low-mm-divi-header-active #main-header #top-menu {
 }
 
 /*
- * Vertically center the nav (desktop) and the hamburger toggle (mobile) within
- * Divi's #et-top-navigation. The logo is absolutely positioned, so the container
- * collapses to its content height with no room to center. JS (divi-header.js)
- * publishes Divi's intended nav height (data-height / data-fixed-height) as
- * --low-mm-divi-nav-height, used here as min-height so align-items:center works.
- * Applied at all widths so the mobile toggle centers too.
+ * Divi sizes the primary bar with:
+ *   #et-top-navigation { padding-top: menu_height/2 }
+ *   #et-top-navigation nav > ul > li > a { padding-bottom: menu_height/2 }
+ * That creates empty space under the labels when we also flex-center. Replace
+ * that padding model with an explicit height + align-items:center.
+ *
+ * --low-mm-divi-nav-height comes from inline style (PHP) and divi-header.js.
  *
  * pointer-events: none on the full-width nav shell lets clicks reach Divi's
  * absolutely positioned logo; interactive children re-enable pointer-events.
@@ -59,8 +75,22 @@ body.low-mm-divi-header-active #main-header .low-mm-header-navigation {
 	display: flex;
 	align-items: center;
 	justify-content: flex-end;
-	min-height: var( --low-mm-divi-nav-height, 0px );
+	box-sizing: border-box;
+	height: var(--low-mm-divi-nav-height, auto);
+	min-height: var(--low-mm-divi-nav-height, 0px);
 	padding: 0 !important;
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
+}
+
+/* Kill Divi's half-height link padding (normal + fixed header). */
+body.low-mm-divi-header-active.et_header_style_left #main-header #et-top-navigation nav > ul > li > a,
+body.low-mm-divi-header-active.et_header_style_split #main-header #et-top-navigation nav > ul > li > a,
+body.low-mm-divi-header-active.et_header_style_left #main-header.et-fixed-header #et-top-navigation nav > ul > li > a,
+body.low-mm-divi-header-active.et_header_style_split #main-header.et-fixed-header #et-top-navigation nav > ul > li > a,
+body.low-mm-divi-header-active #main-header #top-menu > li > a {
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
 }
 
 body.low-mm-divi-header-active #main-header #et-top-navigation,
@@ -89,8 +119,10 @@ body.low-mm-divi-header-active #main-header .low-mm-header-navigation .low-mm-pa
 body.low-mm-divi-header-active #main-header #top-menu-nav {
 	display: flex;
 	align-items: center;
+	align-self: stretch;
 	float: none;
 	margin: 0;
+	position: relative;
 }
 
 @media (max-width: 1023px) {
@@ -106,7 +138,6 @@ body.low-mm-divi-header-active #main-header #top-menu-nav {
 		display: flex !important;
 		visibility: visible !important;
 		opacity: 1 !important;
-		height: auto !important;
 		overflow: visible !important;
 	}
 
@@ -116,7 +147,7 @@ body.low-mm-divi-header-active #main-header #top-menu-nav {
 	 * the admin bar offset if the metric is unavailable.
 	 */
 	body.low-mm-divi-header-active .low-mm-mobile-drawer {
-		top: var( --low-mm-divi-header-bottom, var( --low-mm-admin-bar-offset, 0px ) );
+		top: var(--low-mm-divi-header-bottom, var(--low-mm-admin-bar-offset, 0px));
 	}
 
 	/*
@@ -171,6 +202,7 @@ body.low-mm-divi-header-active #main-header #top-menu-nav {
 		gap: 0;
 		width: 100%;
 		float: none;
+		position: static;
 	}
 
 	body.low-mm-divi-header-active #main-header .low-mm-mobile-drawer__panel #top-menu > li {
@@ -181,7 +213,18 @@ body.low-mm-divi-header-active #main-header #top-menu-nav {
 
 	body.low-mm-divi-header-active #main-header .low-mm-mobile-drawer__panel #top-menu > li > a {
 		display: block;
-		padding: 0.875rem 1rem;
+		padding: 0.875rem 1rem !important;
+	}
+}
+
+/* Divi's own mobile breakpoint is 980px — keep its hamburger buried there too. */
+@media (max-width: 980px) {
+	body.low-mm-divi-header-active #et_mobile_nav_menu,
+	body.low-mm-divi-header-active .et_mobile_nav_menu,
+	body.low-mm-divi-header-active .mobile_menu_bar,
+	body.low-mm-divi-header-active #main-header .mobile_nav {
+		display: none !important;
+		visibility: hidden !important;
 	}
 }
 

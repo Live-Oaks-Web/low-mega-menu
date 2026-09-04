@@ -25,9 +25,19 @@ class SettingsPage {
 	public const PAGE_SLUG = 'low-mm-settings';
 
 	/**
-	 * Option group name.
+	 * Shared option group (legacy). Prefer tab-specific groups.
 	 */
 	public const OPTION_GROUP = 'low_mm_settings';
+
+	/**
+	 * Option group for General tab fields only.
+	 */
+	public const OPTION_GROUP_GENERAL = 'low_mm_settings_general';
+
+	/**
+	 * Option group for Styling tab fields only.
+	 */
+	public const OPTION_GROUP_STYLING = 'low_mm_settings_styling';
 
 	/**
 	 * Register hooks.
@@ -76,11 +86,14 @@ class SettingsPage {
 	/**
 	 * Register settings, sections, and fields.
 	 *
+	 * General and Styling use separate option groups so saving one tab does not
+	 * re-sanitize (and wipe) the other tab's options.
+	 *
 	 * @return void
 	 */
 	public function register_settings(): void {
 		register_setting(
-			self::OPTION_GROUP,
+			self::OPTION_GROUP_GENERAL,
 			ShortcodeGate::OPTION_KEY,
 			array(
 				'type'              => 'boolean',
@@ -90,7 +103,7 @@ class SettingsPage {
 		);
 
 		register_setting(
-			self::OPTION_GROUP,
+			self::OPTION_GROUP_GENERAL,
 			FrontendSettings::OPTION_ARIA_EXPANDED,
 			array(
 				'type'              => 'boolean',
@@ -100,7 +113,7 @@ class SettingsPage {
 		);
 
 		register_setting(
-			self::OPTION_GROUP,
+			self::OPTION_GROUP_GENERAL,
 			FrontendSettings::OPTION_SEARCH_ENABLED,
 			array(
 				'type'              => 'boolean',
@@ -110,7 +123,7 @@ class SettingsPage {
 		);
 
 		register_setting(
-			self::OPTION_GROUP,
+			self::OPTION_GROUP_GENERAL,
 			FrontendSettings::OPTION_MOBILE_BREAKPOINT,
 			array(
 				'type'              => 'integer',
@@ -120,7 +133,7 @@ class SettingsPage {
 		);
 
 		register_setting(
-			self::OPTION_GROUP,
+			self::OPTION_GROUP_STYLING,
 			FrontendSettings::OPTION_STYLE_COLORS,
 			array(
 				'type'              => 'array',
@@ -130,7 +143,7 @@ class SettingsPage {
 		);
 
 		register_setting(
-			self::OPTION_GROUP,
+			self::OPTION_GROUP_STYLING,
 			FrontendSettings::OPTION_CUSTOM_CSS,
 			array(
 				'type'              => 'string',
@@ -140,7 +153,7 @@ class SettingsPage {
 		);
 
 		register_setting(
-			self::OPTION_GROUP,
+			self::OPTION_GROUP_STYLING,
 			FrontendSettings::OPTION_PANEL_MAX_WIDTH,
 			array(
 				'type'              => 'integer',
@@ -157,7 +170,7 @@ class SettingsPage {
 
 		if ( NavEnvironment::is_divi() ) {
 			register_setting(
-				self::OPTION_GROUP,
+				self::OPTION_GROUP_GENERAL,
 				FrontendSettings::OPTION_OVERRIDE_DIVI_HEADER,
 				array(
 					'type'              => 'boolean',
@@ -336,6 +349,16 @@ class SettingsPage {
 	}
 
 	/**
+	 * Option group for the active settings tab.
+	 *
+	 * @param string $tab Tab id.
+	 * @return string
+	 */
+	private function option_group_for_tab( string $tab ): string {
+		return 'styling' === $tab ? self::OPTION_GROUP_STYLING : self::OPTION_GROUP_GENERAL;
+	}
+
+	/**
 	 * Sanitize checkbox values.
 	 *
 	 * @param mixed $value Submitted value.
@@ -455,7 +478,7 @@ class SettingsPage {
 			</nav>
 			<form action="options.php" method="post">
 				<?php
-				settings_fields( self::OPTION_GROUP );
+				settings_fields( $this->option_group_for_tab( $active_tab ) );
 				do_settings_sections( $this->settings_page_for_tab( $active_tab ) );
 				submit_button();
 				?>

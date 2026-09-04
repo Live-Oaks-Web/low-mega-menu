@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.7.5
+
+- Fix Settings → General / Styling saves overwriting the other tab (separate Settings API option groups).
+- Divi header override: restore `id="et-top-navigation"`, use menu-height flex centering instead of Divi’s half-height link padding, and more aggressively hide Divi’s mobile hamburger.
+
 ## 1.7.4
 
 - Settings → Styling → Panel layout: configurable `.low-mm-panel__inner` max-width (default 1200px). Per-panel Full / Custom still override.

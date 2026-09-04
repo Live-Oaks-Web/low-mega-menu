@@ -141,7 +141,7 @@ class DiviHeaderOverride {
 		$menu_html = (string) apply_filters( 'low_mm_divi_header_menu_html', $menu_html );
 
 		return sprintf(
-			'<div class="low-mm-header-navigation low-mm-divi-navigation low-mm-nav-container" data-height="%1$s" data-fixed-height="%2$s">%3$s</div>',
+			'<div id="et-top-navigation" class="low-mm-header-navigation low-mm-divi-navigation low-mm-nav-container" data-height="%1$s" data-fixed-height="%2$s" style="--low-mm-divi-nav-height:%1$spx">%3$s</div>',
 			esc_attr( (string) $menu_height ),
 			esc_attr( (string) $fixed_height ),
 			$menu_html
