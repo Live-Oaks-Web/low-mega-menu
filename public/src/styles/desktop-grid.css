@@ -30,7 +30,7 @@
 .low-mega-menu .low-mm-panel__inner {
 	@apply low-w-full low-mx-auto low-px-6 low-py-8;
 	background-color: var(--low-mm-panel-bg, #ffffff);
-	max-width: 1200px;
+	max-width: var(--low-mm-panel-inner-max-width, 1200px);
 	max-height: min(80vh, 900px);
 	overflow-y: auto;
 }

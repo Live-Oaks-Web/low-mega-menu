@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.4
+
+- Settings → Styling → Panel layout: configurable `.low-mm-panel__inner` max-width (default 1200px). Per-panel Full / Custom still override.
+
 ## 1.7.3
 
 - Fix WordPress admin updates that deactivated the plugin and left "Plugin file does not exist": more reliable `upgrader_source_selection` rename (find nested `low-mega-menu.php`, move/copy into `low-mega-menu/`), and package release ZIPs with `tar` instead of `Compress-Archive`.

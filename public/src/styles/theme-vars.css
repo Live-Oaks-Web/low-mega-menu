@@ -4,6 +4,10 @@
  * top-level nav links from here.
  */
 
+.low-mega-menu {
+	--low-mm-panel-inner-max-width: 1200px;
+}
+
 .low-mm-panel,
 .low-mm-mobile-drawer,
 .low-mm-search {

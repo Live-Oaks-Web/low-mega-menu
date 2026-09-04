@@ -4,7 +4,7 @@ Tags: mega menu, navigation, menu
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.7.3
+Stable tag: 1.7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,7 +24,7 @@ Features:
 * AJAX search bar: results (posts and pages) appear in a mega menu panel on desktop and inside the drawer on mobile, with a clear button and no-JS fallback.
 * Mobile takeover navigation with drill-down panels.
 * Configurable mobile/desktop breakpoint (default 1024px) in Mega Menu → Settings.
-* Settings → Styling: color palette for panels, links, buttons, and optional custom CSS.
+* Settings → Styling: color palette, panel max width, and optional custom CSS.
 * Theme-agnostic styling that resists host-theme navigation CSS (tested with Divi).
 * Updates from GitHub Releases when a newer version is published.
 
@@ -47,6 +47,9 @@ To publish an update for sites running the plugin:
 Do not zip the whole plugin folder by hand — `node_modules` (especially under `admin-app/`) is hundreds of MB and is not needed at runtime. Delete `node_modules` folders after building if you want a small working copy; recreate them with `npm install` / `npm install --prefix admin-app` when you need to build again.
 
 == Changelog ==
+
+= 1.7.4 =
+* Settings → Styling: added Panel max width (px) for `.low-mm-panel__inner` (default 1200). Per-panel Full / Custom widths still override it.
 
 = 1.7.3 =
 * Fix WordPress plugin updates that left the install empty ("Plugin file does not exist"): harden package extraction rename and build release ZIPs with tar for reliable unzip.

@@ -48,6 +48,11 @@ class FrontendSettings {
 	public const OPTION_CUSTOM_CSS = 'low_mm_custom_css';
 
 	/**
+	 * Option key: default mega panel inner max-width (px).
+	 */
+	public const OPTION_PANEL_MAX_WIDTH = 'low_mm_panel_max_width';
+
+	/**
 	 * Default mobile/desktop breakpoint in pixels.
 	 */
 	public const DEFAULT_MOBILE_BREAKPOINT = 1024;
@@ -61,6 +66,21 @@ class FrontendSettings {
 	 * Maximum allowed breakpoint.
 	 */
 	public const MAX_MOBILE_BREAKPOINT = 1600;
+
+	/**
+	 * Default `.low-mm-panel__inner` max-width in pixels.
+	 */
+	public const DEFAULT_PANEL_MAX_WIDTH = 1200;
+
+	/**
+	 * Minimum allowed panel max-width.
+	 */
+	public const MIN_PANEL_MAX_WIDTH = 480;
+
+	/**
+	 * Maximum allowed panel max-width.
+	 */
+	public const MAX_PANEL_MAX_WIDTH = 2400;
 
 	/**
 	 * Register front-end hooks driven by settings.
@@ -156,6 +176,35 @@ class FrontendSettings {
 
 		if ( $value < self::MIN_MOBILE_BREAKPOINT || $value > self::MAX_MOBILE_BREAKPOINT ) {
 			return self::DEFAULT_MOBILE_BREAKPOINT;
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Default desktop panel content max-width (px) for `.low-mm-panel__inner`.
+	 * Per-panel “Full” / “Custom” width choices still override this.
+	 *
+	 * @return int
+	 */
+	public static function panel_max_width(): int {
+		$stored = get_option( self::OPTION_PANEL_MAX_WIDTH, null );
+		$value  = null === $stored ? self::DEFAULT_PANEL_MAX_WIDTH : (int) $stored;
+
+		return self::sanitize_panel_max_width( $value );
+	}
+
+	/**
+	 * Clamp a panel max-width into the allowed range.
+	 *
+	 * @param mixed $value Raw value.
+	 * @return int
+	 */
+	public static function sanitize_panel_max_width( $value ): int {
+		$value = (int) $value;
+
+		if ( $value < self::MIN_PANEL_MAX_WIDTH || $value > self::MAX_PANEL_MAX_WIDTH ) {
+			return self::DEFAULT_PANEL_MAX_WIDTH;
 		}
 
 		return $value;
@@ -421,6 +470,12 @@ class FrontendSettings {
 			// Scope to mega surfaces only — never the Divi/theme top-level nav links.
 			$parts[] = '.low-mm-panel,.low-mm-mobile-drawer,.low-mm-search{' . implode( ';', $vars ) . ';}';
 		}
+
+		$panel_max = self::panel_max_width();
+		$parts[]   = sprintf(
+			'.low-mega-menu{--low-mm-panel-inner-max-width:%dpx;}',
+			$panel_max
+		);
 
 		$custom = trim( self::custom_css() );
 		if ( '' !== $custom ) {

@@ -139,6 +139,16 @@ class SettingsPage {
 			)
 		);
 
+		register_setting(
+			self::OPTION_GROUP,
+			FrontendSettings::OPTION_PANEL_MAX_WIDTH,
+			array(
+				'type'              => 'integer',
+				'sanitize_callback' => array( FrontendSettings::class, 'sanitize_panel_max_width' ),
+				'default'           => FrontendSettings::DEFAULT_PANEL_MAX_WIDTH,
+			)
+		);
+
 		$divi_header_description = NavEnvironment::is_divi()
 			? __( 'Replace Divi\'s #et-top-navigation with the plugin mega menu. Divi logo and top bar are unchanged. Enabled by default on Divi until you change this setting.', 'low-mega-menu' )
 			: __( 'Only applies when the Divi theme is active.', 'low-mega-menu' );
@@ -249,6 +259,24 @@ class SettingsPage {
 		);
 
 		$styling_sections = array(
+			'low_mm_styling_layout'  => array(
+				'title'  => __( 'Panel layout', 'low-mega-menu' ),
+				'fields' => array(
+					FrontendSettings::OPTION_PANEL_MAX_WIDTH => array(
+						'label'       => __( 'Panel max width (px)', 'low-mega-menu' ),
+						'description' => sprintf(
+							/* translators: 1: default max width, 2: minimum, 3: maximum */
+							__( 'Max width for .low-mm-panel__inner on desktop (default panels). Per-panel Full / Custom width choices still override this. Default: %1$d. Allowed range: %2$d–%3$d.', 'low-mega-menu' ),
+							FrontendSettings::DEFAULT_PANEL_MAX_WIDTH,
+							FrontendSettings::MIN_PANEL_MAX_WIDTH,
+							FrontendSettings::MAX_PANEL_MAX_WIDTH
+						),
+						'type'        => 'number',
+						'min'         => FrontendSettings::MIN_PANEL_MAX_WIDTH,
+						'max'         => FrontendSettings::MAX_PANEL_MAX_WIDTH,
+					),
+				),
+			),
 			'low_mm_styling_palette' => array(
 				'title'  => __( 'Color palette', 'low-mega-menu' ),
 				'fields' => $style_fields,
@@ -345,9 +373,13 @@ class SettingsPage {
 		}
 
 		if ( 'number' === $type ) {
-			$value = FrontendSettings::OPTION_MOBILE_BREAKPOINT === $field_id
-				? FrontendSettings::mobile_breakpoint()
-				: (int) get_option( $field_id, 0 );
+			if ( FrontendSettings::OPTION_MOBILE_BREAKPOINT === $field_id ) {
+				$value = FrontendSettings::mobile_breakpoint();
+			} elseif ( FrontendSettings::OPTION_PANEL_MAX_WIDTH === $field_id ) {
+				$value = FrontendSettings::panel_max_width();
+			} else {
+				$value = (int) get_option( $field_id, 0 );
+			}
 
 			printf(
 				'<input type="number" class="small-text" name="%1$s" id="%1$s" value="%2$d" min="%3$d" max="%4$d" step="1" />',
