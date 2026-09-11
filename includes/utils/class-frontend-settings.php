@@ -316,7 +316,7 @@ class FrontendSettings {
 			),
 			'accent'      => array(
 				'label'       => __( 'Accent', 'low-mega-menu' ),
-				'description' => __( 'Highlights such as post labels and search focus accents.', 'low-mega-menu' ),
+				'description' => __( 'CTA card backgrounds, post labels, and search focus accents.', 'low-mega-menu' ),
 				'default'     => '#bb4d1c',
 			),
 		);

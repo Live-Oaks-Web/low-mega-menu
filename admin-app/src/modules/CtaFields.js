@@ -70,10 +70,12 @@ export default function CtaFields( { settings, onChange } ) {
 			/>
 			{ backgroundMode === 'color' ? (
 				<div>
-					<p className="components-base-control__label">Background color</p>
+					<p className="components-base-control__label">
+						Background color (empty = Settings accent)
+					</p>
 					<ColorPalette
-						value={ settings.background_color || '#f5f5f5' }
-						onChange={ ( value ) => onChange( { background_color: value || '#f5f5f5' } ) }
+						value={ settings.background_color || '' }
+						onChange={ ( value ) => onChange( { background_color: value || '' } ) }
 					/>
 				</div>
 			) : (

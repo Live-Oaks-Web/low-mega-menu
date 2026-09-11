@@ -32,6 +32,10 @@
 	color: var(--low-mm-color-text);
 }
 
+.low-mm-panel .low-mm-cta {
+	background-color: var(--low-mm-color-accent);
+}
+
 .low-mm-panel .low-mm-excerpt__title,
 .low-mm-panel .low-mm-cta__heading,
 .low-mm-panel .low-mm-post-query__title,

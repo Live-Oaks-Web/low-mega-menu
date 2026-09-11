@@ -69,7 +69,7 @@ const registry = {
 			button_text_color: '',
 			button_background_color: '',
 			background_mode: 'color',
-			background_color: '#f5f5f5',
+			background_color: '',
 			background_image_id: 0,
 			alignment: 'left',
 		},

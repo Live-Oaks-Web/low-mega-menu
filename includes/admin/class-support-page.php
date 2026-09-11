@@ -197,7 +197,7 @@ class SupportPage {
 				'label' => __( 'Call to Action', 'low-mega-menu' ),
 				'html'  => $this->module_doc(
 					__( 'Call to Action', 'low-mega-menu' ),
-					__( 'A promotional card with heading, body, button, and background color or image — use it to drive a primary action.', 'low-mega-menu' ),
+					__( 'A promotional card with heading, body, and button. Default card background uses Settings → Accent; you can override with a custom color or image.', 'low-mega-menu' ),
 					array(
 						__( 'Fill heading, body, and button label/URL.', 'low-mega-menu' ),
 						__( 'Background can be a solid color or a Media Library image.', 'low-mega-menu' ),

@@ -45,7 +45,7 @@ class CtaModule extends Module {
 			'button_text_color'       => '',
 			'button_background_color' => '',
 			'background_mode'         => 'color',
-			'background_color'        => '#f5f5f5',
+			'background_color'        => '',
 			'background_image_id'     => 0,
 			'alignment'               => 'left',
 		);
@@ -80,8 +80,9 @@ class CtaModule extends Module {
 				$container_style .= 'background-image:url(' . esc_url( $image ) . ');';
 			}
 		} else {
-			$color = self::sanitize_color( (string) ( $settings['background_color'] ?? '#f5f5f5' ) );
-			if ( '' !== $color ) {
+			// Empty / legacy default gray → Settings accent via --low-mm-color-accent.
+			$color = self::sanitize_color( (string) ( $settings['background_color'] ?? '' ) );
+			if ( '' !== $color && '#f5f5f5' !== strtolower( $color ) ) {
 				$container_style .= 'background-color:' . $color . ';';
 			}
 		}

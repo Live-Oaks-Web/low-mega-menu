@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.7
+
+- CTA module: default card background uses Settings → Styling → Accent (`--low-mm-color-accent`); empty/legacy `#f5f5f5` backgrounds inherit it; custom color or image still overrides.
+
 ## 1.7.6
 
 - Divi sticky header: keep mega panel, search, and CTA link/button colors (and panel font size) consistent when `#main-header` gains `.et-fixed-header`.
