@@ -8,6 +8,7 @@
 namespace LOW_MM\REST;
 
 use LOW_MM\Modules\ScrollTo\HeadingParser;
+use LOW_MM\Utils\Capabilities;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -72,6 +73,14 @@ class HeadingsController {
 			);
 		}
 
+		if ( ! current_user_can( 'read_post', $post_id ) ) {
+			return new \WP_Error(
+				'rest_forbidden',
+				__( 'Sorry, you are not allowed to read this post.', 'low-mega-menu' ),
+				array( 'status' => rest_authorization_required_code() )
+			);
+		}
+
 		if ( ! is_post_type_viewable( $post->post_type ) ) {
 			return new \WP_Error(
 				'low_mm_headings_invalid_type',
@@ -92,11 +101,11 @@ class HeadingsController {
 	}
 
 	/**
-	 * Permission callback.
+	 * Permission callback — Administrators only.
 	 *
 	 * @return bool
 	 */
 	public function can_read_headings(): bool {
-		return current_user_can( 'edit_posts' );
+		return Capabilities::can_manage();
 	}
 }

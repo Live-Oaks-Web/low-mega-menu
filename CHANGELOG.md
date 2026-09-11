@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.7.6
+
+- Divi sticky header: keep mega panel, search, and CTA link/button colors (and panel font size) consistent when `#main-header` gains `.et-fixed-header`.
+- Mega Menus → Support: in-admin documentation (overview + modules); link from Settings.
+- Administrator-only management capability; exclude `mega_menu` from public REST, sitemaps, and front queries.
+- Request/transient caching for layouts, Post Query, headings, CSS rewrite, and search (plus search rate limit).
+
 ## 1.7.5
 
 - Fix Settings → General / Styling saves overwriting the other tab (separate Settings API option groups).

@@ -7,6 +7,8 @@
 
 namespace LOW_MM\PostTypes;
 
+use LOW_MM\Utils\Capabilities;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -31,6 +33,9 @@ class MegaMenuCPT {
 		add_action( 'init', array( $this, 'register_post_type' ) );
 		add_filter( 'wp_sitemaps_post_types', array( $this, 'exclude_from_sitemaps' ) );
 		add_filter( 'wp_robots', array( $this, 'noindex_singular' ) );
+		add_filter( 'wpseo_sitemap_exclude_post_type', array( $this, 'exclude_from_seo_plugins' ), 10, 2 );
+		add_filter( 'rank_math/sitemap/exclude_post_type', array( $this, 'exclude_from_seo_plugins' ), 10, 2 );
+		add_action( 'pre_get_posts', array( $this, 'exclude_from_front_queries' ) );
 	}
 
 	/**
@@ -61,19 +66,23 @@ class MegaMenuCPT {
 				'exclude_from_search' => true,
 				'show_ui'             => true,
 				'show_in_menu'        => true,
+				'show_in_nav_menus'   => false,
+				'show_in_admin_bar'   => false,
 				'menu_position'       => 25,
 				'menu_icon'           => 'dashicons-menu',
 				'show_in_rest'        => false,
 				'has_archive'         => false,
 				'rewrite'             => false,
-				'capability_type'     => 'post',
+				'query_var'           => false,
+				'map_meta_cap'        => false,
+				'capabilities'        => Capabilities::mega_menu_capabilities(),
 				'supports'            => array( 'title' ),
 			)
 		);
 	}
 
 	/**
-	 * Remove mega_menu from sitemap post types.
+	 * Remove mega_menu from core sitemap post types.
 	 *
 	 * @param array<string, \WP_Post_Type> $post_types Registered sitemap post types.
 	 * @return array<string, \WP_Post_Type>
@@ -85,14 +94,54 @@ class MegaMenuCPT {
 	}
 
 	/**
-	 * Add noindex robots directive on singular mega_menu views.
+	 * Yoast / Rank Math sitemap exclusion.
+	 *
+	 * @param bool   $exclude   Whether to exclude.
+	 * @param string $post_type Post type.
+	 * @return bool
+	 */
+	public function exclude_from_seo_plugins( $exclude, $post_type ) {
+		if ( self::POST_TYPE === $post_type ) {
+			return true;
+		}
+
+		return (bool) $exclude;
+	}
+
+	/**
+	 * Keep mega_menu out of front-end main queries if anything forces it in.
+	 *
+	 * @param \WP_Query $query Query.
+	 * @return void
+	 */
+	public function exclude_from_front_queries( \WP_Query $query ): void {
+		if ( is_admin() || ! $query->is_main_query() ) {
+			return;
+		}
+
+		$post_type = $query->get( 'post_type' );
+
+		if ( self::POST_TYPE === $post_type ) {
+			$query->set( 'post_type', 'post' );
+			$query->set( 'post__in', array( 0 ) );
+			return;
+		}
+
+		if ( is_array( $post_type ) && in_array( self::POST_TYPE, $post_type, true ) ) {
+			$query->set( 'post_type', array_values( array_diff( $post_type, array( self::POST_TYPE ) ) ) );
+		}
+	}
+
+	/**
+	 * Add noindex robots directive on singular mega_menu views (defensive).
 	 *
 	 * @param array<string, bool|string> $robots Robots directives.
 	 * @return array<string, bool|string>
 	 */
 	public function noindex_singular( array $robots ): array {
 		if ( is_singular( self::POST_TYPE ) ) {
-			$robots['noindex'] = true;
+			$robots['noindex']  = true;
+			$robots['nofollow'] = true;
 		}
 
 		return $robots;

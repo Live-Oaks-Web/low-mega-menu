@@ -4,7 +4,7 @@ Tags: mega menu, navigation, menu
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.7.5
+Stable tag: 1.7.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,6 +47,12 @@ To publish an update for sites running the plugin:
 Do not zip the whole plugin folder by hand — `node_modules` (especially under `admin-app/`) is hundreds of MB and is not needed at runtime. Delete `node_modules` folders after building if you want a small working copy; recreate them with `npm install` / `npm install --prefix admin-app` when you need to build again.
 
 == Changelog ==
+
+= 1.7.6 =
+* Divi: keep mega panel / search / CTA colors stable when #main-header gets .et-fixed-header on scroll.
+* Mega Menus → Support: in-admin docs for overview and modules.
+* Restrict mega menu admin and REST to Administrators; hide mega_menu from public REST, sitemaps, and front queries.
+* Cache layouts, Post Query HTML, headings, rewritten CSS, and search results (with search rate limiting).
 
 = 1.7.5 =
 * Fix Settings tabs wiping each other: General and Styling now save through separate option groups.

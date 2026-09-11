@@ -469,9 +469,13 @@ class SettingsPage {
 
 		$active_tab = $this->get_active_tab();
 		$base_url   = admin_url( 'edit.php?post_type=' . MegaMenuCPT::POST_TYPE . '&page=' . self::PAGE_SLUG );
+		$support    = admin_url( 'edit.php?post_type=' . MegaMenuCPT::POST_TYPE . '&page=' . SupportPage::PAGE_SLUG );
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Mega Menu Settings', 'low-mega-menu' ); ?></h1>
+			<p class="description" style="margin-top:0.25rem;">
+				<a href="<?php echo esc_url( $support ); ?>"><?php esc_html_e( 'Open Support & documentation', 'low-mega-menu' ); ?></a>
+			</p>
 			<nav class="nav-tab-wrapper" aria-label="<?php esc_attr_e( 'Settings tabs', 'low-mega-menu' ); ?>">
 				<a class="nav-tab <?php echo 'general' === $active_tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( add_query_arg( 'tab', 'general', $base_url ) ); ?>"><?php esc_html_e( 'General', 'low-mega-menu' ); ?></a>
 				<a class="nav-tab <?php echo 'styling' === $active_tab ? 'nav-tab-active' : ''; ?>" href="<?php echo esc_url( add_query_arg( 'tab', 'styling', $base_url ) ); ?>"><?php esc_html_e( 'Styling', 'low-mega-menu' ); ?></a>

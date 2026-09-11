@@ -91,14 +91,16 @@ class CtaModule extends Module {
 			$container_style .= 'color:' . $text_color . ';';
 		}
 
-		$button_style       = '';
-		$button_text_color  = self::sanitize_color( (string) ( $settings['button_text_color'] ?? '' ) );
-		$button_background   = self::sanitize_color( (string) ( $settings['button_background_color'] ?? '' ) );
+		// CSS variables so theme-vars can apply !important and still honor per-CTA colors
+		// when Divi's .et-fixed-header #top-menu a { color:…!important } is active.
+		$button_style      = '';
+		$button_text_color = self::sanitize_color( (string) ( $settings['button_text_color'] ?? '' ) );
+		$button_background = self::sanitize_color( (string) ( $settings['button_background_color'] ?? '' ) );
 		if ( '' !== $button_text_color ) {
-			$button_style .= 'color:' . $button_text_color . ';';
+			$button_style .= '--low-mm-cta-button-text:' . $button_text_color . ';';
 		}
 		if ( '' !== $button_background ) {
-			$button_style .= 'background-color:' . $button_background . ';';
+			$button_style .= '--low-mm-cta-button-bg:' . $button_background . ';';
 		}
 
 		return self::render_template(

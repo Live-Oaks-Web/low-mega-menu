@@ -9,6 +9,7 @@ namespace LOW_MM\Admin;
 
 use LOW_MM\Modules\ModuleRegistry;
 use LOW_MM\PostTypes\MegaMenuCPT;
+use LOW_MM\Utils\Capabilities;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -42,7 +43,7 @@ class BuilderPage {
 			'edit.php?post_type=' . MegaMenuCPT::POST_TYPE,
 			__( 'Mega Menu Builder', 'low-mega-menu' ),
 			__( 'Builder', 'low-mega-menu' ),
-			'edit_posts',
+			Capabilities::MANAGE,
 			self::PAGE_SLUG,
 			array( $this, 'render_page' )
 		);
@@ -61,7 +62,7 @@ class BuilderPage {
 			return;
 		}
 
-		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+		if ( ! Capabilities::can_manage() ) {
 			wp_die( esc_html__( 'You are not allowed to edit this mega menu.', 'low-mega-menu' ) );
 		}
 
@@ -104,7 +105,7 @@ class BuilderPage {
 
 		echo '<ul class="low-mm-builder-landing-list">';
 		foreach ( $menus as $menu ) {
-			if ( ! current_user_can( 'edit_post', $menu->ID ) ) {
+			if ( ! Capabilities::can_manage() ) {
 				continue;
 			}
 
@@ -131,7 +132,7 @@ class BuilderPage {
 
 		$post_id = isset( $_GET['post_id'] ) ? (int) $_GET['post_id'] : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-		if ( $post_id <= 0 || ! $this->is_valid_mega_menu( $post_id ) || ! current_user_can( 'edit_post', $post_id ) ) {
+		if ( $post_id <= 0 || ! $this->is_valid_mega_menu( $post_id ) || ! Capabilities::can_manage() ) {
 			return;
 		}
 

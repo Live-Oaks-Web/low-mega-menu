@@ -11,6 +11,7 @@ use LOW_MM\Integrations\DiviHeaderOverride;
 use LOW_MM\Admin\BuilderPage;
 use LOW_MM\Admin\ListTableColumns;
 use LOW_MM\Admin\SettingsPage;
+use LOW_MM\Admin\SupportPage;
 use LOW_MM\Nav\ClassicMenusSupport;
 use LOW_MM\Nav\FrontendNav;
 use LOW_MM\Nav\MobileNavShell;
@@ -62,6 +63,7 @@ class Plugin {
 		$this->load_modules();
 
 		FrontendSettings::register_hooks();
+		\LOW_MM\Utils\Cache::register_hooks();
 
 		new MegaMenuCPT();
 		new MenusController();
@@ -72,6 +74,7 @@ class Plugin {
 		new ClassicMenusSupport();
 		new BuilderPage();
 		new SettingsPage();
+		new SupportPage();
 		new ListTableColumns();
 		new NavMenuIntegration();
 		new MobileNavShell();

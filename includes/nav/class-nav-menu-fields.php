@@ -8,6 +8,7 @@
 namespace LOW_MM\Nav;
 
 use LOW_MM\PostTypes\MegaMenuCPT;
+use LOW_MM\Utils\Capabilities;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -15,6 +16,13 @@ defined( 'ABSPATH' ) || exit;
  * Renders the Attach Mega Menu field on menu items.
  */
 class NavMenuFields {
+
+	/**
+	 * Cached published mega menus for this request.
+	 *
+	 * @var \WP_Post[]|null
+	 */
+	private static $menus = null;
 
 	/**
 	 * Register hooks.
@@ -33,16 +41,12 @@ class NavMenuFields {
 	 * @return void
 	 */
 	public function render_field( int $item_id, $item, int $depth, $args ): void { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+		if ( ! Capabilities::can_manage() ) {
+			return;
+		}
+
 		$attached_id = NavMenuItemMeta::get_attached_id( $item_id );
-		$menus       = get_posts(
-			array(
-				'post_type'      => MegaMenuCPT::POST_TYPE,
-				'post_status'    => 'publish',
-				'posts_per_page' => -1,
-				'orderby'        => 'title',
-				'order'          => 'ASC',
-			)
-		);
+		$menus       = self::get_mega_menus();
 
 		$field_id   = 'edit-menu-item-low-mm-attached-' . $item_id;
 		$field_name = NavMenuItemMeta::POST_FIELD . '[' . $item_id . ']';
@@ -61,5 +65,33 @@ class NavMenuFields {
 			</label>
 		</p>
 		<?php
+	}
+
+	/**
+	 * Published mega menus, loaded once per request.
+	 *
+	 * @return \WP_Post[]
+	 */
+	private static function get_mega_menus(): array {
+		if ( null !== self::$menus ) {
+			return self::$menus;
+		}
+
+		$menus = get_posts(
+			array(
+				'post_type'              => MegaMenuCPT::POST_TYPE,
+				'post_status'            => 'publish',
+				'posts_per_page'         => -1,
+				'orderby'                => 'title',
+				'order'                  => 'ASC',
+				'no_found_rows'          => true,
+				'update_post_meta_cache' => false,
+				'update_post_term_cache' => false,
+			)
+		);
+
+		self::$menus = is_array( $menus ) ? $menus : array();
+
+		return self::$menus;
 	}
 }

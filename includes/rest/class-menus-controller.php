@@ -111,6 +111,7 @@ class MenusController {
 		}
 
 		update_post_meta( $post_id, MegaMenuCPT::LAYOUT_META_KEY, $layout );
+		\LOW_MM\Utils\Cache::clear_layouts( $post_id );
 
 		return rest_ensure_response( $layout );
 	}
@@ -132,7 +133,7 @@ class MenusController {
 			);
 		}
 
-		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+		if ( ! \LOW_MM\Utils\Capabilities::can_manage() ) {
 			return new \WP_Error(
 				'rest_forbidden',
 				__( 'Sorry, you are not allowed to edit this mega menu.', 'low-mega-menu' ),

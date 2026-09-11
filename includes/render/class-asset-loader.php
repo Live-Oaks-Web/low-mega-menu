@@ -43,14 +43,6 @@ class AssetLoader {
 			return;
 		}
 
-		if ( is_singular() ) {
-			$post_type = get_post_type();
-			if ( is_string( $post_type ) && is_post_type_viewable( $post_type ) ) {
-				self::$should_enqueue = true;
-				return;
-			}
-		}
-
 		$locations = get_nav_menu_locations();
 
 		if ( empty( $locations ) ) {
@@ -126,7 +118,18 @@ class AssetLoader {
 	 * @return void
 	 */
 	private function enqueue_public_css( string $css_path, int $breakpoint ): void {
-		$version = LOW_MM_VERSION . '-' . $breakpoint;
+		$version    = LOW_MM_VERSION . '-' . $breakpoint;
+		$cache_key  = \LOW_MM\Utils\Cache::CSS_PREFIX . md5( LOW_MM_VERSION . '|' . $breakpoint . '|' . (string) filemtime( $css_path ) );
+		$cached_css = get_transient( $cache_key );
+
+		if ( is_string( $cached_css ) && '' !== $cached_css ) {
+			wp_register_style( 'low-mm-public', false, array(), $version );
+			wp_enqueue_style( 'low-mm-public' );
+			wp_add_inline_style( 'low-mm-public', $cached_css );
+			$this->print_breakpoint_bridge( $breakpoint );
+			$this->print_style_overrides();
+			return;
+		}
 
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- local plugin asset.
 		$css = file_get_contents( $css_path );
@@ -160,6 +163,8 @@ class AssetLoader {
 			'--low-mm-breakpoint: ' . $breakpoint . 'px',
 			(string) $css
 		);
+
+		set_transient( $cache_key, (string) $css, WEEK_IN_SECONDS );
 
 		wp_register_style( 'low-mm-public', false, array(), $version );
 		wp_enqueue_style( 'low-mm-public' );

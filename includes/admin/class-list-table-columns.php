@@ -66,32 +66,69 @@ class ListTableColumns {
 	}
 
 	/**
+	 * Prefetched map of mega_menu_id => label strings for this request.
+	 *
+	 * @var array<int, string[]>|null
+	 */
+	private static $attachment_map = null;
+
+	/**
 	 * Find nav menu items attached to a mega menu post.
 	 *
 	 * @param int $mega_menu_id Mega menu post ID.
 	 * @return string[]
 	 */
 	private function find_attachments( int $mega_menu_id ): array {
-		$results = array();
-		$menus   = wp_get_nav_menus();
+		$map = $this->get_attachment_map();
+
+		return isset( $map[ $mega_menu_id ] ) ? $map[ $mega_menu_id ] : array();
+	}
+
+	/**
+	 * Build attachment labels once per list-table request.
+	 *
+	 * @return array<int, string[]>
+	 */
+	private function get_attachment_map(): array {
+		if ( null !== self::$attachment_map ) {
+			return self::$attachment_map;
+		}
+
+		self::$attachment_map = array();
+		$menus                = wp_get_nav_menus();
 
 		foreach ( $menus as $menu ) {
 			$items = wp_get_nav_menu_items( $menu->term_id );
-			if ( ! is_array( $items ) ) {
+			if ( ! is_array( $items ) || empty( $items ) ) {
 				continue;
 			}
 
+			$item_ids = array_map(
+				static function ( $item ) {
+					return (int) $item->ID;
+				},
+				$items
+			);
+			update_meta_cache( 'post', $item_ids );
+
 			foreach ( $items as $item ) {
-				if ( NavMenuItemMeta::get_attached_id( (int) $item->ID ) === $mega_menu_id ) {
-					$results[] = sprintf(
-						'%s → %s',
-						$menu->name,
-						$item->title
-					);
+				$attached = NavMenuItemMeta::get_attached_id( (int) $item->ID );
+				if ( $attached <= 0 ) {
+					continue;
 				}
+
+				if ( ! isset( self::$attachment_map[ $attached ] ) ) {
+					self::$attachment_map[ $attached ] = array();
+				}
+
+				self::$attachment_map[ $attached ][] = sprintf(
+					'%s → %s',
+					$menu->name,
+					$item->title
+				);
 			}
 		}
 
-		return $results;
+		return self::$attachment_map;
 	}
 }

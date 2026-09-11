@@ -7,12 +7,13 @@
 
 namespace LOW_MM\REST;
 
+use LOW_MM\Utils\Cache;
 use LOW_MM\Utils\FrontendSettings;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Public, nonce-checked search endpoint returning rich post/page results.
+ * Public search endpoint with rate limiting and short result caching.
  */
 class SearchController {
 
@@ -25,6 +26,16 @@ class SearchController {
 	 * Minimum query length honored server-side.
 	 */
 	public const MIN_CHARS = 2;
+
+	/**
+	 * Max search requests per IP per minute.
+	 */
+	public const RATE_LIMIT = 30;
+
+	/**
+	 * How long to cache identical search payloads (seconds).
+	 */
+	public const RESULT_TTL = 60;
 
 	/**
 	 * Register hooks.
@@ -62,11 +73,19 @@ class SearchController {
 	 * GET handler — return search results.
 	 *
 	 * @param \WP_REST_Request $request Request object.
-	 * @return \WP_REST_Response
+	 * @return \WP_REST_Response|\WP_Error
 	 */
-	public function get_results( \WP_REST_Request $request ): \WP_REST_Response {
+	public function get_results( \WP_REST_Request $request ) {
 		if ( ! FrontendSettings::search_enabled() ) {
 			return rest_ensure_response( array( 'results' => array() ) );
+		}
+
+		if ( $this->is_rate_limited() ) {
+			return new \WP_Error(
+				'low_mm_search_rate_limited',
+				__( 'Too many search requests. Please try again shortly.', 'low-mega-menu' ),
+				array( 'status' => 429 )
+			);
 		}
 
 		$query = trim( (string) $request['q'] );
@@ -75,10 +94,18 @@ class SearchController {
 			return rest_ensure_response( array( 'results' => array() ) );
 		}
 
+		$post_types = FrontendSettings::search_post_types();
+		$cache_key  = Cache::SEARCH_PREFIX . md5( strtolower( $query ) . '|' . implode( ',', $post_types ) . '|' . FrontendSettings::search_results_count() );
+		$cached     = get_transient( $cache_key );
+
+		if ( is_array( $cached ) ) {
+			return rest_ensure_response( array( 'results' => $cached ) );
+		}
+
 		$search = new \WP_Query(
 			array(
 				's'                      => $query,
-				'post_type'              => FrontendSettings::search_post_types(),
+				'post_type'              => $post_types,
 				'post_status'            => 'publish',
 				'posts_per_page'         => FrontendSettings::search_results_count(),
 				'no_found_rows'          => true,
@@ -94,7 +121,32 @@ class SearchController {
 			$results[] = $this->format_result( $post );
 		}
 
+		set_transient( $cache_key, $results, self::RESULT_TTL );
+
 		return rest_ensure_response( array( 'results' => $results ) );
+	}
+
+	/**
+	 * Simple per-IP rate limit via transients.
+	 *
+	 * @return bool True when limited.
+	 */
+	private function is_rate_limited(): bool {
+		$ip = '';
+		if ( ! empty( $_SERVER['REMOTE_ADDR'] ) ) {
+			$ip = (string) wp_unslash( $_SERVER['REMOTE_ADDR'] );
+		}
+
+		$key   = Cache::SEARCH_RL_PREFIX . md5( $ip ? $ip : 'unknown' );
+		$count = (int) get_transient( $key );
+
+		if ( $count >= self::RATE_LIMIT ) {
+			return true;
+		}
+
+		set_transient( $key, $count + 1, MINUTE_IN_SECONDS );
+
+		return false;
 	}
 
 	/**
@@ -135,7 +187,9 @@ class SearchController {
 			}
 		}
 
-		$source = wp_strip_all_tags( $post->post_content );
+		// Avoid loading huge posts: trim from a capped substring of content.
+		$raw    = (string) $post->post_content;
+		$source = wp_strip_all_tags( strlen( $raw ) > 2000 ? substr( $raw, 0, 2000 ) : $raw );
 		$source = html_entity_decode( $source, ENT_QUOTES );
 
 		return wp_trim_words( $source, 8, '…' );

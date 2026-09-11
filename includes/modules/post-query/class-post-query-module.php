@@ -89,8 +89,16 @@ class PostQueryModule extends Module {
 	 */
 	public static function render( array $settings ): string {
 		$settings = self::normalize_settings( $settings );
-		$args     = PostQueryBuilder::build_args( $settings );
-		$query    = new \WP_Query( $args );
+		$gen      = \LOW_MM\Utils\Cache::post_query_generation();
+		$cache_key = \LOW_MM\Utils\Cache::POST_QUERY_PREFIX . md5( wp_json_encode( $settings ) . '|' . $gen );
+		$cached    = get_transient( $cache_key );
+
+		if ( is_string( $cached ) ) {
+			return $cached;
+		}
+
+		$args  = PostQueryBuilder::build_args( $settings );
+		$query = new \WP_Query( $args );
 
 		$items = array();
 		while ( $query->have_posts() ) {
@@ -127,20 +135,27 @@ class PostQueryModule extends Module {
 		wp_reset_postdata();
 
 		if ( empty( $items ) ) {
-			if ( current_user_can( 'edit_theme_options' ) ) {
-				return '<div class="low-mm-module low-mm-post-query low-mm-post-query--empty">' .
+			if ( \LOW_MM\Utils\Capabilities::can_manage() ) {
+				$html = '<div class="low-mm-module low-mm-post-query low-mm-post-query--empty">' .
 					esc_html__( 'No posts match this query.', 'low-mega-menu' ) . '</div>';
+				set_transient( $cache_key, $html, 5 * MINUTE_IN_SECONDS );
+				return $html;
 			}
+			set_transient( $cache_key, '', 5 * MINUTE_IN_SECONDS );
 			return '';
 		}
 
-		return self::render_template(
+		$html = self::render_template(
 			array(
 				'items'          => $items,
 				'view_all_label' => (string) ( $settings['view_all_label'] ?? '' ),
 				'view_all_url'   => (string) ( $settings['view_all_url'] ?? '' ),
 			)
 		);
+
+		set_transient( $cache_key, $html, 5 * MINUTE_IN_SECONDS );
+
+		return $html;
 	}
 }
 

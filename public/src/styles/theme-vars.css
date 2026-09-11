@@ -2,6 +2,10 @@
  * Themeable color tokens for mega panels / search / drawer chrome only.
  * Settings → Styling overrides these via inline CSS. Do not style Divi/theme
  * top-level nav links from here.
+ *
+ * Divi injects `.et-fixed-header #top-menu a { color: … !important }` on scroll.
+ * Panel / search anchors must match or beat that specificity with !important so
+ * colors stay consistent when #main-header gets .et-fixed-header.
  */
 
 .low-mega-menu {
@@ -40,32 +44,68 @@
 	color: var(--low-mm-color-muted);
 }
 
+/* Panel / search links — including under Divi sticky header. */
 .low-mm-panel a:not(.low-mm-cta__button),
-.low-mm-search__link {
-	color: var(--low-mm-color-link);
+.low-mm-search__link,
+#top-menu .low-mm-panel a:not(.low-mm-cta__button),
+#top-menu .low-mm-search__link,
+.et-fixed-header #top-menu .low-mm-panel a:not(.low-mm-cta__button),
+.et-fixed-header #top-menu .low-mm-search__link,
+#main-header.et-fixed-header #top-menu .low-mm-panel a:not(.low-mm-cta__button),
+#main-header.et-fixed-header #top-menu .low-mm-search__link {
+	color: var(--low-mm-color-link) !important;
 }
 
 .low-mm-panel a:not(.low-mm-cta__button):hover,
 .low-mm-panel a:not(.low-mm-cta__button):focus,
 .low-mm-search__link:hover,
-.low-mm-search__link:focus {
-	color: var(--low-mm-color-link-hover);
+.low-mm-search__link:focus,
+#top-menu .low-mm-panel a:not(.low-mm-cta__button):hover,
+#top-menu .low-mm-panel a:not(.low-mm-cta__button):focus,
+#top-menu .low-mm-search__link:hover,
+#top-menu .low-mm-search__link:focus,
+.et-fixed-header #top-menu .low-mm-panel a:not(.low-mm-cta__button):hover,
+.et-fixed-header #top-menu .low-mm-panel a:not(.low-mm-cta__button):focus,
+.et-fixed-header #top-menu .low-mm-search__link:hover,
+.et-fixed-header #top-menu .low-mm-search__link:focus,
+#main-header.et-fixed-header #top-menu .low-mm-panel a:not(.low-mm-cta__button):hover,
+#main-header.et-fixed-header #top-menu .low-mm-panel a:not(.low-mm-cta__button):focus {
+	color: var(--low-mm-color-link-hover) !important;
 }
 
-/* Beat Divi `#top-menu a` for CTA buttons inside panels only. */
+/*
+ * CTA buttons — beat Divi `#top-menu a` / `.et-fixed-header #top-menu a`.
+ * Per-button overrides set --low-mm-cta-button-text / --low-mm-cta-button-bg on the anchor.
+ */
 .low-mm-panel a.low-mm-cta__button,
-#top-menu .low-mm-panel a.low-mm-cta__button {
-	background-color: var(--low-mm-color-button-bg);
-	color: var(--low-mm-color-button-text);
+#top-menu .low-mm-panel a.low-mm-cta__button,
+.et-fixed-header #top-menu .low-mm-panel a.low-mm-cta__button,
+#main-header.et-fixed-header #top-menu .low-mm-panel a.low-mm-cta__button,
+.et-fixed-header #top-menu li .low-mm-panel a.low-mm-cta__button,
+#main-header.et-fixed-header #top-menu li .low-mm-panel a.low-mm-cta__button {
+	background-color: var(--low-mm-cta-button-bg, var(--low-mm-color-button-bg)) !important;
+	color: var(--low-mm-cta-button-text, var(--low-mm-color-button-text)) !important;
 }
 
 .low-mm-panel a.low-mm-cta__button:hover,
 .low-mm-panel a.low-mm-cta__button:focus,
 #top-menu .low-mm-panel a.low-mm-cta__button:hover,
-#top-menu .low-mm-panel a.low-mm-cta__button:focus {
-	background-color: var(--low-mm-color-button-bg);
-	color: var(--low-mm-color-button-text);
+#top-menu .low-mm-panel a.low-mm-cta__button:focus,
+.et-fixed-header #top-menu .low-mm-panel a.low-mm-cta__button:hover,
+.et-fixed-header #top-menu .low-mm-panel a.low-mm-cta__button:focus,
+#main-header.et-fixed-header #top-menu .low-mm-panel a.low-mm-cta__button:hover,
+#main-header.et-fixed-header #top-menu .low-mm-panel a.low-mm-cta__button:focus {
+	background-color: var(--low-mm-cta-button-bg, var(--low-mm-color-button-bg)) !important;
+	color: var(--low-mm-cta-button-text, var(--low-mm-color-button-text)) !important;
 	opacity: 0.92;
+}
+
+/* Divi also shrinks `#top-menu li a` font-size when fixed — keep panel type stable. */
+.et-fixed-header #top-menu .low-mm-panel a,
+.et-fixed-header #top-menu .low-mm-panel li a,
+#main-header.et-fixed-header #top-menu .low-mm-panel a,
+#main-header.et-fixed-header #top-menu .low-mm-panel li a {
+	font-size: inherit !important;
 }
 
 .low-mm-panel,

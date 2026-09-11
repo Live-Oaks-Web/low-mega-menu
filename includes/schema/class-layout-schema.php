@@ -100,17 +100,26 @@ class LayoutSchema {
 	 * @return array<string, mixed>|null
 	 */
 	public static function get_layout_for_post( int $post_id ): ?array {
+		$cached = \LOW_MM\Utils\Cache::get_layout( $post_id );
+		if ( false !== $cached ) {
+			return $cached;
+		}
+
 		$post = get_post( $post_id );
 
 		if ( ! $post instanceof \WP_Post || MegaMenuCPT::POST_TYPE !== $post->post_type || 'publish' !== $post->post_status ) {
+			\LOW_MM\Utils\Cache::set_layout( $post_id, null );
 			return null;
 		}
 
 		$layout = self::parse_stored_layout( get_post_meta( $post_id, MegaMenuCPT::LAYOUT_META_KEY, true ) );
 
 		if ( null === $layout || ! self::layout_has_renderable_content( $layout ) ) {
+			\LOW_MM\Utils\Cache::set_layout( $post_id, null );
 			return null;
 		}
+
+		\LOW_MM\Utils\Cache::set_layout( $post_id, $layout );
 
 		return $layout;
 	}

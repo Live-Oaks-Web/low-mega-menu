@@ -510,7 +510,7 @@ class GitHubUpdater {
 			$name = (string) ( $asset['name'] ?? '' );
 			$url  = (string) ( $asset['browser_download_url'] ?? '' );
 
-			if ( '' === $url || ! preg_match( '/\.zip$/i', $name ) ) {
+			if ( '' === $url || ! preg_match( '/\.zip$/i', $name ) || ! $this->is_allowed_package_url( $url ) ) {
 				continue;
 			}
 
@@ -528,7 +528,7 @@ class GitHubUpdater {
 			$name = (string) ( $asset['name'] ?? '' );
 			$url  = (string) ( $asset['browser_download_url'] ?? '' );
 
-			if ( $url && preg_match( '/\.zip$/i', $name ) ) {
+			if ( $url && preg_match( '/\.zip$/i', $name ) && $this->is_allowed_package_url( $url ) ) {
 				return $url;
 			}
 		}
@@ -539,6 +539,30 @@ class GitHubUpdater {
 		}
 
 		return 'https://github.com/' . self::REPO . '/archive/refs/tags/' . rawurlencode( $tag ) . '.zip';
+	}
+
+	/**
+	 * Only accept package downloads from GitHub hosts.
+	 *
+	 * @param string $url Candidate URL.
+	 * @return bool
+	 */
+	private function is_allowed_package_url( string $url ): bool {
+		$host = wp_parse_url( $url, PHP_URL_HOST );
+		if ( ! is_string( $host ) || '' === $host ) {
+			return false;
+		}
+
+		$host    = strtolower( $host );
+		$allowed = array(
+			'github.com',
+			'www.github.com',
+			'objects.githubusercontent.com',
+			'release-assets.githubusercontent.com',
+			'codeload.github.com',
+		);
+
+		return in_array( $host, $allowed, true );
 	}
 
 	/**

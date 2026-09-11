@@ -52,7 +52,7 @@ class NavMenuItemMeta {
 	 * @return void
 	 */
 	public function save_attachment( int $menu_id, int $menu_item_db_id, array $args ): void { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
-		if ( ! current_user_can( 'edit_theme_options' ) ) {
+		if ( ! \LOW_MM\Utils\Capabilities::can_manage() ) {
 			return;
 		}
 

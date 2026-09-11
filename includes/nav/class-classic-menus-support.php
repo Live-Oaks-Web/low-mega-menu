@@ -134,7 +134,7 @@ class ClassicMenusSupport {
 			'edit.php?post_type=' . MegaMenuCPT::POST_TYPE,
 			__( 'Site Navigation Menus', 'low-mega-menu' ),
 			__( 'Site Navigation Menus', 'low-mega-menu' ),
-			'edit_theme_options',
+			\LOW_MM\Utils\Capabilities::MANAGE,
 			'low-mm-nav-menus',
 			array( $this, 'render_nav_menus_landing' )
 		);
@@ -146,7 +146,7 @@ class ClassicMenusSupport {
 	 * @return void
 	 */
 	public function render_nav_menus_landing(): void {
-		if ( ! current_user_can( 'edit_theme_options' ) ) {
+		if ( ! \LOW_MM\Utils\Capabilities::can_manage() ) {
 			wp_die( esc_html__( 'You are not allowed to manage menus.', 'low-mega-menu' ) );
 		}
 
@@ -196,7 +196,7 @@ class ClassicMenusSupport {
 	 * @return void
 	 */
 	public function render_admin_notices(): void {
-		if ( ! is_admin() || ! current_user_can( 'edit_theme_options' ) ) {
+		if ( ! is_admin() || ! \LOW_MM\Utils\Capabilities::can_manage() ) {
 			return;
 		}
 

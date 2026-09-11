@@ -38,9 +38,26 @@ class HeadingParser {
 			return array();
 		}
 
-		$content = apply_filters( 'the_content', $post->post_content );
+		$cache_key = \LOW_MM\Utils\Cache::HEADINGS_PREFIX . $post_id;
+		$cached    = get_transient( $cache_key );
 
-		return self::extract_from_html( $content, $post_id );
+		if ( is_array( $cached ) && isset( $cached['modified'], $cached['headings'] ) && $cached['modified'] === $post->post_modified_gmt ) {
+			return is_array( $cached['headings'] ) ? $cached['headings'] : array();
+		}
+
+		$content  = apply_filters( 'the_content', $post->post_content );
+		$headings = self::extract_from_html( $content, $post_id );
+
+		set_transient(
+			$cache_key,
+			array(
+				'modified' => $post->post_modified_gmt,
+				'headings' => $headings,
+			),
+			DAY_IN_SECONDS
+		);
+
+		return $headings;
 	}
 
 	/**
