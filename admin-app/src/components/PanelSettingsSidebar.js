@@ -68,6 +68,58 @@ export default function PanelSettingsSidebar( { panelSettings, onChange } ) {
 						) }
 					/>
 				) }
+				<RangeControl
+					label="Padding top (px)"
+					value={
+						typeof settings.padding_top === 'number'
+							? settings.padding_top
+							: 32
+					}
+					onChange={ ( value ) =>
+						onChange( { padding_top: typeof value === 'number' ? value : 32 } )
+					}
+					min={ 0 }
+					max={ 200 }
+				/>
+				<RangeControl
+					label="Padding right (px)"
+					value={
+						typeof settings.padding_right === 'number'
+							? settings.padding_right
+							: 24
+					}
+					onChange={ ( value ) =>
+						onChange( { padding_right: typeof value === 'number' ? value : 24 } )
+					}
+					min={ 0 }
+					max={ 200 }
+				/>
+				<RangeControl
+					label="Padding bottom (px)"
+					value={
+						typeof settings.padding_bottom === 'number'
+							? settings.padding_bottom
+							: 32
+					}
+					onChange={ ( value ) =>
+						onChange( { padding_bottom: typeof value === 'number' ? value : 32 } )
+					}
+					min={ 0 }
+					max={ 200 }
+				/>
+				<RangeControl
+					label="Padding left (px)"
+					value={
+						typeof settings.padding_left === 'number'
+							? settings.padding_left
+							: 24
+					}
+					onChange={ ( value ) =>
+						onChange( { padding_left: typeof value === 'number' ? value : 24 } )
+					}
+					min={ 0 }
+					max={ 200 }
+				/>
 				<SelectControl
 					label="Animation"
 					value={ settings.animation || 'fade' }

@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.9
+
+- Panel settings and CTA: per-side padding controls (top / right / bottom / left). Defaults match prior CSS (panel 32/24/32/24, CTA 24 all sides).
+
 ## 1.7.8
 
 - Settings → Styling → Panel layout: Button text alignment (left / center / right; default center) via `--low-mm-button-text-align`.

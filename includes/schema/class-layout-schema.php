@@ -35,6 +35,10 @@ class LayoutSchema {
 				'background'           => '#ffffff',
 				'background_mode'      => 'color',
 				'background_image_id'  => 0,
+				'padding_top'          => 32,
+				'padding_right'        => 24,
+				'padding_bottom'       => 32,
+				'padding_left'         => 24,
 				'animation'            => 'fade',
 				'animation_speed_ms'   => 200,
 			),
@@ -106,6 +110,66 @@ class LayoutSchema {
 	}
 
 	/**
+	 * Default panel padding (px) — matches former Tailwind py-8 / px-6.
+	 */
+	public const DEFAULT_PANEL_PADDING_TOP    = 32;
+	public const DEFAULT_PANEL_PADDING_RIGHT  = 24;
+	public const DEFAULT_PANEL_PADDING_BOTTOM = 32;
+	public const DEFAULT_PANEL_PADDING_LEFT   = 24;
+
+	/**
+	 * Clamp a padding value into an allowed px range.
+	 *
+	 * @param mixed $value   Raw value.
+	 * @param int   $default Fallback when missing/invalid.
+	 * @return int
+	 */
+	public static function sanitize_padding_px( $value, int $default ): int {
+		if ( ! is_numeric( $value ) ) {
+			return $default;
+		}
+
+		$value = (int) $value;
+		if ( $value < 0 || $value > 200 ) {
+			return $default;
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Resolve top/right/bottom/left padding from settings.
+	 *
+	 * Falls back to legacy padding_x / padding_y when the four-side keys are absent.
+	 *
+	 * @param array<string, mixed> $settings Settings bag.
+	 * @param array{top:int,right:int,bottom:int,left:int} $defaults Per-side defaults.
+	 * @return array{top:int,right:int,bottom:int,left:int}
+	 */
+	public static function resolve_padding_box( array $settings, array $defaults ): array {
+		$legacy_x = array_key_exists( 'padding_x', $settings ) && is_numeric( $settings['padding_x'] )
+			? (int) $settings['padding_x']
+			: null;
+		$legacy_y = array_key_exists( 'padding_y', $settings ) && is_numeric( $settings['padding_y'] )
+			? (int) $settings['padding_y']
+			: null;
+
+		$fallback = array(
+			'top'    => null !== $legacy_y ? $legacy_y : $defaults['top'],
+			'right'  => null !== $legacy_x ? $legacy_x : $defaults['right'],
+			'bottom' => null !== $legacy_y ? $legacy_y : $defaults['bottom'],
+			'left'   => null !== $legacy_x ? $legacy_x : $defaults['left'],
+		);
+
+		return array(
+			'top'    => self::sanitize_padding_px( $settings['padding_top'] ?? $fallback['top'], $fallback['top'] ),
+			'right'  => self::sanitize_padding_px( $settings['padding_right'] ?? $fallback['right'], $fallback['right'] ),
+			'bottom' => self::sanitize_padding_px( $settings['padding_bottom'] ?? $fallback['bottom'], $fallback['bottom'] ),
+			'left'   => self::sanitize_padding_px( $settings['padding_left'] ?? $fallback['left'], $fallback['left'] ),
+		);
+	}
+
+	/**
 	 * Build inline CSS custom properties for panel background + animation.
 	 *
 	 * @param array<string, mixed> $panel_settings Panel settings from layout JSON.
@@ -118,9 +182,23 @@ class LayoutSchema {
 			$background = '#ffffff';
 		}
 
+		$pad = self::resolve_padding_box(
+			$panel_settings,
+			array(
+				'top'    => self::DEFAULT_PANEL_PADDING_TOP,
+				'right'  => self::DEFAULT_PANEL_PADDING_RIGHT,
+				'bottom' => self::DEFAULT_PANEL_PADDING_BOTTOM,
+				'left'   => self::DEFAULT_PANEL_PADDING_LEFT,
+			)
+		);
+
 		$parts = array(
 			sprintf( '--low-mm-animation-speed:%dms', $speed_ms ),
 			sprintf( '--low-mm-panel-bg:%s', $background ),
+			sprintf( '--low-mm-panel-padding-top:%dpx', $pad['top'] ),
+			sprintf( '--low-mm-panel-padding-right:%dpx', $pad['right'] ),
+			sprintf( '--low-mm-panel-padding-bottom:%dpx', $pad['bottom'] ),
+			sprintf( '--low-mm-panel-padding-left:%dpx', $pad['left'] ),
 		);
 
 		$mode = (string) ( $panel_settings['background_mode'] ?? 'color' );

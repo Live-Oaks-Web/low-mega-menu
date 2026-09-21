@@ -258,6 +258,32 @@ class LayoutValidator {
 			}
 		}
 
+		foreach ( array( 'padding_top', 'padding_right', 'padding_bottom', 'padding_left', 'padding_x', 'padding_y' ) as $pad_key ) {
+			if ( ! array_key_exists( $pad_key, $panel_settings ) ) {
+				continue;
+			}
+			$pad = $panel_settings[ $pad_key ];
+			if ( ! is_int( $pad ) && ! is_numeric( $pad ) ) {
+				return new \WP_Error(
+					'low_mm_invalid_panel_padding',
+					sprintf(
+						/* translators: %s: padding setting key */
+						__( 'Panel %s must be a number.', 'low-mega-menu' ),
+						$pad_key
+					),
+					array( 'status' => 400 )
+				);
+			}
+			$pad = (int) $pad;
+			if ( $pad < 0 || $pad > 200 ) {
+				return new \WP_Error(
+					'low_mm_invalid_panel_padding_range',
+					__( 'Panel padding must be between 0 and 200 pixels.', 'low-mega-menu' ),
+					array( 'status' => 400 )
+				);
+			}
+		}
+
 		return true;
 	}
 

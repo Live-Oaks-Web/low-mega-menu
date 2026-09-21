@@ -47,6 +47,10 @@ class CtaModule extends Module {
 			'background_mode'         => 'color',
 			'background_color'        => '',
 			'background_image_id'     => 0,
+			'padding_top'             => 24,
+			'padding_right'           => 24,
+			'padding_bottom'          => 24,
+			'padding_left'            => 24,
 			'alignment'               => 'left',
 		);
 	}
@@ -63,6 +67,19 @@ class CtaModule extends Module {
 		$modes = array( 'color', 'image' );
 		if ( ! in_array( (string) ( $settings['background_mode'] ?? 'color' ), $modes, true ) ) {
 			return new \WP_Error( 'low_mm_cta_background_mode', __( 'CTA background mode is invalid.', 'low-mega-menu' ), array( 'status' => 400 ) );
+		}
+
+		foreach ( array( 'padding_top', 'padding_right', 'padding_bottom', 'padding_left', 'padding_x', 'padding_y' ) as $pad_key ) {
+			if ( ! array_key_exists( $pad_key, $settings ) ) {
+				continue;
+			}
+			if ( ! is_int( $settings[ $pad_key ] ) && ! is_numeric( $settings[ $pad_key ] ) ) {
+				return new \WP_Error( 'low_mm_cta_padding', __( 'CTA padding must be a number.', 'low-mega-menu' ), array( 'status' => 400 ) );
+			}
+			$pad = (int) $settings[ $pad_key ];
+			if ( $pad < 0 || $pad > 200 ) {
+				return new \WP_Error( 'low_mm_cta_padding_range', __( 'CTA padding must be between 0 and 200 pixels.', 'low-mega-menu' ), array( 'status' => 400 ) );
+			}
 		}
 
 		return true;
@@ -91,6 +108,23 @@ class CtaModule extends Module {
 		if ( '' !== $text_color ) {
 			$container_style .= 'color:' . $text_color . ';';
 		}
+
+		$pad = \LOW_MM\Schema\LayoutSchema::resolve_padding_box(
+			$settings,
+			array(
+				'top'    => 24,
+				'right'  => 24,
+				'bottom' => 24,
+				'left'   => 24,
+			)
+		);
+		$container_style .= sprintf(
+			'--low-mm-cta-padding-top:%dpx;--low-mm-cta-padding-right:%dpx;--low-mm-cta-padding-bottom:%dpx;--low-mm-cta-padding-left:%dpx;',
+			$pad['top'],
+			$pad['right'],
+			$pad['bottom'],
+			$pad['left']
+		);
 
 		// CSS variables so theme-vars can apply !important and still honor per-CTA colors
 		// when Divi's .et-fixed-header #top-menu a { color:…!important } is active.

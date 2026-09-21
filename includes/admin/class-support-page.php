@@ -201,6 +201,7 @@ class SupportPage {
 					array(
 						__( 'Fill heading, body, and button label/URL.', 'low-mega-menu' ),
 						__( 'Background can be a solid color or a Media Library image.', 'low-mega-menu' ),
+						__( 'Per-side padding (top/right/bottom/left, px); defaults match the previous 24px card padding.', 'low-mega-menu' ),
 						__( 'Optional colors for text, button text, and button background; otherwise theme/plugin palette applies.', 'low-mega-menu' ),
 						__( 'Alignment: left, center, or right.', 'low-mega-menu' ),
 					),
@@ -208,6 +209,7 @@ class SupportPage {
 						__( 'Heading / body', 'low-mega-menu' ) => __( 'Main message; body may be rich text unless plain-text-only is on.', 'low-mega-menu' ),
 						__( 'Button', 'low-mega-menu' ) => __( 'Label + URL for the primary CTA.', 'low-mega-menu' ),
 						__( 'Background', 'low-mega-menu' ) => __( 'Color mode or image mode for the card surface.', 'low-mega-menu' ),
+						__( 'Padding', 'low-mega-menu' ) => __( 'Top, right, bottom, and left padding in pixels (default 24).', 'low-mega-menu' ),
 					),
 					__( 'One strong CTA per panel usually works better than several competing buttons.', 'low-mega-menu' )
 				),
@@ -293,7 +295,7 @@ class SupportPage {
 			),
 			array(
 				'title' => __( 'Build the panel', 'low-mega-menu' ),
-				'body'  => __( 'Choose a column layout, set panel width/animation, and drop modules into columns. Drag to reorder.', 'low-mega-menu' ),
+				'body'  => __( 'Choose a column layout, set panel width, padding, background, and animation, and drop modules into columns. Drag to reorder.', 'low-mega-menu' ),
 			),
 			array(
 				'title' => __( 'Attach to navigation', 'low-mega-menu' ),

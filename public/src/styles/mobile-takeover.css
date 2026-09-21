@@ -56,7 +56,8 @@
 	}
 
 	.low-mega-menu .low-mm-panel__inner {
-		@apply low-px-4 low-py-6;
+		/* Keep builder/desktop padding vars; fall back to former mobile px-4/py-6. */
+		padding: var(--low-mm-panel-padding-top, 24px) var(--low-mm-panel-padding-right, 16px) var(--low-mm-panel-padding-bottom, 24px) var(--low-mm-panel-padding-left, 16px);
 	}
 
 	.low-mega-menu .low-mm-panel__columns {
