@@ -162,6 +162,16 @@ class SettingsPage {
 			)
 		);
 
+		register_setting(
+			self::OPTION_GROUP_STYLING,
+			FrontendSettings::OPTION_BUTTON_TEXT_ALIGN,
+			array(
+				'type'              => 'string',
+				'sanitize_callback' => array( FrontendSettings::class, 'sanitize_button_text_align' ),
+				'default'           => FrontendSettings::DEFAULT_BUTTON_TEXT_ALIGN,
+			)
+		);
+
 		$divi_header_description = NavEnvironment::is_divi()
 			? __( 'Replace Divi\'s #et-top-navigation with the plugin mega menu. Divi logo and top bar are unchanged. Enabled by default on Divi until you change this setting.', 'low-mega-menu' )
 			: __( 'Only applies when the Divi theme is active.', 'low-mega-menu' );
@@ -288,6 +298,16 @@ class SettingsPage {
 						'min'         => FrontendSettings::MIN_PANEL_MAX_WIDTH,
 						'max'         => FrontendSettings::MAX_PANEL_MAX_WIDTH,
 					),
+					FrontendSettings::OPTION_BUTTON_TEXT_ALIGN => array(
+						'label'       => __( 'Button text alignment', 'low-mega-menu' ),
+						'description' => __( 'Text alignment inside CTA buttons. Default: Center.', 'low-mega-menu' ),
+						'type'        => 'select',
+						'options'     => array(
+							'left'   => __( 'Left', 'low-mega-menu' ),
+							'center' => __( 'Center', 'low-mega-menu' ),
+							'right'  => __( 'Right', 'low-mega-menu' ),
+						),
+					),
 				),
 			),
 			'low_mm_styling_palette' => array(
@@ -326,6 +346,7 @@ class SettingsPage {
 						'color_key'   => $field['color_key'] ?? '',
 						'default'     => $field['default'] ?? '',
 						'rows'        => $field['rows'] ?? 8,
+						'options'     => $field['options'] ?? array(),
 					)
 				);
 			}
@@ -411,6 +432,32 @@ class SettingsPage {
 				isset( $args['min'] ) ? (int) $args['min'] : 0,
 				isset( $args['max'] ) ? (int) $args['max'] : 9999
 			);
+
+			if ( ! empty( $args['description'] ) ) {
+				printf( '<p class="description">%s</p>', esc_html( (string) $args['description'] ) );
+			}
+			return;
+		}
+
+		if ( 'select' === $type ) {
+			if ( FrontendSettings::OPTION_BUTTON_TEXT_ALIGN === $field_id ) {
+				$value = FrontendSettings::button_text_align();
+			} else {
+				$value = (string) get_option( $field_id, '' );
+			}
+
+			$options = is_array( $args['options'] ?? null ) ? $args['options'] : array();
+
+			printf( '<select name="%1$s" id="%1$s">', esc_attr( $field_id ) );
+			foreach ( $options as $option_value => $option_label ) {
+				printf(
+					'<option value="%1$s" %2$s>%3$s</option>',
+					esc_attr( (string) $option_value ),
+					selected( $value, (string) $option_value, false ),
+					esc_html( (string) $option_label )
+				);
+			}
+			echo '</select>';
 
 			if ( ! empty( $args['description'] ) ) {
 				printf( '<p class="description">%s</p>', esc_html( (string) $args['description'] ) );

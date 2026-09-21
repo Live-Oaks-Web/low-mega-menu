@@ -84,9 +84,23 @@ export default function CtaFields( { settings, onChange } ) {
 					allowedTypes={ [ 'image' ] }
 					value={ settings.background_image_id || 0 }
 					render={ ( { open } ) => (
-						<Button variant="secondary" onClick={ open }>
-							{ settings.background_image_id ? 'Replace background image' : 'Select background image' }
-						</Button>
+						<div>
+							<Button variant="secondary" onClick={ open }>
+								{ settings.background_image_id
+									? 'Replace background image'
+									: 'Select background image' }
+							</Button>
+							{ !! settings.background_image_id && (
+								<Button
+									variant="link"
+									isDestructive
+									onClick={ () => onChange( { background_image_id: 0 } ) }
+									style={ { marginLeft: '0.5rem' } }
+								>
+									Remove
+								</Button>
+							) }
+						</div>
 					) }
 				/>
 			) }

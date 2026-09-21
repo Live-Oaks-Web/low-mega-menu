@@ -53,6 +53,11 @@ class FrontendSettings {
 	public const OPTION_PANEL_MAX_WIDTH = 'low_mm_panel_max_width';
 
 	/**
+	 * Option key: CTA button text alignment.
+	 */
+	public const OPTION_BUTTON_TEXT_ALIGN = 'low_mm_button_text_align';
+
+	/**
 	 * Default mobile/desktop breakpoint in pixels.
 	 */
 	public const DEFAULT_MOBILE_BREAKPOINT = 1024;
@@ -81,6 +86,20 @@ class FrontendSettings {
 	 * Maximum allowed panel max-width.
 	 */
 	public const MAX_PANEL_MAX_WIDTH = 2400;
+
+	/**
+	 * Default CTA button text alignment.
+	 */
+	public const DEFAULT_BUTTON_TEXT_ALIGN = 'center';
+
+	/**
+	 * Allowed CTA button text-align values.
+	 *
+	 * @return string[]
+	 */
+	public static function button_text_align_choices(): array {
+		return array( 'left', 'center', 'right' );
+	}
 
 	/**
 	 * Register front-end hooks driven by settings.
@@ -205,6 +224,34 @@ class FrontendSettings {
 
 		if ( $value < self::MIN_PANEL_MAX_WIDTH || $value > self::MAX_PANEL_MAX_WIDTH ) {
 			return self::DEFAULT_PANEL_MAX_WIDTH;
+		}
+
+		return $value;
+	}
+
+	/**
+	 * CTA button text alignment (left|center|right). Defaults to center.
+	 *
+	 * @return string
+	 */
+	public static function button_text_align(): string {
+		$stored = get_option( self::OPTION_BUTTON_TEXT_ALIGN, null );
+		$value  = null === $stored ? self::DEFAULT_BUTTON_TEXT_ALIGN : (string) $stored;
+
+		return self::sanitize_button_text_align( $value );
+	}
+
+	/**
+	 * Sanitize CTA button text-align.
+	 *
+	 * @param mixed $value Raw value.
+	 * @return string
+	 */
+	public static function sanitize_button_text_align( $value ): string {
+		$value = is_string( $value ) ? sanitize_key( $value ) : '';
+
+		if ( ! in_array( $value, self::button_text_align_choices(), true ) ) {
+			return self::DEFAULT_BUTTON_TEXT_ALIGN;
 		}
 
 		return $value;
@@ -473,8 +520,9 @@ class FrontendSettings {
 
 		$panel_max = self::panel_max_width();
 		$parts[]   = sprintf(
-			'.low-mega-menu{--low-mm-panel-inner-max-width:%dpx;}',
-			$panel_max
+			'.low-mega-menu{--low-mm-panel-inner-max-width:%dpx;--low-mm-button-text-align:%s;}',
+			$panel_max,
+			self::button_text_align()
 		);
 
 		$custom = trim( self::custom_css() );

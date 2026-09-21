@@ -38,19 +38,8 @@ class PanelRenderer {
 		$animation      = in_array( (string) ( $panel_settings['animation'] ?? '' ), LayoutSchema::recognized_animations(), true )
 			? (string) $panel_settings['animation']
 			: 'fade';
-		$speed_ms       = max( 0, (int) ( $panel_settings['animation_speed_ms'] ?? 200 ) );
-		$background     = (string) ( $panel_settings['background'] ?? '#ffffff' );
 		$max_width      = (string) ( $panel_settings['max_width'] ?? 'default' );
-
-		if ( ! preg_match( '/^#[0-9a-fA-F]{6}$/', $background ) ) {
-			$background = '#ffffff';
-		}
-
-		$style_attrs = sprintf(
-			'--low-mm-animation-speed:%dms;--low-mm-panel-bg:%s;',
-			$speed_ms,
-			esc_attr( $background )
-		);
+		$style_attrs    = LayoutSchema::panel_style_vars( $panel_settings );
 
 		$grid_template = self::build_grid_template( $columns );
 		$order_map     = self::build_mobile_order_map( $columns, $mobile_order );

@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.7.8
+
+- Settings → Styling → Panel layout: Button text alignment (left / center / right; default center) via `--low-mm-button-text-align`.
+- Builder Panel settings: background mode Color or Image (Media Library), rendered with cover/center; CTA image picker gains Remove.
+
 ## 1.7.7
 
 - CTA module: default card background uses Settings → Styling → Accent (`--low-mm-color-accent`); empty/legacy `#f5f5f5` backgrounds inherit it; custom color or image still overrides.

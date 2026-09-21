@@ -30,6 +30,10 @@
 .low-mega-menu .low-mm-panel__inner {
 	@apply low-w-full low-mx-auto low-px-6 low-py-8;
 	background-color: var(--low-mm-panel-bg, #ffffff);
+	background-image: var(--low-mm-panel-bg-image, none);
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
 	max-width: var(--low-mm-panel-inner-max-width, 1200px);
 	max-height: min(80vh, 900px);
 	overflow-y: auto;
@@ -238,6 +242,9 @@
 
 .low-mega-menu .low-mm-cta {
 	@apply low-rounded-md low-p-6;
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
 }
 
 .low-mm-cta__body {
@@ -267,6 +274,10 @@
 		z-index: 9999;
 		box-sizing: border-box;
 		background-color: var(--low-mm-panel-bg, #ffffff);
+		background-image: var(--low-mm-panel-bg-image, none);
+		background-size: cover;
+		background-position: center;
+		background-repeat: no-repeat;
 		left: 0 !important;
 		right: 0 !important;
 		width: 100% !important;

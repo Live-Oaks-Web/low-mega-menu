@@ -229,6 +229,35 @@ class LayoutValidator {
 			);
 		}
 
+		if ( array_key_exists( 'background_mode', $panel_settings ) ) {
+			$mode = (string) $panel_settings['background_mode'];
+			if ( ! in_array( $mode, LayoutSchema::recognized_background_modes(), true ) ) {
+				return new \WP_Error(
+					'low_mm_invalid_panel_background_mode',
+					__( 'Panel background_mode must be "color" or "image".', 'low-mega-menu' ),
+					array( 'status' => 400 )
+				);
+			}
+		}
+
+		if ( array_key_exists( 'background_image_id', $panel_settings ) ) {
+			$image_id = $panel_settings['background_image_id'];
+			if ( ! is_int( $image_id ) && ! is_numeric( $image_id ) ) {
+				return new \WP_Error(
+					'low_mm_invalid_panel_background_image',
+					__( 'Panel background_image_id must be a number.', 'low-mega-menu' ),
+					array( 'status' => 400 )
+				);
+			}
+			if ( (int) $image_id < 0 ) {
+				return new \WP_Error(
+					'low_mm_invalid_panel_background_image',
+					__( 'Panel background_image_id must be zero or a positive attachment ID.', 'low-mega-menu' ),
+					array( 'status' => 400 )
+				);
+			}
+		}
+
 		return true;
 	}
 

@@ -99,24 +99,12 @@ class NavMenuItemEnhancer {
 
 		$layout     = LayoutSchema::get_layout_for_post( $mega_menu_post_id );
 		$animation  = 'fade';
-		$speed_ms   = 200;
-		$background = '#ffffff';
+		$panel_style = '--low-mm-animation-speed:200ms;--low-mm-panel-bg:#ffffff;';
 
 		if ( is_array( $layout ) && is_array( $layout['panel_settings'] ?? null ) ) {
-			$animation  = (string) ( $layout['panel_settings']['animation'] ?? 'fade' );
-			$speed_ms   = (int) ( $layout['panel_settings']['animation_speed_ms'] ?? 200 );
-			$background = (string) ( $layout['panel_settings']['background'] ?? '#ffffff' );
+			$animation   = (string) ( $layout['panel_settings']['animation'] ?? 'fade' );
+			$panel_style = LayoutSchema::panel_style_vars( $layout['panel_settings'] );
 		}
-
-		if ( ! preg_match( '/^#[0-9a-fA-F]{6}$/', $background ) ) {
-			$background = '#ffffff';
-		}
-
-		$panel_style = sprintf(
-			'--low-mm-animation-speed:%dms;--low-mm-panel-bg:%s;',
-			$speed_ms,
-			esc_attr( $background )
-		);
 
 		ob_start();
 		?>

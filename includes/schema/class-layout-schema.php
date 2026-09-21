@@ -31,10 +31,12 @@ class LayoutSchema {
 		return array(
 			'version'        => self::VERSION,
 			'panel_settings' => array(
-				'max_width'          => 'default',
-				'background'         => '#ffffff',
-				'animation'          => 'fade',
-				'animation_speed_ms' => 200,
+				'max_width'            => 'default',
+				'background'           => '#ffffff',
+				'background_mode'      => 'color',
+				'background_image_id'  => 0,
+				'animation'            => 'fade',
+				'animation_speed_ms'   => 200,
 			),
 			'layout_preset'  => '2-col',
 			'columns'        => array(),
@@ -89,6 +91,52 @@ class LayoutSchema {
 			'slide-down',
 			'none',
 		);
+	}
+
+	/**
+	 * Recognized panel / module background modes.
+	 *
+	 * @return string[]
+	 */
+	public static function recognized_background_modes(): array {
+		return array(
+			'color',
+			'image',
+		);
+	}
+
+	/**
+	 * Build inline CSS custom properties for panel background + animation.
+	 *
+	 * @param array<string, mixed> $panel_settings Panel settings from layout JSON.
+	 * @return string Inline style attribute value (may be empty segments joined).
+	 */
+	public static function panel_style_vars( array $panel_settings ): string {
+		$speed_ms   = max( 0, (int) ( $panel_settings['animation_speed_ms'] ?? 200 ) );
+		$background = (string) ( $panel_settings['background'] ?? '#ffffff' );
+		if ( ! preg_match( '/^#[0-9a-fA-F]{6}$/', $background ) ) {
+			$background = '#ffffff';
+		}
+
+		$parts = array(
+			sprintf( '--low-mm-animation-speed:%dms', $speed_ms ),
+			sprintf( '--low-mm-panel-bg:%s', $background ),
+		);
+
+		$mode = (string) ( $panel_settings['background_mode'] ?? 'color' );
+		if ( ! in_array( $mode, self::recognized_background_modes(), true ) ) {
+			$mode = 'color';
+		}
+
+		if ( 'image' === $mode ) {
+			$image_id = (int) ( $panel_settings['background_image_id'] ?? 0 );
+			$image    = $image_id > 0 ? wp_get_attachment_image_url( $image_id, 'full' ) : '';
+			if ( $image ) {
+				$parts[] = '--low-mm-panel-bg-image:url(' . esc_url( $image ) . ')';
+			}
+		}
+
+		return implode( ';', $parts ) . ';';
 	}
 
 	/**

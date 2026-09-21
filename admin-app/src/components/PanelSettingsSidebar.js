@@ -1,7 +1,16 @@
-import { Panel, PanelBody, SelectControl, RangeControl, ColorPalette } from '@wordpress/components';
+import { MediaUpload } from '@wordpress/media-utils';
+import {
+	Button,
+	Panel,
+	PanelBody,
+	SelectControl,
+	RangeControl,
+	ColorPalette,
+} from '@wordpress/components';
 
 export default function PanelSettingsSidebar( { panelSettings, onChange } ) {
 	const settings = panelSettings || {};
+	const backgroundMode = settings.background_mode || 'color';
 
 	return (
 		<Panel className="low-mm-panel-settings">
@@ -16,11 +25,49 @@ export default function PanelSettingsSidebar( { panelSettings, onChange } ) {
 					] }
 					onChange={ ( value ) => onChange( { max_width: value } ) }
 				/>
-				<p className="components-base-control__label">Background</p>
-				<ColorPalette
-					value={ settings.background || '#ffffff' }
-					onChange={ ( value ) => onChange( { background: value || '#ffffff' } ) }
+				<SelectControl
+					label="Background"
+					value={ backgroundMode }
+					options={ [
+						{ label: 'Color', value: 'color' },
+						{ label: 'Image', value: 'image' },
+					] }
+					onChange={ ( value ) => onChange( { background_mode: value } ) }
 				/>
+				{ backgroundMode === 'color' ? (
+					<div>
+						<p className="components-base-control__label">Background color</p>
+						<ColorPalette
+							value={ settings.background || '#ffffff' }
+							onChange={ ( value ) => onChange( { background: value || '#ffffff' } ) }
+						/>
+					</div>
+				) : (
+					<MediaUpload
+						onSelect={ ( media ) => onChange( { background_image_id: media.id } ) }
+						allowedTypes={ [ 'image' ] }
+						value={ settings.background_image_id || 0 }
+						render={ ( { open } ) => (
+							<div>
+								<Button variant="secondary" onClick={ open }>
+									{ settings.background_image_id
+										? 'Replace background image'
+										: 'Select background image' }
+								</Button>
+								{ !! settings.background_image_id && (
+									<Button
+										variant="link"
+										isDestructive
+										onClick={ () => onChange( { background_image_id: 0 } ) }
+										style={ { marginLeft: '0.5rem' } }
+									>
+										Remove
+									</Button>
+								) }
+							</div>
+						) }
+					/>
+				) }
 				<SelectControl
 					label="Animation"
 					value={ settings.animation || 'fade' }
