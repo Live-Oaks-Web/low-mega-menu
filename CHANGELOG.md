@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.11
+
+- Mobile/tablet (below plugin breakpoint): CTA modules with a background image use `max-width: 300px` (respects center/right alignment).
+
 ## 1.7.10
 
 - Builder: tiny thumbnail preview for panel and CTA background images (click to replace).

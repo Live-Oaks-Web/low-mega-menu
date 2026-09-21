@@ -11,11 +11,21 @@
  * @var string $alignment
  * @var string $background_style
  * @var string $button_style
+ * @var bool   $has_bg_image
  */
 
 defined( 'ABSPATH' ) || exit;
+
+$cta_classes = array(
+	'low-mm-module',
+	'low-mm-cta',
+	'low-mm-cta--align-' . $alignment,
+);
+if ( ! empty( $has_bg_image ) ) {
+	$cta_classes[] = 'low-mm-has-bg-image';
+}
 ?>
-<div class="low-mm-module low-mm-cta low-mm-cta--align-<?php echo esc_attr( $alignment ); ?>"<?php echo $background_style ? ' style="' . esc_attr( $background_style ) . '"' : ''; ?>>
+<div class="<?php echo esc_attr( implode( ' ', $cta_classes ) ); ?>"<?php echo $background_style ? ' style="' . esc_attr( $background_style ) . '"' : ''; ?>>
 	<?php if ( $heading ) : ?>
 		<h3 class="low-mm-cta__heading"><?php echo esc_html( $heading ); ?></h3>
 	<?php endif; ?>

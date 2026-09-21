@@ -90,11 +90,13 @@ class CtaModule extends Module {
 	 */
 	public static function render( array $settings ): string {
 		$container_style = '';
+		$has_bg_image    = false;
 		if ( 'image' === ( $settings['background_mode'] ?? 'color' ) ) {
 			$image_id = (int) ( $settings['background_image_id'] ?? 0 );
 			$image    = $image_id ? wp_get_attachment_image_url( $image_id, 'large' ) : '';
 			if ( $image ) {
 				$container_style .= 'background-image:url(' . esc_url( $image ) . ');';
+				$has_bg_image     = true;
 			}
 		} else {
 			// Empty / legacy default gray → Settings accent via --low-mm-color-accent.
@@ -148,6 +150,7 @@ class CtaModule extends Module {
 				'alignment'        => (string) ( $settings['alignment'] ?? 'left' ),
 				'background_style' => $container_style,
 				'button_style'     => $button_style,
+				'has_bg_image'     => $has_bg_image,
 			)
 		);
 	}

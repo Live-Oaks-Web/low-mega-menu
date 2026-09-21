@@ -74,6 +74,26 @@
 		@apply low-mb-3 low-border-b low-border-gray-200 low-pb-2 low-text-sm;
 	}
 
+	/*
+	 * Callouts / modules with a background image stay compact on mobile & tablet
+	 * (plugin breakpoint; rewritten to Settings → Mobile breakpoint − 1).
+	 */
+	.low-mega-menu .low-mm-module.low-mm-has-bg-image,
+	.low-mega-menu .low-mm-cta.low-mm-has-bg-image {
+		width: 100%;
+		max-width: 300px;
+		box-sizing: border-box;
+	}
+
+	.low-mega-menu .low-mm-cta--align-center.low-mm-has-bg-image {
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.low-mega-menu .low-mm-cta--align-right.low-mm-has-bg-image {
+		margin-left: auto;
+	}
+
 	.low-mega-menu.low-mm-nav-container.low-mm-mobile-closed .low-mm-panel {
 		@apply low-hidden;
 	}
