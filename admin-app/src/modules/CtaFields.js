@@ -1,6 +1,4 @@
-import { MediaUpload } from '@wordpress/media-utils';
 import {
-	Button,
 	CheckboxControl,
 	SelectControl,
 	TextControl,
@@ -8,6 +6,7 @@ import {
 	RangeControl,
 } from '@wordpress/components';
 import WysiwygControl from '../components/WysiwygControl';
+import BackgroundImagePicker from '../components/BackgroundImagePicker';
 
 export default function CtaFields( { settings, onChange } ) {
 	const backgroundMode = settings.background_mode || 'color';
@@ -80,29 +79,9 @@ export default function CtaFields( { settings, onChange } ) {
 					/>
 				</div>
 			) : (
-				<MediaUpload
-					onSelect={ ( media ) => onChange( { background_image_id: media.id } ) }
-					allowedTypes={ [ 'image' ] }
-					value={ settings.background_image_id || 0 }
-					render={ ( { open } ) => (
-						<div>
-							<Button variant="secondary" onClick={ open }>
-								{ settings.background_image_id
-									? 'Replace background image'
-									: 'Select background image' }
-							</Button>
-							{ !! settings.background_image_id && (
-								<Button
-									variant="link"
-									isDestructive
-									onClick={ () => onChange( { background_image_id: 0 } ) }
-									style={ { marginLeft: '0.5rem' } }
-								>
-									Remove
-								</Button>
-							) }
-						</div>
-					) }
+				<BackgroundImagePicker
+					imageId={ settings.background_image_id || 0 }
+					onChange={ ( id ) => onChange( { background_image_id: id } ) }
 				/>
 			) }
 			<RangeControl

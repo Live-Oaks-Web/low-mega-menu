@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.10
+
+- Builder: tiny thumbnail preview for panel and CTA background images (click to replace).
+
 ## 1.7.9
 
 - Panel settings and CTA: per-side padding controls (top / right / bottom / left). Defaults match prior CSS (panel 32/24/32/24, CTA 24 all sides).
