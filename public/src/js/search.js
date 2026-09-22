@@ -289,13 +289,6 @@ class SearchController {
 		title.textContent = item.title || '';
 		body.appendChild( title );
 
-		if ( item.typeLabel ) {
-			const meta = document.createElement( 'span' );
-			meta.className = 'low-mm-search__type';
-			meta.textContent = item.typeLabel;
-			body.appendChild( meta );
-		}
-
 		if ( item.excerpt ) {
 			const excerpt = document.createElement( 'span' );
 			excerpt.className = 'low-mm-search__excerpt';

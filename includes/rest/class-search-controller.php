@@ -95,7 +95,7 @@ class SearchController {
 		}
 
 		$post_types = FrontendSettings::search_post_types();
-		$cache_key  = Cache::SEARCH_PREFIX . md5( strtolower( $query ) . '|' . implode( ',', $post_types ) . '|' . FrontendSettings::search_results_count() );
+		$cache_key  = Cache::SEARCH_PREFIX . md5( strtolower( $query ) . '|' . implode( ',', $post_types ) . '|' . FrontendSettings::search_results_count() . '|ex30' );
 		$cached     = get_transient( $cache_key );
 
 		if ( is_array( $cached ) ) {
@@ -156,42 +156,43 @@ class SearchController {
 	 * @return array<string, string>
 	 */
 	private function format_result( \WP_Post $post ): array {
-		$type_obj   = get_post_type_object( $post->post_type );
-		$type_label = $type_obj instanceof \WP_Post_Type ? $type_obj->labels->singular_name : '';
-		$thumbnail  = (string) get_the_post_thumbnail_url( $post, 'thumbnail' );
+		$thumbnail = (string) get_the_post_thumbnail_url( $post, 'thumbnail' );
 
 		return array(
 			'id'        => (string) $post->ID,
 			'title'     => html_entity_decode( wp_strip_all_tags( get_the_title( $post ) ), ENT_QUOTES ),
 			'url'       => (string) get_permalink( $post ),
-			'typeLabel' => (string) $type_label,
 			'thumbnail' => $thumbnail,
 			'excerpt'   => $this->format_excerpt( $post ),
 		);
 	}
 
 	/**
-	 * Prefer the authored excerpt; otherwise use the first 8 words of content.
+	 * Prefer the authored excerpt; otherwise use post content. Always ≤ 30 words.
 	 *
 	 * @param \WP_Post $post Post object.
 	 * @return string
 	 */
 	private function format_excerpt( \WP_Post $post ): string {
+		$source = '';
+
 		if ( has_excerpt( $post ) ) {
 			$excerpt = wp_strip_all_tags( $post->post_excerpt );
 			$excerpt = html_entity_decode( $excerpt, ENT_QUOTES );
 			$excerpt = trim( preg_replace( '/\s+/u', ' ', $excerpt ) ?? $excerpt );
 
 			if ( '' !== $excerpt ) {
-				return $excerpt;
+				$source = $excerpt;
 			}
 		}
 
-		// Avoid loading huge posts: trim from a capped substring of content.
-		$raw    = (string) $post->post_content;
-		$source = wp_strip_all_tags( strlen( $raw ) > 2000 ? substr( $raw, 0, 2000 ) : $raw );
-		$source = html_entity_decode( $source, ENT_QUOTES );
+		if ( '' === $source ) {
+			// Avoid loading huge posts: trim from a capped substring of content.
+			$raw    = (string) $post->post_content;
+			$source = wp_strip_all_tags( strlen( $raw ) > 2000 ? substr( $raw, 0, 2000 ) : $raw );
+			$source = html_entity_decode( $source, ENT_QUOTES );
+		}
 
-		return wp_trim_words( $source, 8, '…' );
+		return wp_trim_words( $source, 30, '...' );
 	}
 }

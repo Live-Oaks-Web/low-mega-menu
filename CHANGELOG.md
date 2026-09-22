@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.8.4
+
+- Search results: hide post type labels; excerpts trimmed to 30 words with `...`.
+
 ## 1.8.3
 
 - Column modules: left indent, bottom padding, and bottom border (border color from Settings → Border / divider).
