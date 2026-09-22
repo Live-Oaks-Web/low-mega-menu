@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.8.3
+
+- Column modules: left indent, bottom padding, and bottom border (border color from Settings → Border / divider).
+- Column labels: bottom padding. Spacing/border width are CSS variables for Custom CSS overrides.
+
 ## 1.8.2
 
 - CTA module Text color (heading & body) overrides Settings → Styling text/heading colors when set.

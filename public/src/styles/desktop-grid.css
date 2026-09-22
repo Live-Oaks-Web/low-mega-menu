@@ -70,6 +70,7 @@
 .low-mega-menu .low-mm-column__label {
 	@apply low-mb-4 low-font-semibold low-uppercase low-tracking-widest low-text-gray-500;
 	font-size: var(--low-mm-font-size-column-label, 1rem);
+	padding-bottom: var(--low-mm-column-label-padding-bottom, 1em);
 }
 
 .low-mega-menu .low-mm-column__modules {
@@ -80,6 +81,10 @@
 	font-size: var(--low-mm-font-size-body, 0.875rem);
 	line-height: 1.5;
 	gap: 0;
+	margin-left: var(--low-mm-column-modules-margin-left, 0.5rem);
+	padding-bottom: var(--low-mm-column-modules-padding-bottom, 1em);
+	/* Border color follows Settings → Styling → Border / divider (--low-mm-color-border). */
+	border-bottom: var(--low-mm-column-modules-border-width, 1px) solid var(--low-mm-color-border, #eee);
 }
 
 /* Space between modules only — not between a bare title <a> and following text (Code modules). */
