@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.8.2
+
+- CTA module Text color (heading & body) overrides Settings → Styling text/heading colors when set.
+- Extra 20px space between stacked modules (`1rem + 20px`).
+
 ## 1.8.1
 
 - Settings → Styling → Type sizes: body, title, and column label font sizes (rem) for mega menu surfaces only; defaults match current CSS (`0.875` / `1` / `1`).

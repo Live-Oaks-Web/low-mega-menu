@@ -90,6 +90,18 @@
 	line-height: 1.5;
 }
 
+/* CTA module text color (heading & body) overrides Settings → Text / Heading when set. */
+.low-mm-panel .low-mm-cta .low-mm-module__body,
+.low-mm-panel .low-mm-cta .low-mm-cta__body {
+	color: var(--low-mm-cta-text, var(--low-mm-color-text));
+}
+
+.low-mm-panel .low-mm-cta .low-mm-module__title,
+.low-mm-panel .low-mm-cta .low-mm-cta__title,
+.low-mm-panel .low-mm-cta .low-mm-cta__heading {
+	color: var(--low-mm-cta-text, var(--low-mm-color-heading));
+}
+
 /* Panel / search links — including under Divi sticky header. */
 .low-mm-panel a:not(.low-mm-cta__button),
 .low-mm-search__link,

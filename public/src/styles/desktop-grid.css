@@ -85,7 +85,7 @@
 /* Space between modules only — not between a bare title <a> and following text (Code modules). */
 .low-mega-menu .low-mm-column__modules > .low-mm-module + .low-mm-module,
 .low-mega-menu .low-mm-column__modules > :not(.low-mm-module) + .low-mm-module {
-	margin-top: 1rem;
+	margin-top: calc(1rem + 20px);
 }
 
 .low-mega-menu .low-mm-mobile-header {

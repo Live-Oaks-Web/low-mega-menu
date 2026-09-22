@@ -108,7 +108,8 @@ class CtaModule extends Module {
 
 		$text_color = self::sanitize_color( (string) ( $settings['text_color'] ?? '' ) );
 		if ( '' !== $text_color ) {
-			$container_style .= 'color:' . $text_color . ';';
+			// CSS var so .low-mm-module__body / title rules (plugin palette) still defer to CTA override.
+			$container_style .= 'color:' . $text_color . ';--low-mm-cta-text:' . $text_color . ';';
 		}
 
 		$pad = \LOW_MM\Schema\LayoutSchema::resolve_padding_box(
