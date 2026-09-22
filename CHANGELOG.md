@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.17
+
+- Module titles (excerpt, CTA heading, post query, scroll-to, search, column `h3`s) use `font-size: 0.9375rem` — between body (`0.875rem`) and column labels (`1rem`).
+
 ## 1.7.16
 
 - Module titles: no underline at rest; underline the title only on hover/focus. Link body/meta (e.g. scroll-to content) stays undecorated.

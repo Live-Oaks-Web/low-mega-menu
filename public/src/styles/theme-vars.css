@@ -41,9 +41,12 @@
 .low-mm-panel .low-mm-cta__heading,
 .low-mm-panel .low-mm-post-query__title,
 .low-mm-panel .low-mm-scroll-to__title,
+.low-mm-panel .low-mm-column__modules > a > h3,
+.low-mm-panel .low-mm-column__modules h3,
 .low-mm-search__title {
 	color: var(--low-mm-color-heading);
 	text-decoration: none !important;
+	font-size: 0.9375rem; /* halfway between module body (0.875rem) and column label (1rem) */
 }
 
 .low-mm-panel .low-mm-column__label {
