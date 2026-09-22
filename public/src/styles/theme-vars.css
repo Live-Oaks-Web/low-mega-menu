@@ -70,29 +70,14 @@
 	text-decoration: none !important;
 }
 
-.low-mm-panel .low-mm-excerpt__title,
-.low-mm-panel .low-mm-cta__heading,
-.low-mm-panel .low-mm-post-query__title,
-.low-mm-panel .low-mm-scroll-to__title,
-.low-mm-search__title,
+/* Titles stay undecorated at rest (covers Code-module bare <a><h3>). */
 .low-mm-panel h3 a,
 .low-mm-panel a h3,
 .low-mm-panel a .low-mm-excerpt__title,
 .low-mm-panel a .low-mm-post-query__title,
 .low-mm-panel a .low-mm-scroll-to__title,
 .low-mm-panel a .low-mm-cta__heading,
-.low-mm-panel a:hover .low-mm-excerpt__title,
-.low-mm-panel a:focus .low-mm-excerpt__title,
-.low-mm-panel a:hover .low-mm-post-query__title,
-.low-mm-panel a:focus .low-mm-post-query__title,
-.low-mm-panel a:hover .low-mm-scroll-to__title,
-.low-mm-panel a:focus .low-mm-scroll-to__title,
-.low-mm-panel a:hover .low-mm-cta__heading,
-.low-mm-panel a:focus .low-mm-cta__heading,
-.low-mm-panel a:hover h3,
-.low-mm-panel a:focus h3,
-.low-mm-panel h3 a:hover,
-.low-mm-panel h3 a:focus {
+.low-mm-search__link .low-mm-search__title {
 	text-decoration: none !important;
 }
 
@@ -111,6 +96,43 @@
 #main-header.et-fixed-header #top-menu .low-mm-panel a:not(.low-mm-cta__button):hover,
 #main-header.et-fixed-header #top-menu .low-mm-panel a:not(.low-mm-cta__button):focus {
 	color: var(--low-mm-color-link-hover) !important;
+	text-decoration: none !important;
+}
+
+/*
+ * Underline the title only on hover/focus — keep the anchor itself undecorated
+ * so scroll-to body / neighboring text does not pick up a line.
+ */
+.low-mm-panel a:hover .low-mm-excerpt__title,
+.low-mm-panel a:focus .low-mm-excerpt__title,
+.low-mm-panel a:hover .low-mm-post-query__title,
+.low-mm-panel a:focus .low-mm-post-query__title,
+.low-mm-panel a:hover .low-mm-scroll-to__title,
+.low-mm-panel a:focus .low-mm-scroll-to__title,
+.low-mm-panel a:hover .low-mm-cta__heading,
+.low-mm-panel a:focus .low-mm-cta__heading,
+.low-mm-panel a:hover h3,
+.low-mm-panel a:focus h3,
+.low-mm-panel h3 a:hover,
+.low-mm-panel h3 a:focus,
+.low-mm-search__link:hover .low-mm-search__title,
+.low-mm-search__link:focus .low-mm-search__title,
+#top-menu .low-mm-panel a:hover .low-mm-excerpt__title,
+#top-menu .low-mm-panel a:focus .low-mm-excerpt__title,
+#top-menu .low-mm-panel a:hover .low-mm-post-query__title,
+#top-menu .low-mm-panel a:focus .low-mm-post-query__title,
+#top-menu .low-mm-panel a:hover .low-mm-scroll-to__title,
+#top-menu .low-mm-panel a:focus .low-mm-scroll-to__title,
+#top-menu .low-mm-panel a:hover h3,
+#top-menu .low-mm-panel a:focus h3 {
+	text-decoration: underline !important;
+}
+
+/* Body / meta under a hovered link must stay undecorated. */
+.low-mm-panel a:hover .low-mm-scroll-to__content,
+.low-mm-panel a:focus .low-mm-scroll-to__content,
+.low-mm-panel a:hover .low-mm-excerpt__body,
+.low-mm-panel a:focus .low-mm-excerpt__body {
 	text-decoration: none !important;
 }
 

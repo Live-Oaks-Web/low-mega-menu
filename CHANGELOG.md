@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.16
+
+- Module titles: no underline at rest; underline the title only on hover/focus. Link body/meta (e.g. scroll-to content) stays undecorated.
+
 ## 1.7.15
 
 - Module titles (excerpt, CTA heading, post query, scroll-to, search) use `text-decoration: none` at rest and on hover/focus.
