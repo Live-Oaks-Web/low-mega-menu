@@ -69,7 +69,7 @@
 
 .low-mega-menu .low-mm-column__label {
 	@apply low-mb-4 low-font-semibold low-uppercase low-tracking-widest low-text-gray-500;
-	font-size: 1rem;
+	font-size: var(--low-mm-font-size-column-label, 1rem);
 }
 
 .low-mega-menu .low-mm-column__modules {
@@ -77,6 +77,7 @@
 	min-width: 0;
 	overflow-wrap: anywhere;
 	word-break: break-word;
+	font-size: var(--low-mm-font-size-body, 0.875rem);
 	line-height: 1.5;
 	gap: 0;
 }
@@ -92,7 +93,7 @@
 }
 
 .low-mega-menu .low-mm-module {
-	font-size: 0.875rem;
+	font-size: var(--low-mm-font-size-body, 0.875rem);
 	line-height: 1.5;
 }
 
@@ -167,7 +168,8 @@
 
 .low-mega-menu .low-mm-link-list__body,
 .low-mega-menu .low-mm-link-list__description {
-	@apply low-mt-1 low-text-sm low-text-gray-600;
+	@apply low-mt-1 low-text-gray-600;
+	font-size: var(--low-mm-font-size-body, 0.875rem);
 }
 
 .low-mega-menu .low-mm-post-query__list {
@@ -226,7 +228,8 @@
 /* Post-query body sits below the whole link row, not under the title alone. */
 .low-mega-menu .low-mm-post-query__body,
 .low-mega-menu .low-mm-post-query__excerpt {
-	@apply low-mt-2 low-text-sm low-text-gray-600;
+	@apply low-mt-2 low-text-gray-600;
+	font-size: var(--low-mm-font-size-body, 0.875rem);
 }
 
 .low-mega-menu .low-mm-post-query__view-all {
@@ -273,7 +276,7 @@
 .low-mega-menu .low-mm-module__title {
 	display: block;
 	margin: 0;
-	font-size: 1rem;
+	font-size: var(--low-mm-font-size-title, 1rem);
 	line-height: 1.2;
 	font-weight: 600;
 }
@@ -281,7 +284,7 @@
 .low-mega-menu .low-mm-module__body {
 	display: block;
 	margin-top: 0.25rem;
-	font-size: 0.875rem;
+	font-size: var(--low-mm-font-size-body, 0.875rem);
 	line-height: 1.5;
 }
 

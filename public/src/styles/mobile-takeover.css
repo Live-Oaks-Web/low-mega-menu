@@ -72,7 +72,7 @@
 
 	.low-mega-menu .low-mm-column__label {
 		@apply low-mb-3 low-border-b low-border-gray-200 low-pb-2;
-		font-size: 0.88rem;
+		font-size: var(--low-mm-font-size-column-label, 1rem);
 	}
 
 	/*

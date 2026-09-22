@@ -172,6 +172,16 @@ class SettingsPage {
 			)
 		);
 
+		register_setting(
+			self::OPTION_GROUP_STYLING,
+			FrontendSettings::OPTION_STYLE_FONT_SIZES,
+			array(
+				'type'              => 'array',
+				'sanitize_callback' => array( FrontendSettings::class, 'sanitize_style_font_sizes' ),
+				'default'           => array(),
+			)
+		);
+
 		$divi_header_description = NavEnvironment::is_divi()
 			? __( 'Replace Divi\'s #et-top-navigation with the plugin mega menu. Divi logo and top bar are unchanged. Enabled by default on Divi until you change this setting.', 'low-mega-menu' )
 			: __( 'Only applies when the Divi theme is active.', 'low-mega-menu' );
@@ -310,11 +320,27 @@ class SettingsPage {
 					),
 				),
 			),
+			'low_mm_styling_type'    => array(
+				'title'  => __( 'Type sizes', 'low-mega-menu' ),
+				'fields' => array(),
+			),
 			'low_mm_styling_palette' => array(
 				'title'  => __( 'Color palette', 'low-mega-menu' ),
 				'fields' => $style_fields,
 			),
 		);
+
+		foreach ( FrontendSettings::style_font_size_fields() as $key => $field ) {
+			$styling_sections['low_mm_styling_type']['fields'][ 'font_size_' . $key ] = array(
+				'label'         => $field['label'],
+				'description'   => $field['description'],
+				'type'          => 'font_size',
+				'font_size_key' => $key,
+				'default'       => $field['default'],
+				'min'           => FrontendSettings::MIN_FONT_SIZE_REM,
+				'max'           => FrontendSettings::MAX_FONT_SIZE_REM,
+			);
+		}
 
 		$general_sections = apply_filters( 'low_mm_settings_sections', $general_sections );
 		$styling_sections = apply_filters( 'low_mm_styling_settings_sections', $styling_sections );
@@ -344,9 +370,11 @@ class SettingsPage {
 						'min'         => $field['min'] ?? null,
 						'max'         => $field['max'] ?? null,
 						'color_key'   => $field['color_key'] ?? '',
+						'font_size_key' => $field['font_size_key'] ?? '',
 						'default'     => $field['default'] ?? '',
 						'rows'        => $field['rows'] ?? 8,
 						'options'     => $field['options'] ?? array(),
+						'step'        => $field['step'] ?? null,
 					)
 				);
 			}
@@ -458,6 +486,30 @@ class SettingsPage {
 				);
 			}
 			echo '</select>';
+
+			if ( ! empty( $args['description'] ) ) {
+				printf( '<p class="description">%s</p>', esc_html( (string) $args['description'] ) );
+			}
+			return;
+		}
+
+		if ( 'font_size' === $type ) {
+			$key     = (string) ( $args['font_size_key'] ?? '' );
+			$sizes   = FrontendSettings::style_font_sizes();
+			$value   = isset( $sizes[ $key ] ) ? (float) $sizes[ $key ] : (float) ( $args['default'] ?? 1 );
+			$default = (float) ( $args['default'] ?? 1 );
+			$name    = FrontendSettings::OPTION_STYLE_FONT_SIZES . '[' . $key . ']';
+			$display = rtrim( rtrim( number_format( $value, 4, '.', '' ), '0' ), '.' );
+
+			printf(
+				'<input type="number" class="small-text" name="%1$s" id="%2$s" value="%3$s" min="%4$s" max="%5$s" step="0.0625" data-default="%6$s" /> <span class="description">rem</span>',
+				esc_attr( $name ),
+				esc_attr( 'low-mm-font-size-' . $key ),
+				esc_attr( $display ),
+				esc_attr( (string) ( $args['min'] ?? FrontendSettings::MIN_FONT_SIZE_REM ) ),
+				esc_attr( (string) ( $args['max'] ?? FrontendSettings::MAX_FONT_SIZE_REM ) ),
+				esc_attr( rtrim( rtrim( number_format( $default, 4, '.', '' ), '0' ), '.' ) )
+			);
 
 			if ( ! empty( $args['description'] ) ) {
 				printf( '<p class="description">%s</p>', esc_html( (string) $args['description'] ) );

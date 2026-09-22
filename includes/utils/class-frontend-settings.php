@@ -58,6 +58,11 @@ class FrontendSettings {
 	public const OPTION_BUTTON_TEXT_ALIGN = 'low_mm_button_text_align';
 
 	/**
+	 * Option key: mega menu type sizes (body / title / column label) in rem.
+	 */
+	public const OPTION_STYLE_FONT_SIZES = 'low_mm_style_font_sizes';
+
+	/**
 	 * Default mobile/desktop breakpoint in pixels.
 	 */
 	public const DEFAULT_MOBILE_BREAKPOINT = 1024;
@@ -91,6 +96,16 @@ class FrontendSettings {
 	 * Default CTA button text alignment.
 	 */
 	public const DEFAULT_BUTTON_TEXT_ALIGN = 'center';
+
+	/**
+	 * Minimum rem for Settings → Styling type sizes.
+	 */
+	public const MIN_FONT_SIZE_REM = 0.5;
+
+	/**
+	 * Maximum rem for Settings → Styling type sizes.
+	 */
+	public const MAX_FONT_SIZE_REM = 2.5;
 
 	/**
 	 * Allowed CTA button text-align values.
@@ -308,6 +323,100 @@ class FrontendSettings {
 	}
 
 	/**
+	 * Font-size fields for Settings → Styling (rem). Defaults match current CSS.
+	 *
+	 * @return array<string, array{label:string,description:string,default:float}>
+	 */
+	public static function style_font_size_fields(): array {
+		return array(
+			'body'         => array(
+				'label'       => __( 'Body font size (rem)', 'low-mega-menu' ),
+				'description' => __( 'Module body / description text inside mega panels. Default: 0.875.', 'low-mega-menu' ),
+				'default'     => 0.875,
+			),
+			'title'        => array(
+				'label'       => __( 'Title font size (rem)', 'low-mega-menu' ),
+				'description' => __( 'All module titles (and search result titles) inside mega panels. Default: 1.', 'low-mega-menu' ),
+				'default'     => 1.0,
+			),
+			'column_label' => array(
+				'label'       => __( 'Column label font size (rem)', 'low-mega-menu' ),
+				'description' => __( 'Column labels (e.g. MEMBERS, DIRECTORY). Default: 1.', 'low-mega-menu' ),
+				'default'     => 1.0,
+			),
+		);
+	}
+
+	/**
+	 * Saved type sizes with stylesheet defaults when unset/empty.
+	 *
+	 * @return array<string, float>
+	 */
+	public static function style_font_sizes(): array {
+		$stored = get_option( self::OPTION_STYLE_FONT_SIZES, array() );
+		if ( ! is_array( $stored ) ) {
+			$stored = array();
+		}
+
+		$sizes = array();
+		foreach ( self::style_font_size_fields() as $key => $field ) {
+			$raw = isset( $stored[ $key ] ) ? $stored[ $key ] : null;
+			if ( null === $raw || '' === $raw ) {
+				$sizes[ $key ] = (float) $field['default'];
+				continue;
+			}
+			$sizes[ $key ] = self::sanitize_font_size_rem( $raw, (float) $field['default'] );
+		}
+
+		return $sizes;
+	}
+
+	/**
+	 * Sanitize the style font-sizes option.
+	 *
+	 * @param mixed $value Submitted value.
+	 * @return array<string, float>
+	 */
+	public static function sanitize_style_font_sizes( $value ): array {
+		if ( ! is_array( $value ) ) {
+			$value = array();
+		}
+
+		$clean = array();
+		foreach ( self::style_font_size_fields() as $key => $field ) {
+			$raw           = isset( $value[ $key ] ) ? $value[ $key ] : $field['default'];
+			$clean[ $key ] = self::sanitize_font_size_rem( $raw, (float) $field['default'] );
+		}
+
+		return $clean;
+	}
+
+	/**
+	 * Clamp a rem font-size into the allowed range.
+	 *
+	 * @param mixed $value   Raw value.
+	 * @param float $default Fallback when invalid.
+	 * @return float
+	 */
+	public static function sanitize_font_size_rem( $value, float $default ): float {
+		if ( is_string( $value ) ) {
+			$value = trim( str_ireplace( 'rem', '', $value ) );
+		}
+
+		if ( ! is_numeric( $value ) ) {
+			return $default;
+		}
+
+		$value = round( (float) $value, 4 );
+
+		if ( $value < self::MIN_FONT_SIZE_REM || $value > self::MAX_FONT_SIZE_REM ) {
+			return $default;
+		}
+
+		return $value;
+	}
+
+	/**
 	 * Color keys available in Settings → Styling.
 	 *
 	 * Defaults match the current front-end palette.
@@ -522,11 +631,25 @@ class FrontendSettings {
 			$parts[] = '.low-mm-panel,.low-mm-mobile-drawer,.low-mm-search{' . implode( ';', $vars ) . ';}';
 		}
 
+		$sizes     = self::style_font_sizes();
+		$size_map  = array(
+			'body'         => '--low-mm-font-size-body',
+			'title'        => '--low-mm-font-size-title',
+			'column_label' => '--low-mm-font-size-column-label',
+		);
+		$size_vars = array();
+		foreach ( $size_map as $key => $css_var ) {
+			if ( isset( $sizes[ $key ] ) ) {
+				$size_vars[] = sprintf( '%s:%srem', $css_var, rtrim( rtrim( number_format( (float) $sizes[ $key ], 4, '.', '' ), '0' ), '.' ) );
+			}
+		}
+
 		$panel_max = self::panel_max_width();
 		$parts[]   = sprintf(
-			'.low-mega-menu{--low-mm-panel-inner-max-width:%dpx;--low-mm-button-text-align:%s;}',
+			'.low-mega-menu{--low-mm-panel-inner-max-width:%dpx;--low-mm-button-text-align:%s;%s}',
 			$panel_max,
-			self::button_text_align()
+			self::button_text_align(),
+			implode( ';', $size_vars )
 		);
 
 		$custom = trim( self::custom_css() );

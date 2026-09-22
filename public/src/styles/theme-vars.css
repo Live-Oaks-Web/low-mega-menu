@@ -11,6 +11,9 @@
 .low-mega-menu {
 	--low-mm-panel-inner-max-width: 1200px;
 	--low-mm-button-text-align: center;
+	--low-mm-font-size-body: 0.875rem;
+	--low-mm-font-size-title: 1rem;
+	--low-mm-font-size-column-label: 1rem;
 }
 
 .low-mm-panel,
@@ -50,10 +53,12 @@
 .low-mm-panel .low-mm-link-list__title,
 .low-mm-panel .low-mm-column__modules > a > h3,
 .low-mm-panel .low-mm-column__modules h3,
+.low-mm-panel .low-mm-code > a > h3,
+.low-mm-panel .low-mm-code h3,
 .low-mm-search__title {
 	color: var(--low-mm-color-heading);
 	text-decoration: none !important;
-	font-size: 1rem;
+	font-size: var(--low-mm-font-size-title, 1rem) !important;
 	margin: 0 !important;
 	padding: 0 !important;
 	line-height: 1.2;
@@ -73,6 +78,7 @@
 
 .low-mm-panel .low-mm-column__label {
 	color: var(--low-mm-color-muted);
+	font-size: var(--low-mm-font-size-column-label, 1rem);
 }
 
 .low-mm-panel .low-mm-column__modules,

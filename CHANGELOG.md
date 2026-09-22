@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.8.1
+
+- Settings → Styling → Type sizes: body, title, and column label font sizes (rem) for mega menu surfaces only; defaults match current CSS (`0.875` / `1` / `1`).
+- All module titles share one size via `--low-mm-font-size-title` (including Code bare `h3`s).
+
 ## 1.8.0
 
 - Normalize first-party module markup: titles use `span.low-mm-module__title` + per-module `__title`; bodies use `div.low-mm-module__body` + per-module `__body` (legacy aliases kept: CTA `__heading`, scroll-to `__content`, post-query `__excerpt`, link-list `__description`).

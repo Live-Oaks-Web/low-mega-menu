@@ -19,6 +19,7 @@ $options = array(
 	'low_mm_custom_css',
 	'low_mm_panel_max_width',
 	'low_mm_button_text_align',
+	'low_mm_style_font_sizes',
 	'low_mm_pq_gen',
 );
 
