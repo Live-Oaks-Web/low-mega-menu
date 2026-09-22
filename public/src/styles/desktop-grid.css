@@ -69,7 +69,7 @@
 
 .low-mega-menu .low-mm-column__label {
 	@apply low-mb-4 low-font-semibold low-uppercase low-tracking-widest low-text-gray-500;
-	font-size: 0.88rem;
+	font-size: 1rem;
 }
 
 .low-mega-menu .low-mm-column__modules {
@@ -85,7 +85,8 @@
 }
 
 .low-mega-menu .low-mm-module {
-	@apply low-text-sm;
+	font-size: 0.875rem;
+	line-height: 1.5;
 }
 
 /*

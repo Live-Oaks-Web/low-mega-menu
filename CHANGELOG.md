@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.7.14
+
+- Column labels use `font-size: 1rem`.
+- Modules keep `line-height: 1.5` by dropping Tailwind `text-sm`’s tighter line-height.
+
 ## 1.7.13
 
 - Column modules use Settings → Styling → Text color and line-height 1.5.
