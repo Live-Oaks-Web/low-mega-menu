@@ -71,7 +71,8 @@
 	}
 
 	.low-mega-menu .low-mm-column__label {
-		@apply low-mb-3 low-border-b low-border-gray-200 low-pb-2 low-text-sm;
+		@apply low-mb-3 low-border-b low-border-gray-200 low-pb-2;
+		font-size: 0.88rem;
 	}
 
 	/*

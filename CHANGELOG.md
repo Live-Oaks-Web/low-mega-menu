@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.13
+
+- Column modules use Settings → Styling → Text color and line-height 1.5.
+- Underline on hover only for excerpt `h3` titles and `.low-mm-scroll-to__title`.
+- Column labels use `font-size: 0.88rem`.
+
 ## 1.7.12
 
 - Excerpt body and scroll-to content use Settings → Styling → Text color, with line-height 1.5.
