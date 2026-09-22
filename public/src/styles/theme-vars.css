@@ -49,6 +49,12 @@
 	color: var(--low-mm-color-muted);
 }
 
+.low-mm-panel .low-mm-excerpt__body,
+.low-mm-panel .low-mm-scroll-to__content {
+	color: var(--low-mm-color-text);
+	line-height: 1.5;
+}
+
 /* Panel / search links — including under Divi sticky header. */
 .low-mm-panel a:not(.low-mm-cta__button),
 .low-mm-search__link,
@@ -59,6 +65,11 @@
 #main-header.et-fixed-header #top-menu .low-mm-panel a:not(.low-mm-cta__button),
 #main-header.et-fixed-header #top-menu .low-mm-search__link {
 	color: var(--low-mm-color-link) !important;
+	text-decoration: none;
+}
+
+.low-mm-panel .low-mm-scroll-to__title {
+	text-decoration: none;
 }
 
 .low-mm-panel a:not(.low-mm-cta__button):hover,
@@ -76,6 +87,12 @@
 #main-header.et-fixed-header #top-menu .low-mm-panel a:not(.low-mm-cta__button):hover,
 #main-header.et-fixed-header #top-menu .low-mm-panel a:not(.low-mm-cta__button):focus {
 	color: var(--low-mm-color-link-hover) !important;
+	text-decoration: underline;
+}
+
+.low-mm-panel a:not(.low-mm-cta__button):hover .low-mm-scroll-to__title,
+.low-mm-panel a:not(.low-mm-cta__button):focus .low-mm-scroll-to__title {
+	text-decoration: underline;
 }
 
 /*
@@ -91,6 +108,7 @@
 	background-color: var(--low-mm-cta-button-bg, var(--low-mm-color-button-bg)) !important;
 	color: var(--low-mm-cta-button-text, var(--low-mm-color-button-text)) !important;
 	text-align: var(--low-mm-button-text-align, center) !important;
+	text-decoration: none !important;
 }
 
 .low-mm-panel a.low-mm-cta__button:hover,
@@ -104,6 +122,7 @@
 	background-color: var(--low-mm-cta-button-bg, var(--low-mm-color-button-bg)) !important;
 	color: var(--low-mm-cta-button-text, var(--low-mm-color-button-text)) !important;
 	opacity: 0.92;
+	text-decoration: none !important;
 }
 
 /* Divi also shrinks `#top-menu li a` font-size when fixed — keep panel type stable. */
@@ -121,7 +140,6 @@
 
 .low-mm-panel .low-mm-post-query__meta,
 .low-mm-panel .low-mm-post-query__date,
-.low-mm-panel .low-mm-scroll-to__content,
 .low-mm-search__type,
 .low-mm-search__excerpt,
 .low-mm-search__status {

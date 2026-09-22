@@ -265,8 +265,13 @@
 	@apply low-block low-text-base low-font-semibold;
 }
 
+.low-mega-menu .low-mm-excerpt__body {
+	line-height: 1.5;
+}
+
 .low-mega-menu .low-mm-scroll-to__content {
-	@apply low-mt-1 low-block low-text-sm low-text-gray-600;
+	@apply low-mt-1 low-block low-text-sm;
+	line-height: 1.5;
 }
 
 /* Desktop: JS pins open panels full-width below the header (see panel-position.js). */

@@ -318,7 +318,7 @@ class FrontendSettings {
 		return array(
 			'text'        => array(
 				'label'       => __( 'Text color', 'low-mega-menu' ),
-				'description' => __( 'Body and excerpt text inside mega panels.', 'low-mega-menu' ),
+				'description' => __( 'Body, excerpt, and scroll-to content text inside mega panels.', 'low-mega-menu' ),
 				'default'     => '#4b5563',
 			),
 			'heading'     => array(

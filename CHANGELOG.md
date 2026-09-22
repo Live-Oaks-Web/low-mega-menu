@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.7.12
+
+- Excerpt body and scroll-to content use Settings → Styling → Text color, with line-height 1.5.
+- Mega panel links (including scroll-to titles) have no underline until hover.
+
 ## 1.7.11
 
 - Mobile/tablet (below plugin breakpoint): CTA modules with a background image use `max-width: 300px` (respects center/right alignment).
