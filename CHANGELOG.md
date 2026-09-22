@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.8.0
+
+- Normalize first-party module markup: titles use `span.low-mm-module__title` + per-module `__title`; bodies use `div.low-mm-module__body` + per-module `__body` (legacy aliases kept: CTA `__heading`, scroll-to `__content`, post-query `__excerpt`, link-list `__description`).
+- Shared title/body CSS roles for consistent sizing, color, hover underline, and title→body spacing (`0.25rem`).
+- Code modules wrap shortcode/HTML output in `.low-mm-module.low-mm-code` (inner HTML still author-controlled).
+- Titles at `1rem` with title→body gap aligned to body line spacing.
+
 ## 1.7.17
 
 - Module titles (excerpt, CTA heading, post query, scroll-to, search, column `h3`s) use `font-size: 0.9375rem` — between body (`0.875rem`) and column labels (`1rem`).

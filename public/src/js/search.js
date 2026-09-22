@@ -285,7 +285,7 @@ class SearchController {
 		body.className = 'low-mm-search__body';
 
 		const title = document.createElement( 'span' );
-		title.className = 'low-mm-search__title';
+		title.className = 'low-mm-module__title low-mm-search__title';
 		title.textContent = item.title || '';
 		body.appendChild( title );
 

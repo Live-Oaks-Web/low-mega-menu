@@ -17,10 +17,10 @@ defined( 'ABSPATH' ) || exit;
 		<?php if ( $image_html ) : ?>
 			<div class="low-mm-excerpt__media"><?php echo $image_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
 		<?php endif; ?>
-		<h3 class="low-mm-excerpt__title"><?php echo esc_html( $title ); ?></h3>
+		<span class="low-mm-module__title low-mm-excerpt__title"><?php echo esc_html( $title ); ?></span>
 	</a>
 	<?php if ( $excerpt ) : ?>
-		<div class="low-mm-excerpt__body">
+		<div class="low-mm-module__body low-mm-excerpt__body">
 			<?php
 			if ( $rich ) {
 				echo wp_kses_post( $excerpt );

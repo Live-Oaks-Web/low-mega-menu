@@ -73,11 +73,18 @@
 }
 
 .low-mega-menu .low-mm-column__modules {
-	@apply low-flex low-flex-col low-gap-4;
+	@apply low-flex low-flex-col;
 	min-width: 0;
 	overflow-wrap: anywhere;
 	word-break: break-word;
 	line-height: 1.5;
+	gap: 0;
+}
+
+/* Space between modules only — not between a bare title <a> and following text (Code modules). */
+.low-mega-menu .low-mm-column__modules > .low-mm-module + .low-mm-module,
+.low-mega-menu .low-mm-column__modules > :not(.low-mm-module) + .low-mm-module {
+	margin-top: 1rem;
 }
 
 .low-mega-menu .low-mm-mobile-header {
@@ -158,6 +165,7 @@
 	@apply low-font-semibold low-text-gray-900 low-no-underline;
 }
 
+.low-mega-menu .low-mm-link-list__body,
 .low-mega-menu .low-mm-link-list__description {
 	@apply low-mt-1 low-text-sm low-text-gray-600;
 }
@@ -202,13 +210,6 @@
 	min-width: 0;
 }
 
-.low-mega-menu .low-mm-post-query__title {
-	margin: 0;
-	font-size: 0.9375rem;
-	line-height: 1.35;
-	font-weight: 600;
-}
-
 .low-mega-menu .low-mm-post-query__label {
 	display: block;
 	margin-top: 0.5rem;
@@ -222,6 +223,8 @@
 	font-size: 0.8125rem;
 }
 
+/* Post-query body sits below the whole link row, not under the title alone. */
+.low-mega-menu .low-mm-post-query__body,
 .low-mega-menu .low-mm-post-query__excerpt {
 	@apply low-mt-2 low-text-sm low-text-gray-600;
 }
@@ -256,18 +259,54 @@
 	@apply low-block low-no-underline low-text-gray-900 hover:low-text-gray-700;
 }
 
-.low-mega-menu .low-mm-scroll-to__title {
-	@apply low-block low-font-semibold;
-	font-size: 0.9375rem;
+.low-mega-menu .low-mm-excerpt__link {
+	display: block;
+	margin: 0;
+	padding: 0;
+	line-height: 1.2;
 }
 
-.low-mega-menu .low-mm-excerpt__body {
+/*
+ * Shared title / body roles — per-module classes stay for overrides & custom CSS.
+ * Title→body gap matches body line spacing (~0.25rem at 0.875rem / lh 1.5).
+ */
+.low-mega-menu .low-mm-module__title {
+	display: block;
+	margin: 0;
+	font-size: 1rem;
+	line-height: 1.2;
+	font-weight: 600;
+}
+
+.low-mega-menu .low-mm-module__body {
+	display: block;
+	margin-top: 0.25rem;
+	font-size: 0.875rem;
 	line-height: 1.5;
 }
 
+/* Legacy module-specific hooks (same elements also carry shared roles). */
+.low-mega-menu .low-mm-excerpt__title,
+.low-mega-menu .low-mm-scroll-to__title,
+.low-mega-menu .low-mm-cta__title,
+.low-mega-menu .low-mm-cta__heading,
+.low-mega-menu .low-mm-post-query__title,
+.low-mega-menu .low-mm-link-list__title {
+	margin: 0;
+	line-height: 1.2;
+}
+
+.low-mega-menu .low-mm-excerpt__body,
+.low-mega-menu .low-mm-scroll-to__body,
 .low-mega-menu .low-mm-scroll-to__content {
-	@apply low-mt-1 low-block low-text-sm;
+	margin-top: 0.25rem;
 	line-height: 1.5;
+}
+
+/* Keep post-query excerpt spacing below the link row (not title-adjacent). */
+.low-mega-menu .low-mm-post-query__body,
+.low-mega-menu .low-mm-post-query__excerpt {
+	margin-top: 0.5rem;
 }
 
 /* Desktop: JS pins open panels full-width below the header (see panel-position.js). */

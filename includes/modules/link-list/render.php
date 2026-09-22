@@ -26,10 +26,10 @@ if ( empty( $rows ) ) {
 		?>
 		<li class="low-mm-link-list__item">
 			<a class="low-mm-link-list__link" href="<?php echo esc_url( $url ); ?>"<?php echo $new_tab ? ' target="_blank" rel="noopener noreferrer"' : ''; ?>>
-				<?php echo esc_html( $label ); ?>
+				<span class="low-mm-module__title low-mm-link-list__title"><?php echo esc_html( $label ); ?></span>
 			</a>
 			<?php if ( '' !== $description ) : ?>
-				<div class="low-mm-link-list__description">
+				<div class="low-mm-module__body low-mm-link-list__body low-mm-link-list__description">
 					<?php
 					if ( $plain_text ) {
 						echo esc_html( wp_strip_all_tags( $description ) );

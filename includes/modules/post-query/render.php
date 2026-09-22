@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
 						<div class="low-mm-post-query__media"><?php echo $item['image_html']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div>
 					<?php endif; ?>
 					<div class="low-mm-post-query__content">
-						<h4 class="low-mm-post-query__title"><?php echo esc_html( get_the_title( $post ) ); ?></h4>
+						<span class="low-mm-module__title low-mm-post-query__title"><?php echo esc_html( get_the_title( $post ) ); ?></span>
 						<?php if ( $item['category_label'] ) : ?>
 							<span class="low-mm-post-query__label"><?php echo esc_html( $item['category_label'] ); ?></span>
 						<?php endif; ?>
@@ -30,7 +30,7 @@ defined( 'ABSPATH' ) || exit;
 					</div>
 				</a>
 				<?php if ( $item['excerpt'] ) : ?>
-					<p class="low-mm-post-query__excerpt"><?php echo esc_html( $item['excerpt'] ); ?></p>
+					<div class="low-mm-module__body low-mm-post-query__body low-mm-post-query__excerpt"><?php echo esc_html( $item['excerpt'] ); ?></div>
 				<?php endif; ?>
 			</li>
 		<?php endforeach; ?>

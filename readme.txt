@@ -4,7 +4,7 @@ Tags: mega menu, navigation, menu
 Requires at least: 6.0
 Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 1.7.17
+Stable tag: 1.8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,6 +47,11 @@ To publish an update for sites running the plugin:
 Do not zip the whole plugin folder by hand — `node_modules` (especially under `admin-app/`) is hundreds of MB and is not needed at runtime. Delete `node_modules` folders after building if you want a small working copy; recreate them with `npm install` / `npm install --prefix admin-app` when you need to build again.
 
 == Changelog ==
+
+= 1.8.0 =
+* Shared module title/body markup (`.low-mm-module__title` / `__body`) with per-module classes; legacy aliases kept.
+* Code modules wrap output in `.low-mm-module.low-mm-code`.
+* Titles at 1rem; title→body spacing matches body line gap.
 
 = 1.7.17 =
 * Module titles use 0.9375rem (halfway between body 0.875rem and column labels 1rem).

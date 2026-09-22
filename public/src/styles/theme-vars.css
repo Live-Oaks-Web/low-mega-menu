@@ -37,16 +37,38 @@
 	background-color: var(--low-mm-color-accent);
 }
 
+/*
+ * Shared title/body contract (.low-mm-module__title / __body) plus per-module
+ * aliases and Code-module bare h3s. Prefer the shared classes for new CSS.
+ */
+.low-mm-panel .low-mm-module__title,
 .low-mm-panel .low-mm-excerpt__title,
+.low-mm-panel .low-mm-cta__title,
 .low-mm-panel .low-mm-cta__heading,
 .low-mm-panel .low-mm-post-query__title,
 .low-mm-panel .low-mm-scroll-to__title,
+.low-mm-panel .low-mm-link-list__title,
 .low-mm-panel .low-mm-column__modules > a > h3,
 .low-mm-panel .low-mm-column__modules h3,
 .low-mm-search__title {
 	color: var(--low-mm-color-heading);
 	text-decoration: none !important;
-	font-size: 0.9375rem; /* halfway between module body (0.875rem) and column label (1rem) */
+	font-size: 1rem;
+	margin: 0 !important;
+	padding: 0 !important;
+	line-height: 1.2;
+}
+
+/* Code modules: bare <a><h3> + following text — same gap as body line spacing. */
+.low-mm-panel .low-mm-column__modules > a:has(> h3),
+.low-mm-panel .low-mm-code > a:has(> h3) {
+	display: block;
+	margin-bottom: 0.25rem;
+}
+
+.low-mm-panel .low-mm-column__modules > h3,
+.low-mm-panel .low-mm-code > h3 {
+	margin-bottom: 0.25rem !important;
 }
 
 .low-mm-panel .low-mm-column__label {
@@ -54,7 +76,9 @@
 }
 
 .low-mm-panel .low-mm-column__modules,
+.low-mm-panel .low-mm-module__body,
 .low-mm-panel .low-mm-excerpt__body,
+.low-mm-panel .low-mm-scroll-to__body,
 .low-mm-panel .low-mm-scroll-to__content {
 	color: var(--low-mm-color-text);
 	line-height: 1.5;
@@ -76,10 +100,13 @@
 /* Titles stay undecorated at rest (covers Code-module bare <a><h3>). */
 .low-mm-panel h3 a,
 .low-mm-panel a h3,
+.low-mm-panel a .low-mm-module__title,
 .low-mm-panel a .low-mm-excerpt__title,
 .low-mm-panel a .low-mm-post-query__title,
 .low-mm-panel a .low-mm-scroll-to__title,
+.low-mm-panel a .low-mm-cta__title,
 .low-mm-panel a .low-mm-cta__heading,
+.low-mm-panel a .low-mm-link-list__title,
 .low-mm-search__link .low-mm-search__title {
 	text-decoration: none !important;
 }
@@ -106,32 +133,46 @@
  * Underline the title only on hover/focus — keep the anchor itself undecorated
  * so scroll-to body / neighboring text does not pick up a line.
  */
+.low-mm-panel a:hover .low-mm-module__title,
+.low-mm-panel a:focus .low-mm-module__title,
 .low-mm-panel a:hover .low-mm-excerpt__title,
 .low-mm-panel a:focus .low-mm-excerpt__title,
 .low-mm-panel a:hover .low-mm-post-query__title,
 .low-mm-panel a:focus .low-mm-post-query__title,
 .low-mm-panel a:hover .low-mm-scroll-to__title,
 .low-mm-panel a:focus .low-mm-scroll-to__title,
+.low-mm-panel a:hover .low-mm-cta__title,
+.low-mm-panel a:focus .low-mm-cta__title,
 .low-mm-panel a:hover .low-mm-cta__heading,
 .low-mm-panel a:focus .low-mm-cta__heading,
+.low-mm-panel a:hover .low-mm-link-list__title,
+.low-mm-panel a:focus .low-mm-link-list__title,
 .low-mm-panel a:hover h3,
 .low-mm-panel a:focus h3,
 .low-mm-panel h3 a:hover,
 .low-mm-panel h3 a:focus,
 .low-mm-search__link:hover .low-mm-search__title,
 .low-mm-search__link:focus .low-mm-search__title,
+#top-menu .low-mm-panel a:hover .low-mm-module__title,
+#top-menu .low-mm-panel a:focus .low-mm-module__title,
 #top-menu .low-mm-panel a:hover .low-mm-excerpt__title,
 #top-menu .low-mm-panel a:focus .low-mm-excerpt__title,
 #top-menu .low-mm-panel a:hover .low-mm-post-query__title,
 #top-menu .low-mm-panel a:focus .low-mm-post-query__title,
 #top-menu .low-mm-panel a:hover .low-mm-scroll-to__title,
 #top-menu .low-mm-panel a:focus .low-mm-scroll-to__title,
+#top-menu .low-mm-panel a:hover .low-mm-link-list__title,
+#top-menu .low-mm-panel a:focus .low-mm-link-list__title,
 #top-menu .low-mm-panel a:hover h3,
 #top-menu .low-mm-panel a:focus h3 {
 	text-decoration: underline !important;
 }
 
 /* Body / meta under a hovered link must stay undecorated. */
+.low-mm-panel a:hover .low-mm-module__body,
+.low-mm-panel a:focus .low-mm-module__body,
+.low-mm-panel a:hover .low-mm-scroll-to__body,
+.low-mm-panel a:focus .low-mm-scroll-to__body,
 .low-mm-panel a:hover .low-mm-scroll-to__content,
 .low-mm-panel a:focus .low-mm-scroll-to__content,
 .low-mm-panel a:hover .low-mm-excerpt__body,

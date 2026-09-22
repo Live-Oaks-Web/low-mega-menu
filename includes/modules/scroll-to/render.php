@@ -19,9 +19,9 @@ defined( 'ABSPATH' ) || exit;
 		data-low-mm-scroll-post="<?php echo esc_attr( (string) $post_id ); ?>"
 		data-low-mm-scroll-index="<?php echo esc_attr( (string) $index ); ?>"
 	>
-		<span class="low-mm-scroll-to__title"><?php echo esc_html( $title ); ?></span>
+		<span class="low-mm-module__title low-mm-scroll-to__title"><?php echo esc_html( $title ); ?></span>
 		<?php if ( '' !== trim( $content ) ) : ?>
-			<span class="low-mm-scroll-to__content"><?php echo esc_html( $content ); ?></span>
+			<div class="low-mm-module__body low-mm-scroll-to__body low-mm-scroll-to__content"><?php echo esc_html( $content ); ?></div>
 		<?php endif; ?>
 	</a>
 </div>

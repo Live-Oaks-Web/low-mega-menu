@@ -27,10 +27,10 @@ if ( ! empty( $has_bg_image ) ) {
 ?>
 <div class="<?php echo esc_attr( implode( ' ', $cta_classes ) ); ?>"<?php echo $background_style ? ' style="' . esc_attr( $background_style ) . '"' : ''; ?>>
 	<?php if ( $heading ) : ?>
-		<h3 class="low-mm-cta__heading"><?php echo esc_html( $heading ); ?></h3>
+		<span class="low-mm-module__title low-mm-cta__title low-mm-cta__heading"><?php echo esc_html( $heading ); ?></span>
 	<?php endif; ?>
 	<?php if ( $body ) : ?>
-		<div class="low-mm-cta__body">
+		<div class="low-mm-module__body low-mm-cta__body">
 			<?php
 			if ( $plain_text ) {
 				echo esc_html( wp_strip_all_tags( $body ) );

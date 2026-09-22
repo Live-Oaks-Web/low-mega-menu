@@ -182,10 +182,11 @@
 }
 
 .low-mm-search__title {
-	font-size: 0.9375rem;
+	font-size: 1rem;
 	font-weight: 600;
 	color: #21303f;
 	line-height: 1.3;
+	margin: 0;
 }
 
 .low-mm-search__type {

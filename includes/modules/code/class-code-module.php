@@ -67,7 +67,9 @@ class CodeModule extends Module {
 		$mode = (string) ( $settings['shortcode_execution'] ?? 'inherit' );
 
 		if ( ShortcodeGate::is_allowed( $mode ) ) {
-			return (string) do_shortcode( $content );
+			// Wrap raw HTML/shortcode output so Code participates in the module root contract.
+			// Inner markup remains author-controlled (escape hatch).
+			return '<div class="low-mm-module low-mm-code">' . (string) do_shortcode( $content ) . '</div>';
 		}
 
 		return self::render_template(
