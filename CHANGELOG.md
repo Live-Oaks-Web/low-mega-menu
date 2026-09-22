@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.15
+
+- Module titles (excerpt, CTA heading, post query, scroll-to, search) use `text-decoration: none` at rest and on hover/focus.
+
 ## 1.7.14
 
 - Column labels use `font-size: 1rem`.
